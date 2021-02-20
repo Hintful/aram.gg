@@ -22,9 +22,9 @@ const TEST_DATA = {
 
 const Profile = ({ location }) => {
   return (
-    <Center h="90vh">
+    <Center h="auto" mb="50px">
       <VStack spacing={5}>
-        <Text fontSize={32} className="sName">{ location.state.sName }</Text>
+        <Text fontSize={32} className="sName" mt={10}>{ location.state.sName }</Text>
         <Divider />
         <MatchHistory />
       </VStack>
