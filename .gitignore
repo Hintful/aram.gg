@@ -25,3 +25,5 @@ yarn-error.log*
 # venv
 .idea/
 venv/
+.venv
+.vscode/settings.json
