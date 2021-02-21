@@ -1,15 +1,15 @@
 import datetime
 import os
 
-from flask import Flask, Response, request
+from flask import Flask, Response
 from flask_mongoengine import MongoEngine
 
 app = Flask(__name__)
-app.config['MONGODB_SETTINGS'] = {
-    'host': os.environ['MONGODB_HOST'],
-    'username': os.environ['MONGODB_USERNAME'],
-    'password': os.environ['MONGODB_PASSWORD'],
-    'db': 'webapp'
+app.config["MONGODB_SETTINGS"] = {
+    "host": os.environ["MONGODB_HOST"],
+    "username": os.environ["MONGODB_USERNAME"],
+    "password": os.environ["MONGODB_PASSWORD"],
+    "db": "webapp",
 }
 
 db = MongoEngine()
