@@ -1,5 +1,8 @@
 flask
 python-dotenv
-flask-mongoengine
 gunicorn
 pre-commit
+wheel
+flask-sqlalchemy
+psycopg2-binary
+flask-mysql

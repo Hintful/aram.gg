@@ -8,24 +8,22 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/app
-      - /app/node_modules
+      - .:/api
+      - /api/node_modules
     networks:
       - frontend
-  mongodb:
-    image: mongo
-    container_name: mongo
+    depends_on:
+      - db
+  db:
+    image: "mariadb:latest"
     restart: unless-stopped
-    command: mongod --auth
     environment:
-      MONGO_INITDB_ROOT_USERNAME: "root"
-      MONGO_INITDB_ROOT_PASSWORD: "password"
-      MONGO_INITDB_DATABASE: webapp
-      MONGODB_DATA_DIR: /data/db
-    volumes:
-      - mongodb:/data/db
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "aramgg"
     networks:
       - backend
+    ports:
+    - "3306:3306"
   api:
     build:
       context: ./api
@@ -33,14 +31,10 @@ services:
     command: gunicorn --bind 0.0.0.0:5000 app:app
     ports:
       - "5000:5000"
-    environment:
-      MONGODB_HOST: mongodb
-      MONGODB_USERNAME: "user"
-      MONGODB_PASSWORD: "password"
     volumes:
       - app:/var/www/
     depends_on:
-      - mongodb
+      - db
     networks:
       - frontend
       - backend
@@ -50,7 +44,5 @@ networks:
   backend: # communication between the MongoDB and the Flask API
     driver: bridge
 volumes:
-  mongodb:
-    driver: local
   app:
     driver: local
