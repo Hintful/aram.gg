@@ -1,0 +1,10 @@
+flask
+python-dotenv
+gunicorn
+pre-commit
+wheel
+flask-sqlalchemy
+psycopg2-binary
+flask-migrate
+flask-script
+mysqlclient
