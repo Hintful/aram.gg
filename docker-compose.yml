@@ -15,20 +15,21 @@ services:
     depends_on:
       - db
   db:
-    image: "mariadb:latest"
+    container_name: postgres
+    image: "postgres:latest"
     restart: unless-stopped
-    environment:
-      MYSQL_ROOT_PASSWORD: "root"
-      MYSQL_DATABASE: "aramgg"
+    env_file:
+      - database.conf
     networks:
       - backend
     ports:
-    - "3306:3306"
+    - "5432:5432"
+    volumes:
+    - db_volume:/var/lib/postgresql
   api:
     build:
-      context: ./api
+      context: .
       dockerfile: Dockerfile
-    command: gunicorn --bind 0.0.0.0:5000 app:app
     ports:
       - "5000:5000"
     volumes:
@@ -46,3 +47,4 @@ networks:
 volumes:
   app:
     driver: local
+  db_volume:
