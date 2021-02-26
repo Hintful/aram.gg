@@ -1,4 +1,4 @@
-from typing import List, Dict
+from typing import Dict, List
 
 import requests
 
@@ -22,7 +22,7 @@ class RiotApiRequests:
         return {
             "account_id": data["accountId"],
             "profile_icon_id": data["profileIconId"],
-            "summoner_level": data["summonerLevel"]
+            "summoner_level": data["summonerLevel"],
         }
 
     @staticmethod

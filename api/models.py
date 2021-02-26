@@ -1,13 +1,14 @@
-from sqlalchemy import Table, Integer, ForeignKey, Column
+from sqlalchemy import Column, ForeignKey, Integer, Table
 from sqlalchemy.orm import relationship
 
-from api.app import db, Base
+from api.app import Base, db
 
 junction_table = Table(
-    "user_champion", Base.metadata,
+    "user_champion",
+    Base.metadata,
     Column("user_id", Integer, ForeignKey("Users.id")),
     Column("champion_id", Integer, ForeignKey("Champions.id")),
-    )
+)
 
 
 class Users(db.Model):
