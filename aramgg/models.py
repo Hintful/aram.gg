@@ -1,9 +1,8 @@
-import flask_sqlalchemy
-
-db = flask_sqlalchemy.SQLAlchemy()
+from aramgg import db
 
 
 class Users(db.Model):
+    __tablename__ = "users"
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), unique=True)
 
@@ -16,10 +15,12 @@ class Users(db.Model):
 
 
 class Games(db.Model):
+    __tablename__ = "games"
     id = db.Column(db.Integer, primary_key=True)
 
 
 class Champions(db.Model):
+    __tablename__ = "champions"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(20), unique=True)
     win_count = db.Column(db.Integer, unique=False)

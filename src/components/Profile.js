@@ -5,7 +5,7 @@ import MatchHistory from './MatchHistory';
 // const
 const API_KEY = "RGAPI-caff676e-3db2-4433-a046-e087af7275a4"
 const SERVER = "na1"
-const BASE = "https://" + SERVER + ".api.riotgames.com"
+const BASE = "https://" + SERVER + ".aramgg.riotgames.com"
 const END_POINT = "/lol/summoner/v4/summoners/by-name/"
 
 const TEST_DATA = {

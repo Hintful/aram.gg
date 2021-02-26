@@ -1,4 +1,4 @@
-from api.models import db
+from aramgg.models import db
 
 
 def get_all(model):

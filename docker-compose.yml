@@ -8,8 +8,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/api
-      - /api/node_modules
+      - .:/aramgg
+      - /aramgg/node_modules
     networks:
       - frontend
     depends_on:
@@ -17,15 +17,17 @@ services:
   db:
     container_name: postgres
     image: "postgres:latest"
+    environment:
+      POSTGRES_DB : "aramgg"
+      POSTGRES_USER: "user"
+      POSTGRES_PASSWORD: "password"
+    ports:
+      - "5432:5432"
     restart: unless-stopped
-    env_file:
-      - database.conf
     networks:
       - backend
-    ports:
-    - "5432:5432"
     volumes:
-    - db_volume:/var/lib/postgresql
+    - db_volume:/var/lib/postgresql/data
   api:
     build:
       context: .

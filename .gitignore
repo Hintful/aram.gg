@@ -29,6 +29,6 @@ venv/
 .vscode/settings.json
 
 #
-api/__pycache__
+aramgg/__pycache__
 __pycache__/
 get-pip.py
