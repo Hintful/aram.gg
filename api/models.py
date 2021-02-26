@@ -45,3 +45,7 @@ class Champions(db.Model):
 
     def __repr__(self):
         return f"<Champion {self.name}"
+
+
+db.create_all()
+db.session.commit()

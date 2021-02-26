@@ -15,6 +15,9 @@ manager = Manager(app)
 manager.add_command("db", MigrateCommand)
 Base = declarative_base()
 
+db.create_all()
+db.session.commit()
+
 
 @app.route('/')
 def hello():
