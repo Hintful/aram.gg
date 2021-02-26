@@ -8,7 +8,7 @@ PARAMS = {"api_key": API_KEY}
 
 
 class RiotApiRequests:
-    def __init__(self, summoner_name: str, request_limit: int):
+    def __init__(self, summoner_name: str, request_limit: int = 10):
         self.summoner_name = summoner_name
         self.request_limit = request_limit
 
