@@ -1,12 +1,11 @@
-from django.http import HttpResponse
-from django.views.generic import ListView
+from rest_framework import viewsets
 
-from .models import Users
+from .models import User
+from .serializers import UserSerializer
 
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
+# Create your views here.
 
 
-class ProfileView(ListView):
-    model = Users
+class UserView(viewsets.ModelViewSet):
+    serializer_class = UserSerializer
+    queryset = User.objects.all()

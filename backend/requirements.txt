@@ -6,3 +6,4 @@ requests
 djangorestframework
 django
 django-extra-views
+django-cors-headers
