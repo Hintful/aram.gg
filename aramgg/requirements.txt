@@ -1,8 +1,8 @@
-flask
 python-dotenv
 pre-commit
 wheel
-flask-sqlalchemy
 psycopg2-binary
 requests
-Flask-Migrate
+djagnorestframework
+django
+django-extra-views

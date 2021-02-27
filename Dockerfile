@@ -6,7 +6,7 @@ EXPOSE 3000
 EXPOSE 35729
 
 # Set working directory
-WORKDIR /api
+WORKDIR .
 
 RUN apt-get update -y
 RUN apt-get install -y python3-pip python-dev build-essential
@@ -18,9 +18,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
 RUN npm install
-
-# Add React app to working directory
-ADD . /api
 
 # Start the React app
 CMD ["npm", "start"]
