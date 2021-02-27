@@ -3,6 +3,6 @@ pre-commit
 wheel
 psycopg2-binary
 requests
-djagnorestframework
+djangorestframework
 django
 django-extra-views
