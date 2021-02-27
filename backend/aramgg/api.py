@@ -2,7 +2,7 @@ from typing import Dict, List
 
 import requests
 
-API_KEY = "RGAPI-66c4b81c-e4e7-409c-bd29-b4c90526d3ec"
+API_KEY = "RGAPI-1f479b8e-1c4b-400d-a871-b98ed6029f1f"
 BASE_URL = "https://na1.api.riotgames.com"
 PARAMS = {"api_key": API_KEY}
 
