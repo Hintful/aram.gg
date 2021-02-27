@@ -1,0 +1,9 @@
+python-dotenv
+pre-commit
+wheel
+psycopg2-binary
+requests
+djangorestframework
+django
+django-extra-views
+django-cors-headers

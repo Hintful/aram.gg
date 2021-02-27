@@ -30,21 +30,22 @@ services:
     - db_volume:/var/lib/postgresql/data
   api:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
     ports:
-      - "5000:5000"
+      - "8000:8000"
     volumes:
-      - app:/var/www/
+      - ./backend:/code
     depends_on:
       - db
     networks:
       - frontend
       - backend
 networks:
-  frontend: # communication between the React and Flask API containers
+  frontend: # communication between the React and Django API containers
     driver: bridge
-  backend: # communication between the MongoDB and the Flask API
+  backend: # communication between the PostgreSQL and the Django API
     driver: bridge
 volumes:
   app:
