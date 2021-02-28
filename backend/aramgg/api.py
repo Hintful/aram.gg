@@ -2,11 +2,12 @@ import os
 from typing import Dict, List
 
 import django
+os.environ["DJANGO_SETTINGS_MODULE"] = "backend.local_settings"
+django.setup()
+
 import requests
 from aramgg.models import Champion, User
 
-os.environ["DJANGO_SETTINGS_MODULE"] = "backend.local_settings"
-django.setup()
 
 
 API_KEY = "RGAPI-1f479b8e-1c4b-400d-a871-b98ed6029f1f"
