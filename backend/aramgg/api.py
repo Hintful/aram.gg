@@ -32,7 +32,7 @@ class RiotApiRequests:
         url = f"{BASE_URL}/lol/match/v4/matchlists/by-account/{account_id}"
         request = requests.get(url=url, params=PARAMS)
         match_list = request.json()
-
+        print(match_list)
         return [match["gameId"] for match in match_list["matches"]]
 
     @staticmethod
@@ -51,7 +51,6 @@ class RiotApiRequests:
         aram_list = list()
         info_dict = self.get_account_info()
         match_list = self.get_match_list(account_id=info_dict["account_id"])
-
         for index, match in zip(range(self.request_limit), match_list):
             match_data = self.get_match_data(match)
             if match_data["gameMode"] == "ARAM":

@@ -6,22 +6,22 @@ class User(models.Model):
     level = models.IntegerField(null=False, blank=False)
     profile_icon = models.IntegerField(null=False, blank=False)
     champion = models.ManyToManyField("Champion")
+    last_updated = models.DateTimeField()
 
     def __str__(self):
         return self.username
 
 
-class Game(models.Model):
-    id = models.IntegerField(unique=True, primary_key=True)
-    is_aram = models.BooleanField(default=False, null=False)
-    user = models.ForeignKey("User", on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.id
-
-
 class Champion(models.Model):
     name = models.CharField(max_length=30, null=False, blank=False, unique=True)
+    win = models.IntegerField(default=0, null=False, blank=False)
+    loss = models.IntegerField(default=0, null=False, blank=False)
+    kill = models.IntegerField(default=0, null=False, blank=False)
+    death = models.IntegerField(default=0, null=False, blank=False)
+    assist = models.IntegerField(default=0, null=False, blank=False)
+    total_damage_done = models.IntegerField(default=0, null=False, blank=False)
+    total_damage_taken = models.IntegerField(default=0, null=False, blank=False)
+    total_healing_done = models.IntegerField(default=0, null=False, blank=False)
 
     def __str__(self):
         return self.name
