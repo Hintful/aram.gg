@@ -6,14 +6,15 @@ class User(models.Model):
     level = models.IntegerField(null=False, blank=False)
     profile_icon = models.IntegerField(null=False, blank=False)
     champion = models.ManyToManyField("Champion")
-    last_updated = models.DateTimeField()
+    last_updated = models.BigIntegerField(null=True, blank=True)
+    account_id = models.CharField(max_length=100, null=False, blank=False)
 
     def __str__(self):
         return self.username
 
 
 class Champion(models.Model):
-    name = models.CharField(max_length=30, null=False, blank=False, unique=True)
+    champion_id = models.CharField(max_length=30, null=False, blank=False)
     win = models.IntegerField(default=0, null=False, blank=False)
     loss = models.IntegerField(default=0, null=False, blank=False)
     kill = models.IntegerField(default=0, null=False, blank=False)

@@ -15,7 +15,6 @@ services:
     depends_on:
       - db
   db:
-    container_name: postgres
     image: "postgres:latest"
     environment:
       POSTGRES_DB : "aramgg"
@@ -36,12 +35,14 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/code
+      - ./backend:/codex
     depends_on:
       - db
     networks:
       - frontend
       - backend
+    links:
+      - db:db
 networks:
   frontend: # communication between the React and Django API containers
     driver: bridge
