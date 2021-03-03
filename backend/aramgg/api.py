@@ -2,13 +2,12 @@ import os
 from typing import Dict, List
 
 import django
+
 os.environ["DJANGO_SETTINGS_MODULE"] = "backend.local_settings"
 django.setup()
 
 import requests
 from aramgg.models import Champion, User
-
-
 
 API_KEY = "APIKEY"
 BASE_URL = "https://na1.api.riotgames.com"
