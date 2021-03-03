@@ -25,4 +25,4 @@ class Champion(models.Model):
     total_healing_done = models.IntegerField(default=0, null=False, blank=False)
 
     def __str__(self):
-        return self.name
+        return self.champion_id

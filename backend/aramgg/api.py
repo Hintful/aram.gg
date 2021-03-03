@@ -10,7 +10,7 @@ from aramgg.models import Champion, User
 
 
 
-API_KEY = "RGAPI-1f479b8e-1c4b-400d-a871-b98ed6029f1f"
+API_KEY = "APIKEY"
 BASE_URL = "https://na1.api.riotgames.com"
 PARAMS = {"api_key": API_KEY}
 
@@ -61,12 +61,7 @@ class RiotApiRequests:
         return final_list
 
     @staticmethod
-    def get_match_data(user: User, match_id: int) -> Dict:
-        """ Get information about specific match based on the match ID """
-
-        url = f"{BASE_URL}/lol/match/v4/matches/{match_id}"
-        request = requests.get(url=url, params=PARAMS)
-        data = request.json()
+    def update_user_champion_info(user: User, data: Dict) -> None:
         participant_identity_list = data["participantIdentities"]
         participant_id = None
 
@@ -98,9 +93,18 @@ class RiotApiRequests:
         champion.death += participant_stats["deaths"]
         champion.assist += participant_stats["assists"]
         champion.save()
-
+        print(champion.win)
         user.champion.add(champion)
         user.save()
+
+    @staticmethod
+    def get_match_data(match_id: int) -> Dict:
+        """ Get information about specific match based on the match ID """
+
+        url = f"{BASE_URL}/lol/match/v4/matches/{match_id}"
+        request = requests.get(url=url, params=PARAMS)
+        data = request.json()
+
         return data
 
     def get_total_match_info(self) -> List:
@@ -111,9 +115,10 @@ class RiotApiRequests:
         match_list = self.get_match_list(user=user)
 
         for index, match in zip(range(self.request_limit), match_list):
-            match_data = self.get_match_data(user=user, match_id=match["gameId"])
+            match_data = self.get_match_data(match_id=match["gameId"])
             if match_data["gameMode"] == "ARAM":
                 aram_list.append(match_data)
+                self.update_user_champion_info(user=user, data=match_data)
             timestamp = match_data["gameCreation"]
             user.last_updated = (
                 timestamp
@@ -128,3 +133,5 @@ class RiotApiRequests:
 if __name__ == "__main__":
     riot_api = RiotApiRequests(summoner_name="juis", request_limit=10)
     total_match_info = riot_api.get_total_match_info()
+    user = User.objects.get(username="juis")
+    champion = Champion.objects.get(user=user)
