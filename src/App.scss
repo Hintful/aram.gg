@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Staatliches&family=Raleway&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Staatliches&family=Raleway&family=Roboto&display=swap");
 @import url("https://use.fontawesome.com/d0c316cf02.js");
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css");
 
@@ -26,6 +26,13 @@ hr {
 
 .icon-box {
   position: relative;
+  border: 1px solid black;
+  border-radius: 8px 8px 0 8px;
+  overflow: hidden;
+
+  .icon-box-image {
+
+  }
 }
 
 .icon-box-level-badge {
@@ -38,4 +45,30 @@ hr {
   font-size: 0.8em;
   padding: 0 4px;
   font-weight: 600;
+  
+}
+
+.champion-stats {
+  width: 80vw;
+  height: 150px;
+  border: 1px solid black;
+  font-family: Roboto;
+}
+
+.champion-icon {
+  width: 120px;
+  height: 150px;
+  text-align: center;
+
+  .champion-icon-image {
+    width: 90px;
+    height: 90px;
+  }
+
+  .champion-name-label {
+    background: #454545;
+    color: white;
+    width: 90px;
+    justify-content: center;
+  }
 }

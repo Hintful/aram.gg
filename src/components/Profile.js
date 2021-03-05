@@ -4,6 +4,7 @@ import MatchHistory from './MatchHistory';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import IconBox from './IconBox';
+import ChampionStats from './ChampionStats';
 
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
@@ -25,8 +26,7 @@ const Profile = ({ location }) => {
     // user champion data
     axios.get(`http://localhost:8000/aramgg/rest_api/user_champion/${username}/`)
       .then(res => {
-        setUserChampionStats(res.data[0]);
-        console.log("3" + res.data);
+        setUserChampionStats(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -34,8 +34,6 @@ const Profile = ({ location }) => {
   }
 
   useEffect(() => {
-    console.log("1" + username);
-
     getUserData();
   }, []); // didComponentMount
 
@@ -43,11 +41,12 @@ const Profile = ({ location }) => {
     <Center h="auto" mb="50px">
       <VStack spacing={5}>
         <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-
         <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level}/>
-
         <Divider />
-        {/* <MatchHistory /> */}
+
+        { userChampionStats.map(stat => 
+          <ChampionStats stats={stat} />
+        )}
       </VStack>
 
     </Center>
