@@ -9,7 +9,7 @@ django.setup()
 import requests
 from aramgg.models import Champion, User
 
-API_KEY = "APIKEY"
+API_KEY = "RGAPI-211cfffa-4c6b-40dd-a107-b8375e9e14f1"
 BASE_URL = "https://na1.api.riotgames.com"
 PARAMS = {"api_key": API_KEY}
 
@@ -25,14 +25,18 @@ class RiotApiRequests:
         url = f"{BASE_URL}/lol/summoner/v4/summoners/by-name/{self.summoner_name}"
         request = requests.get(url=url, params=PARAMS)
         data = request.json()
-        User.objects.update_or_create(
-            username=data["name"],
-            defaults={
-                "profile_icon": data["profileIconId"],
-                "account_id": data["accountId"],
-                "level": data["summonerLevel"],
-            },
-        )
+        try:
+            User.objects.update_or_create(
+                username=data["name"],
+                defaults={
+                    "profile_icon": data["profileIconId"],
+                    "account_id": data["accountId"],
+                    "level": data["summonerLevel"],
+                },
+            )
+        except KeyError:
+            raise KeyError(f"Cannot find a summoner named {self.summoner_name}")
+
         return User.objects.get(username=data["name"])
 
     @staticmethod

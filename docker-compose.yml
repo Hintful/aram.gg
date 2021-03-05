@@ -44,6 +44,8 @@ services:
       - backend
     links:
       - db:db
+    environment:
+      - PYTHONUNBUFFERED=0
 networks:
   frontend: # communication between the React and Django API containers
     driver: bridge
