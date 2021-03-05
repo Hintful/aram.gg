@@ -14,7 +14,7 @@ class User(models.Model):
 
 
 class Champion(models.Model):
-    champion_id = models.CharField(max_length=30, null=False, blank=False)
+    champion_id = models.IntegerField(null=False, blank=False)
     win = models.IntegerField(default=0, null=False, blank=False)
     loss = models.IntegerField(default=0, null=False, blank=False)
     kill = models.IntegerField(default=0, null=False, blank=False)

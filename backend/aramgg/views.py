@@ -32,7 +32,7 @@ class ChampionDetailView(generics.ListAPIView):
 
     def get_queryset(self):
         try:
-            username = int(self.kwargs["username"])
+            username = str(self.kwargs["username"])
             return Champion.objects.filter(user__username__iexact=username)
         except ValueError:
             raise ViewDoesNotExist(
