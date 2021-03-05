@@ -1,8 +1,21 @@
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from . import views
 
 urlpatterns = [
-    path("", views.index, name="index"),
-    path("<slug:username>", views.ProfileView.as_view(), name="user_profile"),
+    path("rest_api/users", views.UserView.as_view(), name="rest_api_user"),
+    path("rest_api/champions", views.ChampionView.as_view(), name="rest_api_champion"),
+    path(
+        "rest_api/user_detail/<slug:username>/",
+        views.UserDetailView.as_view(),
+        name="rest_api_user_detail",
+    ),
+    path(
+        "rest_api/user_champion/<slug:username>/",
+        views.ChampionDetailView.as_view(),
+        name="rest_api_user_champion",
+    ),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)
