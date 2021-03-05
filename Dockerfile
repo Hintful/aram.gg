@@ -7,6 +7,7 @@ EXPOSE 35729
 
 # Set working directory
 WORKDIR /frontend
+ADD . /frontend
 
 RUN apt-get update -y
 RUN apt-get install -y python3-pip python-dev build-essential
@@ -18,8 +19,6 @@ ENV PATH /app/node_modules/.bin:$PATH
 COPY package.json /app/package.json
 COPY package-lock.json /app/package-lock.json
 RUN npm install
-
-ADD . /frontend
 
 # Start the React app
 CMD ["npm", "start"]

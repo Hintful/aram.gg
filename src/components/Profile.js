@@ -37,7 +37,7 @@ const Profile = ({ location }) => {
       <VStack spacing={5}>
         <Text fontSize={32} className="sName" mt={10}>{location.state.sName}</Text>
         <Divider />
-        {/* <MatchHistory /> */}
+         <MatchHistory />
       </VStack>
 
     </Center>
