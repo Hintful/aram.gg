@@ -8,8 +8,8 @@ services:
     ports:
       - "3000:3000"
     volumes:
-      - .:/aramgg
-      - /aramgg/node_modules
+      - ./node_modules:/frontend/node_modules
+      - .:/frontend
     networks:
       - frontend
     depends_on:
