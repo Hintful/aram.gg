@@ -1,36 +1,47 @@
 import { Box, Center, Divider, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import MatchHistory from './MatchHistory';
-
-// const
-const API_KEY = "RGAPI-caff676e-3db2-4433-a046-e087af7275a4"
-const SERVER = "na1"
-const BASE = "https://" + SERVER + ".aramgg.riotgames.com"
-const END_POINT = "/lol/summoner/v4/summoners/by-name/"
-
-const TEST_DATA = {
-  "id": "ruq9BdLGJUNvuCDfiDyGk5FMXc1T2AUCTIB9XN2IBdTDQGc",
-  "accountId": "rOhSHasXV7cWlUOentAnCvV6sKoEJJcUTCRiCONOojfYCw",
-  "puuid": "jieCzVj_wYxpuQkH_3kLxGPgefjx91-sftEU8O1p0m8CkMTL7i6uWIKmIHmYgLLdsTm3L13kVBrFTg",
-  "name": "Hint",
-  "profileIconId": 4631,
-  "revisionDate": 1613198330000,
-  "summonerLevel": 168
-}
-
-
+import axios from 'axios';
 
 const Profile = ({ location }) => {
+  const [userDetail, setUserDetail] = useState([]); // init
+  const [userChampionStats, setUserChampionStats] = useState([]); // init
+  const username = location.state.sName;
+
+  useEffect(() => {
+    // user data
+    axios.get(`http://localhost:8000/aramgg/rest_api/user_detail/${username}`)
+      .then(res => {
+        setUserDetail(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    // user champion data
+    axios.get(`http://localhost:8000/aramgg/rest_api/user_champion/${username}/`)
+      .then(res => {
+        setUserChampionStats(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+    
+    console.log(username);
+    console.log(userDetail);
+    console.log(userChampionStats);
+  }, []); // didComponentMount
+
   return (
     <Center h="auto" mb="50px">
       <VStack spacing={5}>
-        <Text fontSize={32} className="sName" mt={10}>{ location.state.sName }</Text>
+        <Text fontSize={32} className="sName" mt={10}>{location.state.sName}</Text>
         <Divider />
-        <MatchHistory />
+        {/* <MatchHistory /> */}
       </VStack>
-      
+
     </Center>
   );
 }
- 
+
 export default Profile;
