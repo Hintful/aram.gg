@@ -14,7 +14,8 @@ function App() {
       <Navbar />
       <Switch location={location} key={location.pathname}>
         <Route exact path='/' component={Main} />
-        <Route path='/profile' component={Profile} />
+        {/* <Route path='/profile' component={Profile} /> */}
+        <Route path='/profile/:id' component={Profile} />
       </Switch>
       
     </div>

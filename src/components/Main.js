@@ -10,12 +10,14 @@ const Main = () => {
   return (
     <Center h="90vh">
       <Container maxW="xl" centerContent>
-        <form onSubmit={() => {
-          history.push({
-            pathname: '/profile',
-            state: { sName: summonerName }
-          })
-        }}>
+        <form 
+        // onSubmit={() => {
+        //   history.push({
+        //     pathname: `/profile/${summonerName}`,
+        //     state: { sName: summonerName }
+        //   })
+        // }}
+        >
           <VStack spacing={6}>
             <Text className="title" fontSize="4xl">
               ARAM.GG
@@ -23,19 +25,21 @@ const Main = () => {
             <FormControl isRequired>
               <InputGroup>
                 <InputLeftElement children={<i class="fas fa-user"></i>} />
-                <Input type='name' placeholder='Summoner Name' aria-label='Summoner Name' width="400px" 
-                  onChange={(e) => {setSummonerName(e.target.value)}}
+                <Input type='name' placeholder='Summoner Name' aria-label='Summoner Name' width="400px"
+                  onChange={(e) => { setSummonerName(e.target.value) }}
                 />
               </InputGroup>
             </FormControl>
-            <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%">
-              Search
-            </Button>
+            <RouterLink to={`/profile/${summonerName}`}>
+              <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%">
+                Search
+              </Button>
+            </RouterLink>
           </VStack>
         </form>
       </Container>
     </Center>
   );
 }
- 
+
 export default Main;
