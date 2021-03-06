@@ -17,7 +17,11 @@ import champion_data_json from './json/champion.json';
 } */
 
 const getURLName = (name) => {
-  if (name.includes(' ')) { // name contains whitespace
+  if (name === "Kog'Maw") {
+    return 'KogMaw';
+  } else if (name === 'Dr. Mundo') {
+    return 'DrMundo';
+  } else if (name.includes(' ')) { // name contains whitespace
     return name.replace(' ', ''); // remove whitespace
   } else if(name.includes("'")) { // name contains small quotes
     const quoteIndex = name.indexOf("'");
