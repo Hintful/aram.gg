@@ -26,7 +26,7 @@ class UserDetailView(APIView):
 
     def get_queryset(self):
         try:
-            return get_object_or_404(User, username__iexact=self.kwargs["username"])
+            return get_object_or_404(User, username__exact=self.kwargs["username"])
         except Http404:
             raise ViewDoesNotExist(
                 f"Selected user record for the user {self.kwargs['username']} does not exist. "
@@ -50,18 +50,17 @@ class ChampionDetailView(APIView):
     serializer_class = ChampionSerializer
     queryset = User.objects.none()
 
-    def get(self, request, *args, **kwargs):
-        champions = get_list_or_404(
-            Champion, user__username__iexact=self.kwargs["username"]
-        )
-        serializer = ChampionSerializer(champions, many=True)
-        return Response(serializer.data)
-
     def get_queryset(self):
+        username = str(self.kwargs["username"])
         try:
-            username = str(self.kwargs["username"])
-            return get_object_or_404(Champion, user__username__iexact=username)
+            return get_object_or_404(Champion, user__username__exact=username)
         except ValueError:
             raise ViewDoesNotExist(
-                f"Selected champion record for the user {self.kwargs['username']} does not exist. "
+                f"Selected champion record for the user {username} does not exist. "
             )
+
+    def get(self, request, *args, **kwargs):
+        username = self.kwargs["username"]
+        champions = get_list_or_404(Champion, user__username__exact=username)
+        serializer = ChampionSerializer(champions, many=True)
+        return Response(serializer.data)
