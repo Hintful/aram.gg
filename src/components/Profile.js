@@ -16,7 +16,7 @@ const Profile = ({ location }) => {
     // user data
     axios.get(`http://localhost:8000/aramgg/rest_api/user_detail/${username}/`)
       .then(res => {
-        setUserDetail(res.data[0]);
+        setUserDetail(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -40,13 +40,7 @@ const Profile = ({ location }) => {
     <Center h="auto" mb="50px">
       <VStack spacing={5}>
         <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-        {userDetail !== undefined ?
           <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} />
-          :
-          <div>
-            Loading..
-          </div>
-        }
         <Divider />
 
         {userChampionStats.map(stat =>
