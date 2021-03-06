@@ -33,3 +33,4 @@ aramgg/__pycache__
 __pycache__/
 get-pip.py
 */.env
+.env
