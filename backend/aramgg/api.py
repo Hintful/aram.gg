@@ -27,7 +27,7 @@ class RiotApiRequests:
         data = request.json()
         try:
             User.objects.update_or_create(
-                username=data["name"],
+                username=data["name"].replace(" ", "").lower(),
                 defaults={
                     "profile_icon": data["profileIconId"],
                     "account_id": data["accountId"],
@@ -37,7 +37,7 @@ class RiotApiRequests:
         except KeyError:
             raise KeyError(f"Cannot find a summoner named {self.summoner_name}")
 
-        return User.objects.get(username=data["name"])
+        return User.objects.get(username=self.summoner_name)
 
     @staticmethod
     def get_match_list(user: User) -> List[Dict[str, int]]:
@@ -133,5 +133,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="jamanbo", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="lottomax", request_limit=10)
     total_match_info = riot_api.get_total_match_info()
