@@ -3,6 +3,8 @@ from typing import Dict, List
 
 import django
 
+from aramgg.config import RIOT_API_KEY
+
 os.environ["DJANGO_SETTINGS_MODULE"] = "backend.local_settings"
 django.setup()
 
@@ -10,7 +12,7 @@ import requests
 from aramgg.models import Champion, User
 
 BASE_URL = "https://na1.api.riotgames.com"
-PARAMS = {"api_key": os.environ["RIOT_API_KEY"]}
+PARAMS = {"api_key": RIOT_API_KEY}
 
 
 class RiotApiRequests:
