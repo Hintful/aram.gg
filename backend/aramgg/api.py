@@ -9,7 +9,7 @@ django.setup()
 import requests
 from aramgg.models import Champion, User
 
-API_KEY = "RGAPI-211cfffa-4c6b-40dd-a107-b8375e9e14f1"
+API_KEY = "RGAPI-5e8ec849-761c-4e43-a397-b004ba28a23d"
 BASE_URL = "https://na1.api.riotgames.com"
 PARAMS = {"api_key": API_KEY}
 
@@ -96,7 +96,6 @@ class RiotApiRequests:
         champion.death += participant_stats["deaths"]
         champion.assist += participant_stats["assists"]
         champion.save()
-        print(champion.win)
         user.champion.add(champion)
         user.save()
 
@@ -134,7 +133,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="juis", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="jamanbo", request_limit=10)
     total_match_info = riot_api.get_total_match_info()
-    user = User.objects.get(username="juis")
-    champion = Champion.objects.get(user=user)
