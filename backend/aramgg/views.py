@@ -33,18 +33,17 @@ class UserDetailView(APIView):
             )
 
     def get(self, request, *args, **kwargs):
+        username = self.kwargs["username"]
         try:
-            riot_api = RiotApiRequests(
-                summoner_name=self.kwargs["username"], request_limit=10
-            )
+            riot_api = RiotApiRequests(summoner_name=username, request_limit=10)
             riot_api.get_account_info()
             riot_api.get_total_match_info()
-            user = User.objects.get(username__iexact=self.kwargs["username"])
+            user = User.objects.get(username__exact=username)
             serializer = UserSerializer(user, many=False)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         except ObjectDoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(data=username, status=status.HTTP_404_NOT_FOUND)
 
 
 class ChampionDetailView(APIView):
