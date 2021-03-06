@@ -9,7 +9,7 @@ django.setup()
 import requests
 from aramgg.models import Champion, User
 
-API_KEY = "RGAPI-211cfffa-4c6b-40dd-a107-b8375e9e14f1"
+API_KEY = "RGAPI-74ba0d2c-c684-408e-93b3-ea594973d720"
 BASE_URL = "https://na1.api.riotgames.com"
 PARAMS = {"api_key": API_KEY}
 
