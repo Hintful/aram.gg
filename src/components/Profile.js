@@ -40,7 +40,13 @@ const Profile = ({ location }) => {
     <Center h="auto" mb="50px">
       <VStack spacing={5}>
         <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-          <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} />
+          { userDetail !== undefined ?
+            <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} />
+            :
+            <div>
+              Loading..
+            </div>
+          }
         <Divider />
 
         {userChampionStats.map(stat =>

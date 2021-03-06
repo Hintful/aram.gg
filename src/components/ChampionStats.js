@@ -45,7 +45,12 @@ const ChampionStats = ({ stats }) => {
   return (
     <Flex direction="row" className="champion-stats">
       <Flex direction="column" justify="center" align="center" className="champion-icon">
-        <Image mb={2} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
+        { championName !== '' ?
+          <Image mb={2} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
+          :
+          <div style={{ background: 'black' }}>
+          </div>
+        }
         <Flex className="champion-name-label">
           <Text fontSize="sm">{championName}</Text>
         </Flex>
