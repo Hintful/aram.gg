@@ -9,6 +9,7 @@ import ChampionStats from './ChampionStats';
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
   const [userChampionStats, setUserChampionStats] = useState([]); // init
+  const [numGames, setNumGames] = useState(0);
   const { id } = useParams();
   const username = id;
 
@@ -36,17 +37,34 @@ const Profile = ({ location }) => {
     getUserData();
   }, []); // didComponentMount
 
+  useEffect(() => {
+    const totalNumGames = userChampionStats.reduce((total, championStat) => total + (championStat.win + championStat.loss), 0);
+    setTimeout(() => {
+      for(let i = 0; i < totalNumGames; i++) {
+        console.log(i);
+        setTimeout(() => {setNumGames((state) => state + 1)}, 100);
+      }
+    }, 1000);
+    
+  }, [userChampionStats])
+
   return (
     <Center h="auto" mb="50px">
       <VStack spacing={5}>
         <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-          { userDetail !== undefined ?
-            <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} />
-            :
-            <div>
-              Loading..
+        {userDetail !== undefined ?
+          <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} />
+          :
+          <div>
+            Loading..
             </div>
-          }
+        }
+        <Text fontFamily="Roboto" fontSize={14}>
+          Total number of games analyzed:&nbsp;
+          <span style={{ fontWeight: 600 }}>
+            {numGames}
+          </span>
+        </Text>
         <Divider />
 
         {userChampionStats.map((stat, i) =>
