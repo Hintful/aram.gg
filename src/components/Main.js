@@ -11,7 +11,9 @@ const Main = () => {
     <Center h="90vh">
       <Container maxW="xl" centerContent>
         <form 
-        onSubmit={() => {
+        onSubmit={(e) => {
+          e.preventDefault();
+          setSummonerName('');
           history.push({
             pathname: `/profile/${summonerName}`
           })
