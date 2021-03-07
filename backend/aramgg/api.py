@@ -81,7 +81,6 @@ class RiotApiRequests:
             if participant["participantId"] == participant_id
         )
         participant_stats = participant_info["stats"]
-
         # Get or create champion records and update relative fields
         champion, created = Champion.objects.get_or_create(
             champion_id=participant_info["championId"],
@@ -90,6 +89,7 @@ class RiotApiRequests:
             champion.win += 1
         else:
             champion.loss += 1
+        champion.total_game_length += data["gameDuration"]
         champion.total_damage_done += participant_stats["totalDamageDealtToChampions"]
         champion.total_healing_done += participant_stats["totalHeal"]
         champion.total_damage_taken += participant_stats["totalDamageTaken"]
@@ -107,7 +107,6 @@ class RiotApiRequests:
         url = f"{BASE_URL}/lol/match/v4/matches/{match_id}"
         request = requests.get(url=url, params=PARAMS)
         data = request.json()
-
         return data
 
     def get_total_match_info(self) -> List:
@@ -134,5 +133,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="lottomax", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="juis", request_limit=10)
     total_match_info = riot_api.get_total_match_info()

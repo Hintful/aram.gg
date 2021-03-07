@@ -23,6 +23,7 @@ class Champion(models.Model):
     total_damage_done = models.IntegerField(default=0, null=False, blank=False)
     total_damage_taken = models.IntegerField(default=0, null=False, blank=False)
     total_healing_done = models.IntegerField(default=0, null=False, blank=False)
+    total_game_length = models.IntegerField(default=0, null=False, blank=False)
 
     def __str__(self):
         return self.champion_id
