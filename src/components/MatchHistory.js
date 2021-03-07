@@ -65,7 +65,7 @@ const MatchHistory = () => {
       </VStack>
 
       <Button colorScheme="teal" size="md" onClick={() => { setNumViewableMatches(numViewableMatches + RENDER_MATCH_SIZE)}}>
-        <i class="fas fa-caret-down fa-lg"></i> &nbsp;View More Matches
+        <i className="fas fa-caret-down fa-lg"></i> &nbsp;View More Matches
       </Button>
     </Flex>
   );

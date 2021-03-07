@@ -49,8 +49,8 @@ const Profile = ({ location }) => {
           }
         <Divider />
 
-        {userChampionStats.map(stat =>
-          <ChampionStats stats={stat} />
+        {userChampionStats.map((stat, i) =>
+          <ChampionStats stats={stat} key={i} />
         )}
       </VStack>
 
