@@ -34,4 +34,4 @@ __pycache__/
 get-pip.py
 */.env
 .env
-*/config.py
+backend/aramgg/config.py
