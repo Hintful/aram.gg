@@ -148,7 +148,7 @@ const Profile = ({ location }) => {
           </Text>
           :
           <Text fontFamily="Toboto" fontSize={14}>
-            <Spinner color="teal.500" size="xs" /> Loading...
+            Total number of games analyzed:&nbsp;&nbsp;<Spinner color="teal.500" size="xs" /> <span style={{ fontWeight: 600}}>Loading...</span>
           </Text>
         }
 

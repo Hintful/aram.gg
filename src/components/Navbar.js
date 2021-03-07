@@ -1,4 +1,4 @@
-import { Box, HStack, Divider, FormControl, Input, InputGroup, Stack, Text, Button } from '@chakra-ui/react';
+import { Box, HStack, Divider, FormControl, Input, InputGroup, Stack, Text, Button, InputLeftElement } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 
@@ -26,7 +26,7 @@ const Navbar = () => {
           <FormControl isRequired>
             <HStack spacing={0} mr={2}>
               <InputGroup>
-                <Input type='name' value={summonerName} size="sm" placeholder='Summoner Name' aria-label="Summoner Name" width="300px"
+                <Input type='name' value={summonerName} size="sm" placeholder='Summoner Name' aria-label="Summoner Name" width="250px"
                   onChange={(e) => { setSummonerName(e.target.value) }}
                 />
               </InputGroup>

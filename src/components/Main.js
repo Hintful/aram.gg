@@ -25,7 +25,7 @@ const Main = () => {
             </Text>
             <FormControl isRequired>
               <InputGroup>
-                <InputLeftElement children={<i class="fas fa-user"></i>} />
+                <InputLeftElement children={<i className="fas fa-user"></i>} />
                 <Input type='name' placeholder='Summoner Name' aria-label='Summoner Name' width="400px"
                   onChange={(e) => { setSummonerName(e.target.value) }}
                 />
