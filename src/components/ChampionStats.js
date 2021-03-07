@@ -16,6 +16,7 @@ import champion_data_json from './json/champion.json';
   "total_damage_done"
   "total_damage_taken"
   "total_healing_done"
+  "total_game_length"
 } */
 
 const getURLName = (name) => {
@@ -80,6 +81,10 @@ const ChampionStats = ({ stats }) => {
   const [championData, setChampionData] = useState([]);
   const [championName, setChampionName] = useState('');
 
+  const getTotalMinutes = () => {
+    return stats.total_game_length / 60;
+  }
+
   useEffect(() => {
     setChampionData(Object.values(JSON.parse(JSON.stringify(champion_data_json)).data));
   }, []);
@@ -127,13 +132,13 @@ const ChampionStats = ({ stats }) => {
           </Stat>
           <Stat width="120px">
             <StatLabel>Damage Done</StatLabel>
-            <StatNumber>{formatNumber(Math.round(stats.total_damage_done / (stats.win + stats.loss)))}</StatNumber>
-            <StatHelpText>Per Game</StatHelpText>
+            <StatNumber>{formatNumber(Math.round(stats.total_damage_done / getTotalMinutes()))}</StatNumber>
+            <StatHelpText>Per Minute</StatHelpText>
           </Stat>
           <Stat width="120px">
             <StatLabel>Damage Taken</StatLabel>
-            <StatNumber>{formatNumber(Math.round(stats.total_damage_taken / (stats.win + stats.loss)))}</StatNumber>
-            <StatHelpText>Per Game</StatHelpText>
+            <StatNumber>{formatNumber(Math.round(stats.total_damage_taken / getTotalMinutes()))}</StatNumber>
+            <StatHelpText>Per Minute</StatHelpText>
           </Stat>
         </HStack>
       </Flex>
