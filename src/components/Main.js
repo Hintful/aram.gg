@@ -11,12 +11,11 @@ const Main = () => {
     <Center h="90vh">
       <Container maxW="xl" centerContent>
         <form 
-        // onSubmit={() => {
-        //   history.push({
-        //     pathname: `/profile/${summonerName}`,
-        //     state: { sName: summonerName }
-        //   })
-        // }}
+        onSubmit={() => {
+          history.push({
+            pathname: `/profile/${summonerName}`
+          })
+        }}
         >
           <VStack spacing={6}>
             <Text className="title" fontSize="4xl">
@@ -30,11 +29,9 @@ const Main = () => {
                 />
               </InputGroup>
             </FormControl>
-            <RouterLink to={`/profile/${summonerName}`}>
               <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%">
                 Search
               </Button>
-            </RouterLink>
           </VStack>
         </form>
       </Container>
