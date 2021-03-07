@@ -1,4 +1,4 @@
-import { Center, Divider, HStack, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
+import { Center, Divider, HStack, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -25,9 +25,10 @@ const getKDAElement = (kda) => {
     )
   } else {
     return (
-      <div>
-        Loading...
-      </div>
+      <HStack>
+        <Spinner color="teal.500" size="sm" />
+        <Text>Loading...</Text>
+      </HStack>
     )
   }
   
@@ -107,7 +108,7 @@ const Profile = ({ location }) => {
             <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={totalKDA} />
             :
             <div>
-              Loading..
+              <Spinner color="teal.500" /> Loading..
             </div>
           }
 
@@ -128,7 +129,7 @@ const Profile = ({ location }) => {
             </StatNumber>
             <StatHelpText>Games Lost</StatHelpText>
           </Stat>
-          <Stat width="120px">
+          <Stat width="160px">
             <StatLabel>KDA</StatLabel>
             <StatNumber>
               { getKDAElement(totalKDA) }
@@ -147,7 +148,7 @@ const Profile = ({ location }) => {
           </Text>
           :
           <Text fontFamily="Toboto" fontSize={14}>
-            Loading...
+            <Spinner color="teal.500" size="xs" /> Loading...
           </Text>
         }
 
