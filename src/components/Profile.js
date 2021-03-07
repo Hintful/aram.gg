@@ -1,6 +1,5 @@
-import { Avatar, AvatarBadge, Box, Center, Divider, Flex, HStack, Image, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
+import { Center, Divider, HStack, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
-import MatchHistory from './MatchHistory';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import IconBox from './IconBox';
@@ -9,7 +8,7 @@ import { roundNumber } from './ChampionStats';
 import { StarIcon } from '@chakra-ui/icons';
 
 const getKDAColor = (kda) => {
-  if (kda < 1.0) { return '#888888'; }
+  if (kda < 1.0) { return '#ababab'; }
   else if (kda < 2.0) { return '#454545'; }
   else if (kda < 3.0) { return '#90ee90'; }
   else if (kda < 3.7) { return '#87cefa'; }
@@ -18,17 +17,27 @@ const getKDAColor = (kda) => {
 }
 
 const getKDAElement = (kda) => {
-  return (
-    <span style={{ color: getKDAColor(kda) }}>
-      {roundNumber(kda)}
-    </span>
-  )
+  if (kda) {
+    return (
+      <span style={{ color: getKDAColor(kda) }}>
+        {roundNumber(kda)}
+      </span>
+    )
+  } else {
+    return (
+      <div>
+        Loading...
+      </div>
+    )
+  }
+  
 }
 
 export const kdaStarRating = (kda, starSize = 3) => {
   let star = 0;
 
-  if (kda < 1.0) { star = 1; }
+  if (!kda) { star = 0; }
+  else if (kda < 1.0) { star = 1; }
   else if (kda < 2.0) { star = 2; }
   else if (kda < 3.0) { star = 3; }
   else if (kda < 3.7) { star = 4; }
@@ -44,8 +53,8 @@ export const kdaStarRating = (kda, starSize = 3) => {
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
   const [userChampionStats, setUserChampionStats] = useState([]); // init
-  const [numGames, setNumGames] = useState(0);
-  const [totalKDA, setTotalKDA] = useState(-1);
+  const [numGames, setNumGames] = useState(null);
+  const [totalKDA, setTotalKDA] = useState(null);
   const { id } = useParams();
   const username = id;
 
@@ -69,7 +78,7 @@ const Profile = ({ location }) => {
       })
   }
 
-  
+
 
   useEffect(() => {
     getUserData();
@@ -97,7 +106,7 @@ const Profile = ({ location }) => {
               Loading..
             </div>
           }
-          
+
         </VStack>
 
         <HStack spacing="40px">
@@ -118,25 +127,25 @@ const Profile = ({ location }) => {
           <Stat width="120px">
             <StatLabel>KDA</StatLabel>
             <StatNumber>
-              {totalKDA !== -1 ?
-                getKDAElement(totalKDA)
-                :
-                <div>
-                  Loading...
-                </div>
-              }
+              { getKDAElement(totalKDA) }
             </StatNumber>
             <StatHelpText>
               Over {numGames} Games
             </StatHelpText>
           </Stat>
         </HStack>
-        <Text fontFamily="Roboto" fontSize={14}>
-          Total number of games analyzed:&nbsp;
-          <span style={{ fontWeight: 600 }}>
-            {numGames}
-          </span>
-        </Text>
+        { numGames ?
+          <Text fontFamily="Roboto" fontSize={14}>
+            Total number of games analyzed:&nbsp;
+            <span style={{ fontWeight: 600 }}>
+              {numGames}
+            </span>
+          </Text>
+          :
+          <Text fontFamily="Toboto" fontSize={14}>
+            Loading...
+          </Text>
+        }
 
         <Divider />
 

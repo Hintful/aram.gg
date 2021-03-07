@@ -1,7 +1,7 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { Image } from '@chakra-ui/image';
-import { Box, Divider, Flex, HStack, Spacer, Text } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber, StatHelpText, StatArrow, StatGroup } from '@chakra-ui/react';
+import { Flex, HStack, Text } from '@chakra-ui/layout';
+import { Stat, StatLabel, StatNumber, StatHelpText } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
 
@@ -34,7 +34,7 @@ const getURLName = (name) => {
 }
 
 const getKDAColor = (kda) => {
-  if (kda < 1.5) { return '#888888'; }
+  if (kda < 1.5) { return '#ababab'; }
   else if (kda < 2.3) { return '#454545'; }
   else if (kda < 3.1) { return '#90ee90'; }
   else if (kda < 4) { return '#87cefa'; }
@@ -43,7 +43,7 @@ const getKDAColor = (kda) => {
 }
 
 export const roundNumber = (num) => {
-  return (Math.round(num * 10) / 10).toFixed(1);
+  return parseFloat((Math.round(num * 10) / 10).toFixed(1));
 }
 
 const getKDAElement = (stats) => {
