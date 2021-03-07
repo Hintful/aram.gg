@@ -48,7 +48,7 @@ export const roundNumber = (num) => {
 }
 
 const getKDAElement = (stats) => {
-  const kda = roundNumber((stats.kill + stats.assist) / stats.death);
+  const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
 
   return (
     <span style={{ color: getKDAColor(kda) }}>
@@ -62,7 +62,7 @@ const formatNumber = (num) => {
 }
 
 const kdaStarRating = (stats) => {
-  const kda = roundNumber((stats.kill + stats.assist) / stats.death);
+  const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
   let star = 0;
   if (kda < 1.5) { star = 1; }
   else if (kda < 2.3) { star = 2; }
