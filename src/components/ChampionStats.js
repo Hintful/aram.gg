@@ -33,7 +33,7 @@ const getURLName = (name) => {
   }
 }
 
-const getKDAColor = (kda) => {
+export const getKDAColor = (kda) => {
   if (kda < 1.5) { return '#888888'; }
   else if (kda < 2.3) { return 'black'; }
   else if (kda < 3.1) { return '#90ee90'; }
@@ -42,7 +42,7 @@ const getKDAColor = (kda) => {
   else { return '#ff4500'; }
 }
 
-const roundNumber = (num) => {
+export const roundNumber = (num) => {
   return (Math.round(num * 10) / 10).toFixed(1);
 }
 
@@ -71,7 +71,7 @@ const kdaStarRating = (stats) => {
 
   return (
      Array(5).fill("").map((_, i) => (
-      <StarIcon w={3} h={3} mt="7px" key={i} color={i < star ? "yellow.400" : "gray.500"} />
+      <StarIcon w={3} h={3} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
     ))
   )
 }
@@ -92,7 +92,7 @@ const ChampionStats = ({ stats }) => {
   }, [championData]) // run when championData finishes loading
 
   return (
-    <Flex direction="row" className="champion-stats">
+    <Flex direction="row" className="champion-stats" width="auto">
       <Flex direction="column" justify="center" align="center" className="champion-icon">
         { championName !== '' ?
           <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
@@ -105,7 +105,7 @@ const ChampionStats = ({ stats }) => {
         </Flex>
       </Flex>
       <Flex>
-        <HStack ml={3} spacing="40px">
+        <HStack ml={7} spacing="40px">
           <Stat>
             <StatLabel>Wins</StatLabel>
             <StatNumber color="blue.300">{stats.win}</StatNumber>
