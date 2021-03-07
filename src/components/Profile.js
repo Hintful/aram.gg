@@ -58,9 +58,13 @@ const Profile = ({ location }) => {
   const { id } = useParams();
   const username = id;
 
+  const formatUsername = (username) => {
+    return username.split(" ").join("").toLowerCase();
+  }
+
   async function getUserData() {
     // user data
-    axios.get(`http://localhost:8000/aramgg/rest_api/user_detail/${username}/`)
+    axios.get(`http://localhost:8000/aramgg/rest_api/user_detail/${formatUsername(username)}/`)
       .then(res => {
         setUserDetail(res.data);
       })
@@ -69,7 +73,7 @@ const Profile = ({ location }) => {
       })
 
     // user champion data
-    axios.get(`http://localhost:8000/aramgg/rest_api/user_champion/${username}/`)
+    axios.get(`http://localhost:8000/aramgg/rest_api/user_champion/${formatUsername(username)}/`)
       .then(res => {
         setUserChampionStats(res.data);
       })
