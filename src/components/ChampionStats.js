@@ -33,9 +33,9 @@ const getURLName = (name) => {
   }
 }
 
-export const getKDAColor = (kda) => {
+const getKDAColor = (kda) => {
   if (kda < 1.5) { return '#888888'; }
-  else if (kda < 2.3) { return 'black'; }
+  else if (kda < 2.3) { return '#454545'; }
   else if (kda < 3.1) { return '#90ee90'; }
   else if (kda < 4) { return '#87cefa'; }
   else if (kda < 5) { return '#ffa500'; }

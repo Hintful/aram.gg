@@ -1,15 +1,21 @@
 import { Image } from '@chakra-ui/image';
-import { Box } from '@chakra-ui/layout';
+import { Box, Flex, Text, VStack } from '@chakra-ui/layout';
 import React, { useEffect } from 'react';
+import { kdaStarRating } from './Profile.js';
 
-const IconBox = ({ profile_icon_id, level }) => {
+const IconBox = ({ profile_icon_id, level, totalKDA }) => {
   return (
-    <Box className="icon-box" boxSize="100px" mb={10}>
-      <Image className="icon-box-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/profileicon/${profile_icon_id}.png`} />
-      <Box className="icon-box-level-badge">
-        {level}
+    <VStack mb={5}>
+      <Box className="icon-box" boxSize="100px" mb={-2}>
+        <Image className="icon-box-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/profileicon/${profile_icon_id}.png`} />
+        <Box className="icon-box-level-badge">
+          {level}
+        </Box>
       </Box>
-    </Box>
+      <Flex flexDirection="row">
+        {kdaStarRating(totalKDA, 5)}
+      </Flex>
+    </VStack>
   );
 }
 

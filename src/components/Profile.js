@@ -8,6 +8,39 @@ import ChampionStats from './ChampionStats';
 import { roundNumber } from './ChampionStats';
 import { StarIcon } from '@chakra-ui/icons';
 
+const getKDAColor = (kda) => {
+  if (kda < 1.0) { return '#888888'; }
+  else if (kda < 2.0) { return '#454545'; }
+  else if (kda < 3.0) { return '#90ee90'; }
+  else if (kda < 3.7) { return '#87cefa'; }
+  else if (kda < 4.3) { return '#ffa500'; }
+  else { return '#ff4500'; }
+}
+
+const getKDAElement = (kda) => {
+  return (
+    <span style={{ color: getKDAColor(kda) }}>
+      {roundNumber(kda)}
+    </span>
+  )
+}
+
+export const kdaStarRating = (kda, starSize = 3) => {
+  let star = 0;
+
+  if (kda < 1.0) { star = 1; }
+  else if (kda < 2.0) { star = 2; }
+  else if (kda < 3.0) { star = 3; }
+  else if (kda < 3.7) { star = 4; }
+  else { star = 5; }
+
+  return (
+    Array(5).fill("").map((_, i) => (
+      <StarIcon w={starSize} h={starSize} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
+    ))
+  )
+}
+
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
   const [userChampionStats, setUserChampionStats] = useState([]); // init
@@ -36,38 +69,7 @@ const Profile = ({ location }) => {
       })
   }
 
-  const getKDAColor = (kda) => {
-    if (kda < 1.0) { return '#888888'; }
-    else if (kda < 1.8) { return '#454545'; }
-    else if (kda < 2.5) { return '#90ee90'; }
-    else if (kda < 3.2) { return '#87cefa'; }
-    else if (kda < 4) { return '#ffa500'; }
-    else { return '#ff4500'; }
-  }
-
-  const kdaStarRating = (kda) => {
-    let star = 0;
-
-    if (kda < 1.0) { star = 1; }
-    else if (kda < 1.8) { star = 2; }
-    else if (kda < 2.5) { star = 3; }
-    else if (kda < 3.2) { star = 4; }
-    else { star = 5; }
-
-    return (
-      Array(5).fill("").map((_, i) => (
-       <StarIcon w={3} h={3} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
-     ))
-   )
-  }
-
-  const getKDAElement = (kda) => {
-    return (
-      <span style={{ color: getKDAColor(kda) }}>
-        {roundNumber(kda)}
-      </span>
-    )
-  }
+  
 
   useEffect(() => {
     getUserData();
@@ -86,14 +88,17 @@ const Profile = ({ location }) => {
   return (
     <Center h="auto" mb="50px">
       <VStack spacing={5}>
-        <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-        {userDetail !== undefined ?
-          <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} />
-          :
-          <div>
-            Loading..
+        <VStack>
+          <Text fontSize={32} className="sName" mt={10}>{username}</Text>
+          {userDetail !== undefined ?
+            <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={totalKDA} />
+            :
+            <div>
+              Loading..
             </div>
-        }
+          }
+          
+        </VStack>
 
         <HStack spacing="40px">
           <Stat width="120px">
@@ -110,7 +115,7 @@ const Profile = ({ location }) => {
             </StatNumber>
             <StatHelpText>Games Lost</StatHelpText>
           </Stat>
-          <Stat>
+          <Stat width="120px">
             <StatLabel>KDA</StatLabel>
             <StatNumber>
               {totalKDA !== -1 ?
@@ -122,7 +127,7 @@ const Profile = ({ location }) => {
               }
             </StatNumber>
             <StatHelpText>
-              { kdaStarRating(totalKDA) }
+              Over {numGames} Games
             </StatHelpText>
           </Stat>
         </HStack>
