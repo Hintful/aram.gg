@@ -131,7 +131,7 @@ const ChampionStats = ({ stats }) => {
             </StatHelpText>
           </Stat>
           <Stat width="120px">
-            <StatLabel>Damage Done</StatLabel>
+            <StatLabel>Damage Dealt</StatLabel>
             <StatNumber>{formatNumber(Math.round(stats.total_damage_done / getTotalMinutes()))}</StatNumber>
             <StatHelpText>Per Minute</StatHelpText>
           </Stat>

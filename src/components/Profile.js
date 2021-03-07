@@ -103,7 +103,7 @@ const Profile = ({ location }) => {
       <VStack spacing={5}>
         <VStack>
           <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-          {userDetail !== undefined ?
+          {userDetail ?
             <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={totalKDA} />
             :
             <div>
