@@ -89,6 +89,20 @@ class RiotApiRequests:
             champion.win += 1
         else:
             champion.loss += 1
+
+        killing_spree = participant_stats["largestKillingSpree"]
+        champion.largest_killing_spree = (
+            killing_spree
+            if champion.largest_killing_spree < killing_spree
+            else champion.largest_killing_spree
+        )
+        champion.num_double_kill += participant_stats["doubleKills"]
+        champion.num_triple_kill += participant_stats["tripleKills"]
+        champion.num_quadra_kill += participant_stats["quadraKills"]
+        champion.num_penta_kill += participant_stats["pentaKills"]
+        champion.num_legendary_kill += participant_stats["unrealKills"]
+        champion.total_gold_spent += participant_stats["goldSpent"]
+        champion.total_gold_earned += participant_stats["goldEarned"]
         champion.total_game_length += data["gameDuration"]
         champion.total_damage_done += participant_stats["totalDamageDealtToChampions"]
         champion.total_healing_done += participant_stats["totalHeal"]
@@ -133,5 +147,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="juis", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="hint", request_limit=10)
     total_match_info = riot_api.get_total_match_info()

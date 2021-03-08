@@ -24,6 +24,14 @@ class Champion(models.Model):
     total_damage_taken = models.IntegerField(default=0, null=False, blank=False)
     total_healing_done = models.IntegerField(default=0, null=False, blank=False)
     total_game_length = models.IntegerField(default=0, null=False, blank=False)
+    total_gold_spent = models.IntegerField(default=0, null=False, blank=False)
+    total_gold_earned = models.IntegerField(default=0, null=False, blank=False)
+    largest_killing_spree = models.IntegerField(default=0, null=False, blank=False)
+    num_double_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_triple_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_quadra_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_penta_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_legendary_kill = models.IntegerField(default=0, null=False, blank=False)
 
     def __str__(self):
         return self.champion_id
