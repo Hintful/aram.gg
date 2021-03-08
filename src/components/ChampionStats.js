@@ -1,7 +1,7 @@
 import { StarIcon } from '@chakra-ui/icons';
 import { Image } from '@chakra-ui/image';
-import { Flex, HStack, Text } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber, StatHelpText } from '@chakra-ui/react';
+import { Flex, HStack, Text, VStack } from '@chakra-ui/layout';
+import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
 
@@ -20,7 +20,9 @@ import champion_data_json from './json/champion.json';
 } */
 
 const getURLName = (name) => {
-  if (name === "Kog'Maw") {
+  if (name === "LeBlanc") {
+    return 'Leblanc';
+  } else if (name === "Kog'Maw") {
     return 'KogMaw';
   } else if (name === 'Dr. Mundo') {
     return 'DrMundo';
@@ -52,12 +54,12 @@ const getKDAStyle = (kda, shadow = false) => {
 }
 
 const getDamageStyle = (value, shadow = false) => {
-  if (value < 600) { return { color: "#ababab" }; }
-  else if (value < 1000) { return { color: "#676767" }; }
-  else if (value < 1500) { return { color: "#90ee90" }; }
-  else if (value < 2000) { return { color: "#87cefa" }; }
-  else if (value < 2500) { return { color: "#ffa500", textShadow: shadow ? '0px 0px 4px #ffa500' : '0'  }; }
-  else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0'  }; }
+  if (value < 700) { return { color: "#ababab" }; }
+  else if (value < 1200) { return { color: "#676767" }; }
+  else if (value < 1650) { return { color: "#90ee90" }; }
+  else if (value < 2100) { return { color: "#87cefa" }; }
+  else if (value < 2700) { return { color: "#ffa500", textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
+  else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
   // else {
   //   return {
   //     background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
@@ -83,7 +85,7 @@ const getKDAElement = (stats) => {
 
 const getDamageElement = (value) => {
   return (
-    <span style={ getDamageStyle(parseInt(value.split(',').join(''))) }>
+    <span style={getDamageStyle(parseInt(value.split(',').join('')))}>
       {value}
     </span>
   )
@@ -93,14 +95,18 @@ const formatNumber = (num) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const kdaStarRating = (stats) => {
-  const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
-  let star = 0;
-  if (kda < 1.5) { star = 1; }
-  else if (kda < 2.3) { star = 2; }
-  else if (kda < 3.1) { star = 3; }
-  else if (kda < 4) { star = 4; }
-  else { star = 5; }
+const getKDAStarRating = (kda) => {
+  if (kda < 1) { return 0; }
+  else if (kda < 1.5) { return 1; }
+  else if (kda < 2.3) { return 2; }
+  else if (kda < 3.1) { return 3; }
+  else if (kda < 4) { return 4; }
+  else { return 5; }
+}
+
+const kdaStarRating = (kda) => {
+  // const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
+  const star = getKDAStarRating(kda);
 
   return (
     Array(5).fill("").map((_, i) => (
@@ -110,13 +116,17 @@ const kdaStarRating = (stats) => {
   )
 }
 
+const getDamageStarRating = (value) => {
+  if (value < 500) { return 0; }
+  else if (value < 750) { return 1; }
+  else if (value < 1200) { return 2; }
+  else if (value < 1650) { return 3; }
+  else if (value < 2100) { return 4; }
+  else { return 5; }
+}
+
 const damageStarRating = (value) => {
-  let star = 0;
-  if (value < 600) { star = 1; }
-  else if (value < 1000) { star = 2; }
-  else if (value < 1500) { star = 3; }
-  else if (value < 2000) { star = 4; }
-  else { star = 5; }
+  const star = getDamageStarRating(value);
 
   return (
     Array(5).fill("").map((_, i) => (
@@ -126,9 +136,28 @@ const damageStarRating = (value) => {
   )
 }
 
-const ChampionStats = ({ stats }) => {
+const getCarryPotential = (wins, losses, kda, effectiveDamage, damageTaken) => {
+  console.log(getKDAStarRating(kda), getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken));
+  // const starRatingPotential = (getKDAStarRating(kda) + Math.min(getDamageStarRating(effectiveDamage) + getDamageStarRating(damageTaken), 8)) / 13;
+  const starRatingPotential = ((getKDAStarRating(kda)) + Math.max(getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken))) / 10;
+  const winrate = wins / (wins + losses);
+
+  console.log(starRatingPotential, winrate);
+  if (wins + losses > 2) {
+    return (starRatingPotential + winrate) / 2;
+  } else {
+    return starRatingPotential;
+  }
+}
+
+const ChampionStats = ({ stats, key }) => {
   const [championData, setChampionData] = useState([]);
   const [championName, setChampionName] = useState('');
+  const [kda, setKDA] = useState(null);
+  const [effectiveDamage, setEffectiveDamage] = useState(null); // total damage done + total healing done
+  const [damageTaken, setDamageTaken] = useState(null);
+  const [carryPotential, setCarryPotential] = useState(null);
+
 
   const getTotalMinutes = () => {
     return stats.total_game_length / 60;
@@ -142,8 +171,15 @@ const ChampionStats = ({ stats }) => {
     const championInfo = championData.filter(data => parseInt(data.key) === stats.champion_id)[0];
     if (championInfo !== undefined) {
       setChampionName(championInfo.name);
+      setKDA(stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist));
+      setEffectiveDamage(stats.total_damage_done + stats.total_healing_done);
+      setDamageTaken(stats.total_damage_taken);
     }
   }, [championData]) // run when championData finishes loading
+
+  useEffect(() => {
+    setCarryPotential(getCarryPotential(stats.win, stats.loss, kda, effectiveDamage / getTotalMinutes(), damageTaken / getTotalMinutes()));
+  }, [kda])
 
   return (
     <Flex direction="row" className="champion-stats" width="auto">
@@ -158,7 +194,7 @@ const ChampionStats = ({ stats }) => {
           <Text fontSize="sm">{championName}</Text>
         </Flex>
       </Flex>
-      <Flex>
+      <HStack>
         <HStack ml={7} mr="100px" spacing="40px">
           <Stat width="120px">
             <StatLabel>Wins</StatLabel>
@@ -176,23 +212,35 @@ const ChampionStats = ({ stats }) => {
             {/* <StatNumber>{`${roundNumber((stats.kill + stats.assist) / stats.death)}`}</StatNumber> */}
             <StatNumber>{getKDAElement(stats)}</StatNumber>
             <StatHelpText>
-              {kdaStarRating(stats)}
+              {kdaStarRating(kda)}
             </StatHelpText>
           </Stat>
         </HStack>
         <HStack>
           <Stat width="140px">
-            <StatLabel>Damage Dealt/min</StatLabel>
-            <StatNumber>{getDamageElement(formatNumber(Math.round(stats.total_damage_done / getTotalMinutes())))}</StatNumber>
-            <StatHelpText>{ damageStarRating(stats.total_damage_done / getTotalMinutes()) }</StatHelpText>
+            <StatLabel>Effective Damage/min</StatLabel>
+            <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / getTotalMinutes())))}</StatNumber>
+            <StatHelpText>{damageStarRating(effectiveDamage / getTotalMinutes())}</StatHelpText>
           </Stat>
           <Stat width="140px">
             <StatLabel>Damage Taken/min</StatLabel>
-            <StatNumber>{getDamageElement(formatNumber(Math.round(stats.total_damage_taken / getTotalMinutes())))}</StatNumber>
-            <StatHelpText>{ damageStarRating(stats.total_damage_taken / getTotalMinutes()) }</StatHelpText>
+            <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / getTotalMinutes())))}</StatNumber>
+            <StatHelpText>{damageStarRating(damageTaken / getTotalMinutes())}</StatHelpText>
           </Stat>
         </HStack>
-      </Flex>
+        <VStack>
+          <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
+          {carryPotential ?
+            <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color="blue.500">
+              <CircularProgressLabel><span style={{ fontFamily: "Roboto" }}>{roundNumber(carryPotential * 100)}%</span></CircularProgressLabel>
+            </CircularProgress>
+            :
+            <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500">
+
+            </CircularProgress>
+          }
+        </VStack>
+      </HStack>
 
     </Flex>
   );

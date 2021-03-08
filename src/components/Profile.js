@@ -175,9 +175,8 @@ const Profile = ({ location }) => {
         }
 
         <Divider />
-        {console.log(userChampionStats)}
         <VStack width="50vw">
-
+ 
           {userChampionStats.length > 0 ?
             userChampionStats.map((stat, i) => (
               <>
