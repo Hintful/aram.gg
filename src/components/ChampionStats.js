@@ -20,7 +20,9 @@ import champion_data_json from './json/champion.json';
 } */
 
 const getURLName = (name) => {
-  if (name === "LeBlanc") {
+  if (name === "Wukong") {
+    return 'MonkeyKing';
+  } else if (name === "LeBlanc") {
     return 'Leblanc';
   } else if (name === "Kog'Maw") {
     return 'KogMaw';
