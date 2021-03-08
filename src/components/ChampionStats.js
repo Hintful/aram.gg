@@ -209,28 +209,28 @@ const ChampionStats = ({ stats }) => {
         <Flex direction="column" mt={2}>
           <HStack ml={5} mb={2} spacing="4px" style={{ fontSize: "14px" }}>
             {stats.num_double_kill > 0 &&
-              <Tooltip hasArrow label={`${stats.num_double_kill} Double Kills`}>
+              <Tooltip hasArrow label={stats.num_double_kill !== 1 ? `${stats.num_double_kill} Double Kills` : `${stats.num_double_kill} Double Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#5bd75b', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
                   <i className="fas fa-dice-two"></i>&nbsp;{stats.num_double_kill}
                 </Flex>
               </Tooltip>
             }
             {stats.num_triple_kill > 0 &&
-              <Tooltip hasArrow label={`${stats.num_triple_kill} Triple Kills`}>
+              <Tooltip hasArrow label={stats.num_triple_kill !== 1 ? `${stats.num_triple_kill} Triple Kills` : `${stats.num_triple_kill} Triple Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#87cefa', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
                   <i className="fas fa-dice-three"></i>&nbsp;{stats.num_triple_kill}
                 </Flex>
               </Tooltip>
             }
             {stats.num_quadra_kill > 0 &&
-              <Tooltip hasArrow label={`${stats.num_quadra_kill} Quadra Kills`}>
+              <Tooltip hasArrow label={stats.num_quadra_kill !== 1 ? `${stats.num_quadra_kill} Quadra Kills` : `${stats.num_quadra_kill} Quadra Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#ffa500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
                   <i className="fas fa-dice-four"></i>&nbsp;{stats.num_quadra_kill}
                 </Flex>
               </Tooltip>
             }
             {stats.num_penta_kill > 0 &&
-              <Tooltip hasArrow label={`${stats.num_penta_kill} Penta Kills`}>
+              <Tooltip hasArrow label={stats.num_penta_kill !== 1 ? `${stats.num_penta_kill} Penta Kills` : `${stats.num_penta_kill} Penta Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#ff4500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
                   <i className="fas fa-dice-five"></i>&nbsp;{stats.num_penta_kill}
                 </Flex>
