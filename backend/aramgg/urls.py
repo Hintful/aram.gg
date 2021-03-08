@@ -17,19 +17,34 @@ urlpatterns = [
         name="rest_api_user_champion",
     ),
     path(
-        "rest_api/ranking/most_kill/",
-        views.RankingMostKillView.as_view(),
-        name="rest_api_ranking_most_kill",
+        "rest_api/ranking/most_avg_kill/",
+        views.RankingMostAverageKillView.as_view(),
+        name="rest_api_ranking_most_avg_kill",
     ),
     path(
-        "rest_api/ranking/most_death/",
-        views.RankingMostDeathView.as_view(),
-        name="rest_api_ranking_most_death",
+        "rest_api/ranking/most_avg_death/",
+        views.RankingMostAverageDeathView.as_view(),
+        name="rest_api_ranking_most_avg_death",
     ),
     path(
-        "rest_api/ranking/most_assist/",
-        views.RankingMostAssistView.as_view(),
-        name="rest_api_ranking_most_assist",
+        "rest_api/ranking/most_avg_assist/",
+        views.RankingMostAverageAssistView.as_view(),
+        name="rest_api_ranking_most_avg_assist",
+    ),
+    path(
+        "rest_api/ranking/most_kill_in_one_game/",
+        views.RankingMostKillInAGameView.as_view(),
+        name="rest_api_ranking_most_avg_kill",
+    ),
+    path(
+        "rest_api/ranking/most_death_in_one_game/",
+        views.RankingMostDeathInAGameView.as_view(),
+        name="rest_api_ranking_most_avg_assist",
+    ),
+    path(
+        "rest_api/ranking/most_assist_in_one_game/",
+        views.RankingMostAssistInAGameView.as_view(),
+        name="rest_api_ranking_most_avg_death",
     ),
 ]
 
