@@ -21,6 +21,90 @@ class ChampionView(APIView):
     queryset = Champion.objects.all()
 
 
+class RankingChampWithMostKill(APIView):
+    queryset = Champion.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+
+        max_avg_kill_champ_data = (
+            Champion.objects.values("champion_id")
+            .annotate(avg_kill=Sum("kill") / (Sum("win") + Sum("loss")))
+            .order_by("-avg_kill")[:3]
+        )
+
+        for i, champ in zip(
+            range(len(max_avg_kill_champ_data)), max_avg_kill_champ_data
+        ):
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "champion_id": champ["champion_id"],
+                        "avg_kill": champ["avg_kill"],
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
+class RankingChampWithMostAssist(APIView):
+    queryset = Champion.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+
+        max_avg_assist_champ_data = (
+            Champion.objects.values("champion_id")
+            .annotate(avg_assist=Sum("assist") / (Sum("win") + Sum("loss")))
+            .order_by("-avg_assist")[:3]
+        )
+
+        for i, champ in zip(
+            range(len(max_avg_assist_champ_data)), max_avg_assist_champ_data
+        ):
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "champion_id": champ["champion_id"],
+                        "avg_assist": champ["avg_assist"],
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
+class RankingChampWithMostDeath(APIView):
+    queryset = Champion.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+
+        max_avg_death_champ_data = (
+            Champion.objects.values("champion_id")
+            .annotate(avg_death=Sum("death") / (Sum("win") + Sum("loss")))
+            .order_by("-avg_death")[:3]
+        )
+
+        for i, champ in zip(
+            range(len(max_avg_death_champ_data)), max_avg_death_champ_data
+        ):
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "champion_id": champ["champion_id"],
+                        "avg_death": champ["avg_death"],
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
 class RankingMostKillInAGameView(APIView):
     queryset = User.objects.all()
 

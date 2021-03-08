@@ -46,6 +46,21 @@ urlpatterns = [
         views.RankingMostAssistInAGameView.as_view(),
         name="rest_api_ranking_most_avg_death",
     ),
+    path(
+        "rest_api/ranking/champ_with_most_kill/",
+        views.RankingChampWithMostKill.as_view(),
+        name="rest_api_ranking_champ_with_most_kill",
+    ),
+    path(
+        "rest_api/ranking/champ_with_most_assist/",
+        views.RankingChampWithMostAssist.as_view(),
+        name="rest_api_ranking_champ_with_most_assist",
+    ),
+    path(
+        "rest_api/ranking/champ_with_most_death/",
+        views.RankingChampWithMostDeath.as_view(),
+        name="rest_api_ranking_champ_with_most_death",
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
