@@ -43,14 +43,6 @@ const getKDAStyle = (kda, shadow = false) => {
   else if (kda < 4) { return { color: '#87cefa' }; }
   else if (kda < 5) { return { color: '#ffa500', textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
-  // else {
-  //   return {
-  //     background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
-  //     WebkitBackgroundClip: "text",
-  //     WebkitTextFillColor: "transparent",
-  //     textShadow: shadow ? '0px 0px 4px ' : '0'
-  //   };
-  // }
 }
 
 const getDamageStyle = (value, shadow = false) => {
@@ -60,13 +52,6 @@ const getDamageStyle = (value, shadow = false) => {
   else if (value < 2100) { return { color: "#87cefa" }; }
   else if (value < 2700) { return { color: "#ffa500", textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
-  // else {
-  //   return {
-  //     background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
-  //     WebkitBackgroundClip: "text",
-  //     WebkitTextFillColor: "transparent"
-  //   };
-  // }
 }
 
 export const roundNumber = (num) => {
@@ -105,12 +90,10 @@ const getKDAStarRating = (kda) => {
 }
 
 const kdaStarRating = (kda) => {
-  // const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
   const star = getKDAStarRating(kda);
 
   return (
     Array(5).fill("").map((_, i) => (
-      // <StarIcon w={3} h={3} mt="7px" key={i} bgGradient="linear(to-t, green.200, pink.500)" bgClip="text" />
       <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
@@ -130,7 +113,6 @@ const damageStarRating = (value) => {
 
   return (
     Array(5).fill("").map((_, i) => (
-      // <StarIcon w={3} h={3} mt="7px" key={i} bgGradient="linear(to-t, green.200, pink.500)" bgClip="text" />
       <span style={i < star ? getDamageStyle(value, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
@@ -138,7 +120,6 @@ const damageStarRating = (value) => {
 
 const getCarryPotential = (wins, losses, kda, effectiveDamage, damageTaken) => {
   console.log(getKDAStarRating(kda), getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken));
-  // const starRatingPotential = (getKDAStarRating(kda) + Math.min(getDamageStarRating(effectiveDamage) + getDamageStarRating(damageTaken), 8)) / 13;
   const starRatingPotential = ((getKDAStarRating(kda)) + Math.max(getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken))) / 10;
   const winrate = wins / (wins + losses);
 
@@ -206,10 +187,8 @@ const ChampionStats = ({ stats, key }) => {
             <StatNumber color="red.300">{stats.loss}</StatNumber>
             <StatHelpText>Games Lost</StatHelpText>
           </Stat>
-          {/* <Divider orientation="vertical" /> */}
           <Stat width="120px">
             <StatLabel>KDA</StatLabel>
-            {/* <StatNumber>{`${roundNumber((stats.kill + stats.assist) / stats.death)}`}</StatNumber> */}
             <StatNumber>{getKDAElement(stats)}</StatNumber>
             <StatHelpText>
               {kdaStarRating(kda)}

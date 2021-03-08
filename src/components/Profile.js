@@ -46,7 +46,6 @@ export const kdaStarRating = (kda, starSize = 3) => {
 
   return (
     Array(5).fill("").map((_, i) => (
-      // <StarIcon w={starSize} h={starSize} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
       <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
@@ -132,7 +131,6 @@ const Profile = ({ location }) => {
           <Stat>
             <StatLabel>Losses</StatLabel>
             <StatNumber color="red.300">
-              {/* {userChampionStats.reduce((total, championStat) => total + championStat.loss, 0)} */}
               {numLosses}
             </StatNumber>
             <StatHelpText>Games Lost</StatHelpText>
