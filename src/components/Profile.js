@@ -51,6 +51,15 @@ export const kdaStarRating = (kda, starSize = 3) => {
   )
 }
 
+const getWinrateColor = (winrate) => {
+  if (winrate < 0.35) { return '#ababab'; }
+  else if(winrate < 0.45) { return '#676767'; }
+  else if(winrate < 0.55) { return '#90ee90'; }
+  else if(winrate < 0.65) { return '#87cefa'; }
+  else if(winrate < 0.75) { return '#ffa500'; }
+  else { return '#ff4500'; }
+}
+
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
   const [userChampionStats, setUserChampionStats] = useState([]); // init
@@ -149,7 +158,7 @@ const Profile = ({ location }) => {
         <VStack>
           <Text fontWeight="600">Winrate</Text>
           {numWins ?
-            <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color="blue.500">
+            <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color={getWinrateColor(numWins / (numWins + numLosses))}>
               <CircularProgressLabel><span style={{ fontFamily: "Roboto" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
             </CircularProgress>
             :

@@ -54,6 +54,15 @@ const getDamageStyle = (value, shadow = false) => {
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
 }
 
+const getPotentialColor = (potential) => {
+  if (potential < 0.3) { return '#ababab'; }
+  else if(potential < 0.5) { return '#676767'; }
+  else if(potential < 0.65) { return '#90ee90'; }
+  else if(potential < 0.75) { return '#87cefa'; }
+  else if(potential < 0.9) { return '#ffa500'; }
+  else { return '#ff4500'; }
+}
+
 export const roundNumber = (num) => {
   return (Math.round(num * 10) / 10).toFixed(1);
 }
@@ -210,8 +219,8 @@ const ChampionStats = ({ stats, key }) => {
         <VStack>
           <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
           {carryPotential ?
-            <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color="blue.500">
-              <CircularProgressLabel><span style={{ fontFamily: "Roboto" }}>{roundNumber(carryPotential * 100)}%</span></CircularProgressLabel>
+            <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color={getPotentialColor(carryPotential)}>
+              <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px" }}>{roundNumber(carryPotential * 100)}%</span></CircularProgressLabel>
             </CircularProgress>
             :
             <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500">
