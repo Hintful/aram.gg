@@ -162,7 +162,7 @@ const Profile = ({ location }) => {
               <CircularProgressLabel><span style={{ fontFamily: "Roboto" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
             </CircularProgress>
             :
-            <CircularProgress isIndeterminate size="100px" thickness="5px" color="blue.500">
+            <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
 
             </CircularProgress>
           }
