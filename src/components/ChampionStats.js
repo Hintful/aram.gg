@@ -1,8 +1,9 @@
 import { Image } from '@chakra-ui/image';
 import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularProgressLabel, Tooltip } from '@chakra-ui/react';
+import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularProgressLabel, Tooltip, Icon } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
+import { GiDiceSixFacesTwo, GiDiceSixFacesThree, GiDiceSixFacesFour, GiDiceSixFacesFive, GiDiceSixFacesSix } from 'react-icons/gi'
 
 
 /* stats = {
@@ -211,28 +212,35 @@ const ChampionStats = ({ stats }) => {
             {stats.num_double_kill > 0 &&
               <Tooltip hasArrow label={stats.num_double_kill !== 1 ? `${stats.num_double_kill} Double Kills` : `${stats.num_double_kill} Double Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#5bd75b', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <i className="fas fa-dice-two"></i>&nbsp;{stats.num_double_kill}
+                  <Icon as={GiDiceSixFacesTwo} />&nbsp;{stats.num_double_kill}
                 </Flex>
               </Tooltip>
             }
             {stats.num_triple_kill > 0 &&
               <Tooltip hasArrow label={stats.num_triple_kill !== 1 ? `${stats.num_triple_kill} Triple Kills` : `${stats.num_triple_kill} Triple Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#87cefa', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <i className="fas fa-dice-three"></i>&nbsp;{stats.num_triple_kill}
+                  <Icon as={GiDiceSixFacesThree} />&nbsp;{stats.num_triple_kill}
                 </Flex>
               </Tooltip>
             }
             {stats.num_quadra_kill > 0 &&
               <Tooltip hasArrow label={stats.num_quadra_kill !== 1 ? `${stats.num_quadra_kill} Quadra Kills` : `${stats.num_quadra_kill} Quadra Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#ffa500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <i className="fas fa-dice-four"></i>&nbsp;{stats.num_quadra_kill}
+                  <Icon as={GiDiceSixFacesFour} />&nbsp;{stats.num_quadra_kill}
                 </Flex>
               </Tooltip>
             }
             {stats.num_penta_kill > 0 &&
               <Tooltip hasArrow label={stats.num_penta_kill !== 1 ? `${stats.num_penta_kill} Penta Kills` : `${stats.num_penta_kill} Penta Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#ff4500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <i className="fas fa-dice-five"></i>&nbsp;{stats.num_penta_kill}
+                  <Icon as={GiDiceSixFacesFive} />&nbsp;{stats.num_penta_kill}
+                </Flex>
+              </Tooltip>
+            }
+            {stats.num_legendary_kill > 0 &&
+              <Tooltip hasArrow label={stats.num_legendary_kill !== 1 ? `${stats.num_penta_legendary} Legendary Kills` : `${stats.num_legendary_kill} Legendary Kill`}>
+                <Flex direction="row" align="center" style={{ background: '#c700fd', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
+                  <Icon as={GiDiceSixFacesSix} />&nbsp;{stats.num_legendary_kill}
                 </Flex>
               </Tooltip>
             }
@@ -288,7 +296,7 @@ const ChampionStats = ({ stats }) => {
           </HStack>
         </Flex>
       </Flex>
-    </Flex>
+    </Flex >
   );
 }
 
