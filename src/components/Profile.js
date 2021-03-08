@@ -7,19 +7,19 @@ import ChampionStats from './ChampionStats';
 import { roundNumber } from './ChampionStats';
 import { StarIcon } from '@chakra-ui/icons';
 
-const getKDAColor = (kda) => {
-  if (kda < 1.0) { return '#ababab'; }
-  else if (kda < 2.0) { return '#454545'; }
-  else if (kda < 3.0) { return '#90ee90'; }
-  else if (kda < 3.7) { return '#87cefa'; }
-  else if (kda < 4.3) { return '#ffa500'; }
+const getKDAStyle = (kda) => {
+  if (kda < 1.0) { return { color: '#ababab'}; }
+  else if (kda < 2.0) { return { color: '#676767'}; }
+  else if (kda < 3.0) { return { color: '#90ee90'}; }
+  else if (kda < 3.7) { return { color: '#87cefa'}; }
+  else if (kda < 4.3) { return { color: '#ffa500'}; }
   else { return '#ff4500'; }
 }
 
 const getKDAElement = (kda) => {
   if (kda) {
     return (
-      <span style={{ color: getKDAColor(kda) }}>
+      <span style={ getKDAStyle(kda) }>
         {roundNumber(kda)}
       </span>
     )
@@ -46,7 +46,8 @@ export const kdaStarRating = (kda, starSize = 3) => {
 
   return (
     Array(5).fill("").map((_, i) => (
-      <StarIcon w={starSize} h={starSize} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
+      // <StarIcon w={starSize} h={starSize} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
+      <span style={i < star ? getKDAStyle(kda) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
 }

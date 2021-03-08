@@ -26,7 +26,7 @@ const getURLName = (name) => {
     return 'DrMundo';
   } else if (name.includes(' ')) { // name contains whitespace
     return name.replace(' ', ''); // remove whitespace
-  } else if(name.includes("'")) { // name contains small quotes
+  } else if (name.includes("'")) { // name contains small quotes
     const quoteIndex = name.indexOf("'");
     return name.substring(0, quoteIndex) + name[quoteIndex + 1].toLowerCase() + name.substring(quoteIndex + 2);
   } else {
@@ -34,25 +34,56 @@ const getURLName = (name) => {
   }
 }
 
-const getKDAColor = (kda) => {
-  if (kda < 1.5) { return '#ababab'; }
-  else if (kda < 2.3) { return '#454545'; }
-  else if (kda < 3.1) { return '#90ee90'; }
-  else if (kda < 4) { return '#87cefa'; }
-  else if (kda < 5) { return '#ffa500'; }
-  else { return '#ff4500'; }
+const getKDAStyle = (kda) => {
+  if (kda < 1.5) { return { color: '#ababab' }; }
+  else if (kda < 2.3) { return { color: '#676767' }; }
+  else if (kda < 3.1) { return { color: '#90ee90' }; }
+  else if (kda < 4) { return { color: '#87cefa' }; }
+  else if (kda < 5) { return { color: '#ffa500' }; }
+  else if (kda < 6) { return { color: '#ff4500' }; }
+  else {
+    return {
+      background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
+      webkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent"
+    };
+  }
+}
+
+const getDamageStyle = (value) => {
+  if (value < 600) { return { color: "#ababab" }; }
+  else if (value < 1000) { return { color: "#676767" }; }
+  else if (value < 1500) { return { color: "#90ee90" }; }
+  else if (value < 2000) { return { color: "#87cefa" }; }
+  else if (value < 2500) { return { color: "#ffa500" }; }
+  else if (value < 2800) { return { color: '#ff4500' }; }
+  else {
+    return {
+      background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
+      webkitBackgroundClip: "text",
+      WebkitTextFillColor: "transparent"
+    };
+  }
 }
 
 export const roundNumber = (num) => {
-  return parseFloat((Math.round(num * 10) / 10).toFixed(1));
+  return (Math.round(num * 10) / 10).toFixed(1);
 }
 
 const getKDAElement = (stats) => {
   const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
 
   return (
-    <span style={{ color: getKDAColor(kda) }}>
+    <span style={getKDAStyle(kda)}>
       {kda}
+    </span>
+  )
+}
+
+const getDamageElement = (value) => {
+  return (
+    <span style={ getDamageStyle(parseInt(value.split(',').join(''))) }>
+      {value}
     </span>
   )
 }
@@ -71,8 +102,25 @@ const kdaStarRating = (stats) => {
   else { star = 5; }
 
   return (
-     Array(5).fill("").map((_, i) => (
-      <StarIcon w={3} h={3} mt="7px" key={i} color={i < star ? getKDAColor(kda) : "gray.500"} />
+    Array(5).fill("").map((_, i) => (
+      // <StarIcon w={3} h={3} mt="7px" key={i} bgGradient="linear(to-t, green.200, pink.500)" bgClip="text" />
+      <span style={i < star ? getKDAStyle(kda) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
+    ))
+  )
+}
+
+const damageStarRating = (value) => {
+  let star = 0;
+  if (value < 600) { star = 1; }
+  else if (value < 1000) { star = 2; }
+  else if (value < 1500) { star = 3; }
+  else if (value < 2000) { star = 4; }
+  else { star = 5; }
+
+  return (
+    Array(5).fill("").map((_, i) => (
+      // <StarIcon w={3} h={3} mt="7px" key={i} bgGradient="linear(to-t, green.200, pink.500)" bgClip="text" />
+      <span style={i < star ? getDamageStyle(value) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
 }
@@ -99,7 +147,7 @@ const ChampionStats = ({ stats }) => {
   return (
     <Flex direction="row" className="champion-stats" width="auto">
       <Flex direction="column" justify="center" align="center" className="champion-icon">
-        { championName !== '' ?
+        {championName !== '' ?
           <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
           :
           <div style={{ background: 'black' }}>
@@ -110,7 +158,7 @@ const ChampionStats = ({ stats }) => {
         </Flex>
       </Flex>
       <Flex>
-        <HStack ml={7} spacing="40px">
+        <HStack ml={7} mr="100px" spacing="40px">
           <Stat>
             <StatLabel>Wins</StatLabel>
             <StatNumber color="blue.300">{stats.win}</StatNumber>
@@ -125,20 +173,22 @@ const ChampionStats = ({ stats }) => {
           <Stat width="100px">
             <StatLabel>KDA</StatLabel>
             {/* <StatNumber>{`${roundNumber((stats.kill + stats.assist) / stats.death)}`}</StatNumber> */}
-            <StatNumber>{ getKDAElement(stats) }</StatNumber>
+            <StatNumber>{getKDAElement(stats)}</StatNumber>
             <StatHelpText>
-              { kdaStarRating(stats) }
+              {kdaStarRating(stats)}
             </StatHelpText>
           </Stat>
-          <Stat width="120px">
-            <StatLabel>Damage Dealt</StatLabel>
-            <StatNumber>{formatNumber(Math.round(stats.total_damage_done / getTotalMinutes()))}</StatNumber>
-            <StatHelpText>Per Minute</StatHelpText>
+        </HStack>
+        <HStack>
+          <Stat width="140px">
+            <StatLabel>Damage Dealt/min</StatLabel>
+            <StatNumber>{getDamageElement(formatNumber(Math.round(stats.total_damage_done / getTotalMinutes())))}</StatNumber>
+            <StatHelpText>{ damageStarRating(stats.total_damage_done / getTotalMinutes()) }</StatHelpText>
           </Stat>
-          <Stat width="120px">
-            <StatLabel>Damage Taken</StatLabel>
-            <StatNumber>{formatNumber(Math.round(stats.total_damage_taken / getTotalMinutes()))}</StatNumber>
-            <StatHelpText>Per Minute</StatHelpText>
+          <Stat width="140px">
+            <StatLabel>Damage Taken/min</StatLabel>
+            <StatNumber>{getDamageElement(formatNumber(Math.round(stats.total_damage_taken / getTotalMinutes())))}</StatNumber>
+            <StatHelpText>{ damageStarRating(stats.total_damage_taken / getTotalMinutes()) }</StatHelpText>
           </Stat>
         </HStack>
       </Flex>
