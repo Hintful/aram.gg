@@ -52,11 +52,11 @@ export const kdaStarRating = (kda, starSize = 3) => {
 }
 
 const getWinrateColor = (winrate) => {
-  if (winrate < 0.35) { return '#ababab'; }
-  else if(winrate < 0.45) { return '#676767'; }
-  else if(winrate < 0.55) { return '#90ee90'; }
-  else if(winrate < 0.65) { return '#87cefa'; }
-  else if(winrate < 0.75) { return '#ffa500'; }
+  if (winrate < 0.4) { return '#ababab'; }
+  else if(winrate < 0.5) { return '#676767'; }
+  else if(winrate < 0.6) { return '#90ee90'; }
+  else if(winrate < 0.7) { return '#87cefa'; }
+  else if(winrate < 0.8) { return '#ffa500'; }
   else { return '#ff4500'; }
 }
 
