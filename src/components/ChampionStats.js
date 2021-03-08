@@ -44,7 +44,7 @@ const getKDAStyle = (kda) => {
   else {
     return {
       background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
-      webkitBackgroundClip: "text",
+      WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent"
     };
   }
@@ -60,7 +60,7 @@ const getDamageStyle = (value) => {
   else {
     return {
       background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
-      webkitBackgroundClip: "text",
+      WebkitBackgroundClip: "text",
       WebkitTextFillColor: "transparent"
     };
   }
@@ -159,7 +159,7 @@ const ChampionStats = ({ stats }) => {
       </Flex>
       <Flex>
         <HStack ml={7} mr="100px" spacing="40px">
-          <Stat>
+          <Stat width="120px">
             <StatLabel>Wins</StatLabel>
             <StatNumber color="blue.300">{stats.win}</StatNumber>
             <StatHelpText>Games Won</StatHelpText>
@@ -170,7 +170,7 @@ const ChampionStats = ({ stats }) => {
             <StatHelpText>Games Lost</StatHelpText>
           </Stat>
           {/* <Divider orientation="vertical" /> */}
-          <Stat width="100px">
+          <Stat width="120px">
             <StatLabel>KDA</StatLabel>
             {/* <StatNumber>{`${roundNumber((stats.kill + stats.assist) / stats.death)}`}</StatNumber> */}
             <StatNumber>{getKDAElement(stats)}</StatNumber>
