@@ -208,7 +208,7 @@ const ChampionStats = ({ stats }) => {
               <StatNumber color="red.300">{stats.loss}</StatNumber>
               <StatHelpText>Games Lost</StatHelpText>
             </Stat>
-            <Tooltip hasArrow label={`K/D/A: ${roundNumber(stats.kill/(stats.win + stats.loss))}/${roundNumber(stats.death/(stats.win + stats.loss))}/${roundNumber(stats.assist/(stats.win + stats.loss))}`}>
+            <Tooltip hasArrow label={`${roundNumber(stats.kill/(stats.win + stats.loss))} / ${roundNumber(stats.death/(stats.win + stats.loss))} / ${roundNumber(stats.assist/(stats.win + stats.loss))}`}>
               <Stat width="120px">
                 <StatLabel>KDA</StatLabel>
                 <StatNumber>{getKDAElement(stats)}</StatNumber>
