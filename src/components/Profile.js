@@ -125,7 +125,7 @@ const Profile = ({ location }) => {
   }, [userChampionStats])
 
   return (
-    <Center h="auto" mb="50px">
+    <Center h="auto" mb="50px" className="profile-container">
       <VStack spacing={5}>
         <VStack>
           <Text fontSize={32} className="sName" mt={10}>{username}</Text>
@@ -169,7 +169,7 @@ const Profile = ({ location }) => {
           <Text fontWeight="600">Winrate</Text>
           {numWins ?
             <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color={getWinrateColor(numWins / (numWins + numLosses))}>
-              <CircularProgressLabel><span style={{ fontFamily: "Roboto" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
+              <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px"}}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
             </CircularProgress>
             :
             <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">

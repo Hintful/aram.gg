@@ -12,6 +12,14 @@
   user-select: none; /* Standard */
 }
 
+.profile-container {
+  /* make text non-selectable */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
 .sName {
   font-family: Raleway;
 }
@@ -57,6 +65,12 @@ hr {
   height: 150px;
   // border: 1px solid black;
   font-family: Roboto;
+
+  /* make text non-selectable */
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
 }
 
 .champion-icon {
