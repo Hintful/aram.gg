@@ -34,36 +34,37 @@ const getURLName = (name) => {
   }
 }
 
-const getKDAStyle = (kda) => {
+const getKDAStyle = (kda, shadow = false) => {
   if (kda < 1.5) { return { color: '#ababab' }; }
   else if (kda < 2.3) { return { color: '#676767' }; }
   else if (kda < 3.1) { return { color: '#90ee90' }; }
   else if (kda < 4) { return { color: '#87cefa' }; }
-  else if (kda < 5) { return { color: '#ffa500' }; }
-  else if (kda < 6) { return { color: '#ff4500' }; }
-  else {
-    return {
-      background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent"
-    };
-  }
+  else if (kda < 5) { return { color: '#ffa500', textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
+  else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
+  // else {
+  //   return {
+  //     background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
+  //     WebkitBackgroundClip: "text",
+  //     WebkitTextFillColor: "transparent",
+  //     textShadow: shadow ? '0px 0px 4px ' : '0'
+  //   };
+  // }
 }
 
-const getDamageStyle = (value) => {
+const getDamageStyle = (value, shadow = false) => {
   if (value < 600) { return { color: "#ababab" }; }
   else if (value < 1000) { return { color: "#676767" }; }
   else if (value < 1500) { return { color: "#90ee90" }; }
   else if (value < 2000) { return { color: "#87cefa" }; }
-  else if (value < 2500) { return { color: "#ffa500" }; }
-  else if (value < 2800) { return { color: '#ff4500' }; }
-  else {
-    return {
-      background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
-      WebkitBackgroundClip: "text",
-      WebkitTextFillColor: "transparent"
-    };
-  }
+  else if (value < 2500) { return { color: "#ffa500", textShadow: shadow ? '0px 0px 4px #ffa500' : '0'  }; }
+  else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0'  }; }
+  // else {
+  //   return {
+  //     background: "linear-gradient(135deg, #c544e6 0%, #2eb6d8 100%)",
+  //     WebkitBackgroundClip: "text",
+  //     WebkitTextFillColor: "transparent"
+  //   };
+  // }
 }
 
 export const roundNumber = (num) => {
@@ -104,7 +105,7 @@ const kdaStarRating = (stats) => {
   return (
     Array(5).fill("").map((_, i) => (
       // <StarIcon w={3} h={3} mt="7px" key={i} bgGradient="linear(to-t, green.200, pink.500)" bgClip="text" />
-      <span style={i < star ? getKDAStyle(kda) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
+      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
 }
@@ -120,7 +121,7 @@ const damageStarRating = (value) => {
   return (
     Array(5).fill("").map((_, i) => (
       // <StarIcon w={3} h={3} mt="7px" key={i} bgGradient="linear(to-t, green.200, pink.500)" bgClip="text" />
-      <span style={i < star ? getDamageStyle(value) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
+      <span style={i < star ? getDamageStyle(value, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
     ))
   )
 }
