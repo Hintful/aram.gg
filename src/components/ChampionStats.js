@@ -1,9 +1,9 @@
-import { StarIcon } from '@chakra-ui/icons';
 import { Image } from '@chakra-ui/image';
 import { Flex, HStack, Text, VStack } from '@chakra-ui/layout';
-import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularProgressLabel } from '@chakra-ui/react';
+import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularProgressLabel, Tooltip } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
+
 
 /* stats = {
   "id"
@@ -183,65 +183,70 @@ const ChampionStats = ({ stats }) => {
   }, [kda])
 
   return (
-    <Flex direction="row" className="champion-stats" width="auto">
-      <Flex direction="column" justify="center" align="center" className="champion-icon">
-        {championName !== '' ?
-          <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
-          :
-          <div style={{ background: 'black' }}>
-          </div>
-        }
-        <Flex className="champion-name-label">
-          <Text fontSize="sm">{championName}</Text>
-        </Flex>
-      </Flex>
-      <HStack>
-        <HStack ml={7} mr="100px" spacing="40px">
-          <Stat width="120px">
-            <StatLabel>Wins</StatLabel>
-            <StatNumber color="blue.300">{stats.win}</StatNumber>
-            <StatHelpText>Games Won</StatHelpText>
-          </Stat>
-          <Stat>
-            <StatLabel>Losses</StatLabel>
-            <StatNumber color="red.300">{stats.loss}</StatNumber>
-            <StatHelpText>Games Lost</StatHelpText>
-          </Stat>
-          <Stat width="120px">
-            <StatLabel>KDA</StatLabel>
-            <StatNumber>{getKDAElement(stats)}</StatNumber>
-            <StatHelpText>
-              {kdaStarRating(kda)}
-            </StatHelpText>
-          </Stat>
-        </HStack>
-        <HStack>
-          <Stat width="140px">
-            <StatLabel>Effective Damage/min</StatLabel>
-            <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / getTotalMinutes())))}</StatNumber>
-            <StatHelpText>{damageStarRating(effectiveDamage / getTotalMinutes())}</StatHelpText>
-          </Stat>
-          <Stat width="140px">
-            <StatLabel>Damage Taken/min</StatLabel>
-            <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / getTotalMinutes())))}</StatNumber>
-            <StatHelpText>{damageStarRating(damageTaken / getTotalMinutes())}</StatHelpText>
-          </Stat>
-        </HStack>
-        <VStack>
-          <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
-          {carryPotential ?
-            <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color={getPotentialColor(carryPotential)}>
-              <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px", color: getPotentialColor(carryPotential) }}>{getPotentialRank(carryPotential)}</span></CircularProgressLabel>
-            </CircularProgress>
+    <div>
+      <Flex direction="row" className="champion-stats" width="auto">
+        <Flex direction="column" justify="center" align="center" className="champion-icon">
+          {championName !== '' ?
+            <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
             :
-            <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500">
-
-            </CircularProgress>
+            <div style={{ background: 'black' }}>
+            </div>
           }
-        </VStack>
-      </HStack>
-
-    </Flex>
+          <Flex className="champion-name-label">
+            <Text fontSize="sm">{championName}</Text>
+          </Flex>
+        </Flex>
+        <HStack>
+          <HStack ml={7} mr="100px" spacing="40px">
+            <Stat width="120px">
+              <StatLabel>Wins</StatLabel>
+              <StatNumber color="blue.300">{stats.win}</StatNumber>
+              <StatHelpText>Games Won</StatHelpText>
+            </Stat>
+            <Stat>
+              <StatLabel>Losses</StatLabel>
+              <StatNumber color="red.300">{stats.loss}</StatNumber>
+              <StatHelpText>Games Lost</StatHelpText>
+            </Stat>
+            <Tooltip hasArrow label={`K/D/A: ${roundNumber(stats.kill/(stats.win + stats.loss))}/${roundNumber(stats.death/(stats.win + stats.loss))}/${roundNumber(stats.assist/(stats.win + stats.loss))}`}>
+              <Stat width="120px">
+                <StatLabel>KDA</StatLabel>
+                <StatNumber>{getKDAElement(stats)}</StatNumber>
+                <StatHelpText>
+                  {kdaStarRating(kda)}
+                </StatHelpText>
+              </Stat>
+            </Tooltip>
+          </HStack>
+          <HStack>
+            <Tooltip hasArrow label={`Damage: ${roundNumber(stats.total_damage_done / getTotalMinutes())} / Healing: ${roundNumber(stats.total_healing_done / getTotalMinutes())}`}>
+              <Stat width="140px">
+                <StatLabel>Effective Damage/min</StatLabel>
+                <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / getTotalMinutes())))}</StatNumber>
+                <StatHelpText>{damageStarRating(effectiveDamage / getTotalMinutes())}</StatHelpText>
+              </Stat>
+            </Tooltip>
+            <Stat width="140px">
+              <StatLabel>Damage Taken/min</StatLabel>
+              <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / getTotalMinutes())))}</StatNumber>
+              <StatHelpText>{damageStarRating(damageTaken / getTotalMinutes())}</StatHelpText>
+            </Stat>
+          </HStack>
+          <Tooltip hasArrow label={`${roundNumber(carryPotential * 100)}%`}>
+            <VStack>
+              <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
+              {carryPotential ?
+                <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color={getPotentialColor(carryPotential)}>
+                  <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px", color: getPotentialColor(carryPotential) }}>{getPotentialRank(carryPotential)}</span></CircularProgressLabel>
+                </CircularProgress>
+                :
+                <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500" />
+              }
+            </VStack>
+          </Tooltip>
+        </HStack>
+      </Flex>
+    </div>
   );
 }
 
