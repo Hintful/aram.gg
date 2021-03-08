@@ -207,7 +207,7 @@ const ChampionStats = ({ stats }) => {
           </Flex>
         </Flex>
         <Flex direction="column" mt={2}>
-          <HStack ml={5} mb={2} spacing="4px" style={{ fontSize: "14px" }}>
+          <HStack ml={5} mb={2} height={5} spacing="4px" style={{ fontSize: "14px" }}>
             {stats.num_double_kill > 0 &&
               <Tooltip hasArrow label={stats.num_double_kill !== 1 ? `${stats.num_double_kill} Double Kills` : `${stats.num_double_kill} Double Kill`}>
                 <Flex direction="row" align="center" style={{ background: '#5bd75b', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
