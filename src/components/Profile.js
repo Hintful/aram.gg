@@ -1,4 +1,4 @@
-import { Center, Divider, HStack, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
+import { Center, CircularProgress, CircularProgressLabel, Divider, HStack, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -8,10 +8,10 @@ import { roundNumber } from './ChampionStats';
 import { StarIcon } from '@chakra-ui/icons';
 
 const getKDAStyle = (kda, shadow = false) => {
-  if (kda < 1.0) { return { color: '#ababab'}; }
-  else if (kda < 2.0) { return { color: '#676767'}; }
-  else if (kda < 3.0) { return { color: '#90ee90'}; }
-  else if (kda < 3.7) { return { color: '#87cefa'}; }
+  if (kda < 1.0) { return { color: '#ababab' }; }
+  else if (kda < 2.0) { return { color: '#676767' }; }
+  else if (kda < 3.0) { return { color: '#90ee90' }; }
+  else if (kda < 3.7) { return { color: '#87cefa' }; }
   else if (kda < 4.3) { return { color: '#ffa500', textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
 }
@@ -19,7 +19,7 @@ const getKDAStyle = (kda, shadow = false) => {
 const getKDAElement = (kda) => {
   if (kda) {
     return (
-      <span style={ getKDAStyle(kda) }>
+      <span style={getKDAStyle(kda)}>
         {roundNumber(kda)}
       </span>
     )
@@ -31,7 +31,7 @@ const getKDAElement = (kda) => {
       </HStack>
     )
   }
-  
+
 }
 
 export const kdaStarRating = (kda, starSize = 3) => {
@@ -57,6 +57,8 @@ const Profile = ({ location }) => {
   const [userChampionStats, setUserChampionStats] = useState([]); // init
   const [numGames, setNumGames] = useState(null);
   const [totalKDA, setTotalKDA] = useState(null);
+  const [numWins, setNumWins] = useState(null);
+  const [numLosses, setNumLosses] = useState(null);
   const { id } = useParams();
   const username = id;
 
@@ -95,9 +97,13 @@ const Profile = ({ location }) => {
     const kills = userChampionStats.reduce((total, championStat) => total + championStat.kill, 0);
     const deaths = userChampionStats.reduce((total, championStat) => total + championStat.death, 0);
     const assists = userChampionStats.reduce((total, championStat) => total + championStat.assist, 0);
+    const wins = userChampionStats.reduce((total, championStat) => total + championStat.win, 0)
+    const losses = userChampionStats.reduce((total, championStat) => total + championStat.loss, 0)
 
     setNumGames(totalNumGames);
     setTotalKDA((kills + assists) / deaths)
+    setNumWins(wins);
+    setNumLosses(losses);
   }, [userChampionStats])
 
   return (
@@ -119,28 +125,43 @@ const Profile = ({ location }) => {
           <Stat width="120px">
             <StatLabel>Wins</StatLabel>
             <StatNumber color="blue.300">
-              {userChampionStats.reduce((total, championStat) => total + championStat.win, 0)}
+              {numWins}
             </StatNumber>
             <StatHelpText>Games Won</StatHelpText>
           </Stat>
           <Stat>
             <StatLabel>Losses</StatLabel>
             <StatNumber color="red.300">
-              {userChampionStats.reduce((total, championStat) => total + championStat.loss, 0)}
+              {/* {userChampionStats.reduce((total, championStat) => total + championStat.loss, 0)} */}
+              {numLosses}
             </StatNumber>
             <StatHelpText>Games Lost</StatHelpText>
           </Stat>
           <Stat width="160px">
             <StatLabel>KDA</StatLabel>
             <StatNumber>
-              { getKDAElement(totalKDA) }
+              {getKDAElement(totalKDA)}
             </StatNumber>
             <StatHelpText>
               Over {numGames} Games
             </StatHelpText>
           </Stat>
         </HStack>
-        { numGames ?
+
+        <VStack>
+          <Text fontWeight="600">Winrate</Text>
+          {numWins ?
+            <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color="blue.500">
+              <CircularProgressLabel><span style={{ fontFamily: "Roboto" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
+            </CircularProgress>
+            :
+            <CircularProgress isIndeterminate size="100px" thickness="5px" color="blue.500">
+
+            </CircularProgress>
+          }
+        </VStack>
+
+        {numGames ?
           <Text fontFamily="Roboto" fontSize={14}>
             Total number of games analyzed:&nbsp;
             <span style={{ fontWeight: 600 }}>
@@ -149,7 +170,7 @@ const Profile = ({ location }) => {
           </Text>
           :
           <Text fontFamily="Toboto" fontSize={14}>
-            Total number of games analyzed:&nbsp;&nbsp;<Spinner color="teal.500" size="xs" /> <span style={{ fontWeight: 600}}>Loading...</span>
+            Total number of games analyzed:&nbsp;&nbsp;<Spinner color="teal.500" size="xs" /> <span style={{ fontWeight: 600 }}>Loading...</span>
           </Text>
         }
 
