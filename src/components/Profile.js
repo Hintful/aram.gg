@@ -46,17 +46,17 @@ export const kdaStarRating = (kda, starSize = 3) => {
 
   return (
     Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
+      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
     ))
   )
 }
 
 const getWinrateColor = (winrate) => {
   if (winrate < 0.4) { return '#ababab'; }
-  else if(winrate < 0.5) { return '#676767'; }
-  else if(winrate < 0.6) { return '#90ee90'; }
-  else if(winrate < 0.7) { return '#87cefa'; }
-  else if(winrate < 0.8) { return '#ffa500'; }
+  else if (winrate < 0.5) { return '#676767'; }
+  else if (winrate < 0.6) { return '#90ee90'; }
+  else if (winrate < 0.7) { return '#87cefa'; }
+  else if (winrate < 0.8) { return '#ffa500'; }
   else { return '#ff4500'; }
 }
 
@@ -181,25 +181,41 @@ const Profile = ({ location }) => {
           </Text>
         }
 
+        {userChampionStats.length > 0 ?
+          <Button colorScheme="teal" variant="outline" onClick={() => {
+            window.location.reload();
+          }}
+            leftIcon={<i className="fas fa-sync-alt"></i>}
+          >
+            <Text mb="2px">Refresh</Text>
+          </Button>
+          :
+          <>
+          </>
+        }
+
         <Divider />
         <VStack width="50vw">
- 
+
           {userChampionStats.length > 0 ?
             userChampionStats.map((stat, i) => (
-              <>
-                <ChampionStats stats={stat} key={i} />
+              <div key={i}>
+                <ChampionStats stats={stat} />
                 <Divider orientation="horizontal" />
-              </>
+              </div>
             ))
             :
             <VStack>
               <Text mt={10} mb={5} fontWeight="600">
                 Please refresh the page in a bit - we're fetching your ARAM game data!
               </Text>
-              <Button colorScheme="teal" variant="outline" onClick={() => {
-                window.location.reload();
-              }}>
-                <i class="fas fa-sync-alt"></i>&nbsp;Refresh
+              <Button colorScheme="teal" variant="outline"
+                onClick={() => {
+                  window.location.reload();
+                }}
+                leftIcon={<i className="fas fa-sync-alt"></i>}
+              >
+                <Text mb="2px">Refresh</Text>
               </Button>
             </VStack>
           }

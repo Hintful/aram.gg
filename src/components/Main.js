@@ -31,8 +31,10 @@ const Main = () => {
                 />
               </InputGroup>
             </FormControl>
-              <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%">
-              <i className="fas fa-search"></i>&nbsp;&nbsp;Search
+              <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%"
+                leftIcon={<i className="fas fa-search"></i>}
+              >
+              Search
               </Button>
           </VStack>
         </form>

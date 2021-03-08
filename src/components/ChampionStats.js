@@ -103,7 +103,7 @@ const kdaStarRating = (kda) => {
 
   return (
     Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
+      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
     ))
   )
 }
@@ -122,17 +122,15 @@ const damageStarRating = (value) => {
 
   return (
     Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getDamageStyle(value, true) : { color: "gray.500" }}><i className="fas fa-star"></i></span>
+      <span style={i < star ? getDamageStyle(value, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
     ))
   )
 }
 
 const getCarryPotential = (wins, losses, kda, effectiveDamage, damageTaken) => {
-  console.log(getKDAStarRating(kda), getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken));
   const starRatingPotential = ((getKDAStarRating(kda)) + Math.max(getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken))) / 10;
   const winrate = wins / (wins + losses);
 
-  console.log(starRatingPotential, winrate);
   if (wins + losses > 2) {
     return (starRatingPotential + winrate) / 2;
   } else {
@@ -140,7 +138,7 @@ const getCarryPotential = (wins, losses, kda, effectiveDamage, damageTaken) => {
   }
 }
 
-const ChampionStats = ({ stats, key }) => {
+const ChampionStats = ({ stats }) => {
   const [championData, setChampionData] = useState([]);
   const [championName, setChampionName] = useState('');
   const [kda, setKDA] = useState(null);
