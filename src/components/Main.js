@@ -32,7 +32,7 @@ const Main = () => {
               </InputGroup>
             </FormControl>
               <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%">
-                Search
+              <i className="fas fa-search"></i>&nbsp;&nbsp;Search
               </Button>
           </VStack>
         </form>
