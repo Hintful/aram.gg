@@ -58,11 +58,22 @@ const getDamageStyle = (value, shadow = false) => {
 
 const getPotentialColor = (potential) => {
   if (potential < 0.3) { return '#ababab'; }
-  else if(potential < 0.5) { return '#676767'; }
-  else if(potential < 0.65) { return '#90ee90'; }
-  else if(potential < 0.75) { return '#87cefa'; }
-  else if(potential < 0.9) { return '#ffa500'; }
+  else if (potential < 0.5) { return '#676767'; }
+  else if (potential < 0.65) { return '#90ee90'; }
+  else if (potential < 0.75) { return '#87cefa'; }
+  else if (potential < 0.9) { return '#ffa500'; }
   else { return '#ff4500'; }
+}
+
+const getPotentialRank = (potential) => {
+  const potentialThreshold = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1];
+  const potentialRank = ['F-', 'F', 'F+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS'];
+
+  for (let i = 0; i < potentialThreshold.length; i++) {
+    if (potential <= potentialThreshold[i]) {
+      return potentialRank[i];
+    }
+  }
 }
 
 export const roundNumber = (num) => {
@@ -220,7 +231,7 @@ const ChampionStats = ({ stats }) => {
           <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
           {carryPotential ?
             <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color={getPotentialColor(carryPotential)}>
-              <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px" }}>{roundNumber(carryPotential * 100)}%</span></CircularProgressLabel>
+              <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px", color: getPotentialColor(carryPotential) }}>{getPotentialRank(carryPotential)}</span></CircularProgressLabel>
             </CircularProgress>
             :
             <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500">
