@@ -83,7 +83,7 @@ class RiotApiRequests:
         participant_stats = participant_info["stats"]
         # Get or create champion records and update relative fields
         champion, created = Champion.objects.get_or_create(
-            champion_id=participant_info["championId"],
+            champion_id=participant_info["championId"], user=user
         )
         if participant_stats["win"]:
             champion.win += 1
@@ -95,6 +95,11 @@ class RiotApiRequests:
             killing_spree
             if champion.largest_killing_spree < killing_spree
             else champion.largest_killing_spree
+        )
+        champion.num_max_kill = (
+            participant_stats["kills"]
+            if champion.num_max_kill < participant_stats["kills"]
+            else champion.num_max_kill
         )
         champion.num_double_kill += participant_stats["doubleKills"]
         champion.num_triple_kill += participant_stats["tripleKills"]
@@ -111,8 +116,6 @@ class RiotApiRequests:
         champion.death += participant_stats["deaths"]
         champion.assist += participant_stats["assists"]
         champion.save()
-        user.champion.add(champion)
-        user.save()
 
     @staticmethod
     def get_match_data(match_id: int) -> Dict:
@@ -147,5 +150,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="hint", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="juis", request_limit=10)
     total_match_info = riot_api.get_total_match_info()
