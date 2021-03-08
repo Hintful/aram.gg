@@ -88,7 +88,7 @@ class RankingMostDeathView(APIView):
                 {
                     f"{i+1}": {
                         "user": user_serializer.data,
-                        "avg_kill": user.avg_death_per_game,
+                        "avg_death": user.avg_death_per_game,
                     }
                 }
             )
