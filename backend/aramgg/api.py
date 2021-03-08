@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, Any
 
 import django
 
@@ -64,8 +64,7 @@ class RiotApiRequests:
 
         return final_list
 
-    @staticmethod
-    def update_user_champion_info(user: User, data: Dict) -> None:
+    def update_user_champion_info(self, user: User, data: Dict) -> None:
         participant_identity_list = data["participantIdentities"]
         participant_id = None
 
@@ -90,17 +89,82 @@ class RiotApiRequests:
         else:
             champion.loss += 1
 
-        killing_spree = participant_stats["largestKillingSpree"]
-        champion.largest_killing_spree = (
-            killing_spree
-            if champion.largest_killing_spree < killing_spree
-            else champion.largest_killing_spree
+        self.update_max_record(
+            champion=champion,
+            attribute="largest_killing_spree",
+            new_val=participant_stats["largestKillingSpree"],
         )
-        champion.num_max_kill = (
-            participant_stats["kills"]
-            if champion.num_max_kill < participant_stats["kills"]
-            else champion.num_max_kill
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_kill",
+            new_val=participant_stats["kills"],
         )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_assist",
+            new_val=participant_stats["assists"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_death",
+            new_val=participant_stats["deaths"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="most_gold_spent",
+            new_val=participant_stats["goldSpent"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="most_gold_earned",
+            new_val=participant_stats["goldEarned"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="most_damage_done",
+            new_val=participant_stats["totalDamageDealtToChampions"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="most_damage_taken",
+            new_val=participant_stats["totalDamageTaken"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="most_healing_done",
+            new_val=participant_stats["totalHeal"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="longest_game_length",
+            new_val=data["gameDuration"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_double_kill",
+            new_val=participant_stats["doubleKills"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_triple_kill",
+            new_val=participant_stats["tripleKills"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_quadra_kill",
+            new_val=participant_stats["quadraKills"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_penta_kill",
+            new_val=participant_stats["pentaKills"],
+        )
+        self.update_max_record(
+            champion=champion,
+            attribute="num_max_legendary_kill",
+            new_val=participant_stats["unrealKills"],
+        )
+
         champion.num_double_kill += participant_stats["doubleKills"]
         champion.num_triple_kill += participant_stats["tripleKills"]
         champion.num_quadra_kill += participant_stats["quadraKills"]
@@ -115,6 +179,14 @@ class RiotApiRequests:
         champion.kill += participant_stats["kills"]
         champion.death += participant_stats["deaths"]
         champion.assist += participant_stats["assists"]
+        champion.save()
+
+    @staticmethod
+    def update_max_record(champion: Champion, attribute: str, new_val: Any) -> None:
+        """Replace original value to new value if new value is greater than the original val"""
+        original_val = getattr(champion, attribute)
+        update_val = new_val if original_val < new_val else original_val
+        setattr(champion, attribute, update_val)
         champion.save()
 
     @staticmethod

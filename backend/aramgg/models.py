@@ -33,6 +33,19 @@ class Champion(models.Model):
     num_penta_kill = models.IntegerField(default=0, null=False, blank=False)
     num_legendary_kill = models.IntegerField(default=0, null=False, blank=False)
     num_max_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_max_death = models.IntegerField(default=0, null=False, blank=False)
+    num_max_assist = models.IntegerField(default=0, null=False, blank=False)
+    most_gold_spent = models.IntegerField(default=0, null=False, blank=False)
+    most_gold_earned = models.IntegerField(default=0, null=False, blank=False)
+    most_damage_done = models.IntegerField(default=0, null=False, blank=False)
+    most_damage_taken = models.IntegerField(default=0, null=False, blank=False)
+    most_healing_done = models.IntegerField(default=0, null=False, blank=False)
+    longest_game_length = models.IntegerField(default=0, null=False, blank=False)
+    num_max_double_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_max_triple_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_max_quadra_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_max_penta_kill = models.IntegerField(default=0, null=False, blank=False)
+    num_max_legendary_kill = models.IntegerField(default=0, null=False, blank=False)
 
     def __str__(self):
-        return self.champion_id
+        return f"For user: {self.user.username}: {self.champion_id}"
