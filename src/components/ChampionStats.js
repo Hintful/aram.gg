@@ -1,5 +1,5 @@
 import { Image } from '@chakra-ui/image';
-import { Flex, HStack, Text, VStack } from '@chakra-ui/layout';
+import { Box, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
 import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularProgressLabel, Tooltip } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
@@ -17,6 +17,16 @@ import champion_data_json from './json/champion.json';
   "total_damage_taken"
   "total_healing_done"
   "total_game_length"
+
+  "total_gold_spent"
+  "total_gold_earned"
+
+  "largest_killing_spree"
+  "num_double_kill"
+  "num_triple_kill"
+  "num_quadra_kill"
+  "num_penta_kill"
+  "num_legendary_kill"
 } */
 
 const getURLName = (name) => {
@@ -183,7 +193,7 @@ const ChampionStats = ({ stats }) => {
   }, [kda])
 
   return (
-    <div>
+    <Flex direction="column">
       <Flex direction="row" className="champion-stats" width="auto">
         <Flex direction="column" justify="center" align="center" className="champion-icon">
           {championName !== '' ?
@@ -196,57 +206,89 @@ const ChampionStats = ({ stats }) => {
             <Text fontSize="sm">{championName}</Text>
           </Flex>
         </Flex>
-        <HStack>
-          <HStack ml={7} mr="100px" spacing="40px">
-            <Stat width="120px">
-              <StatLabel>Wins</StatLabel>
-              <StatNumber color="blue.300">{stats.win}</StatNumber>
-              <StatHelpText>Games Won</StatHelpText>
-            </Stat>
-            <Stat>
-              <StatLabel>Losses</StatLabel>
-              <StatNumber color="red.300">{stats.loss}</StatNumber>
-              <StatHelpText>Games Lost</StatHelpText>
-            </Stat>
-            <Tooltip hasArrow label={`${roundNumber(stats.kill/(stats.win + stats.loss))} / ${roundNumber(stats.death/(stats.win + stats.loss))} / ${roundNumber(stats.assist/(stats.win + stats.loss))}`}>
-              <Stat width="120px">
-                <StatLabel>KDA</StatLabel>
-                <StatNumber>{getKDAElement(stats)}</StatNumber>
-                <StatHelpText>
-                  {kdaStarRating(kda)}
-                </StatHelpText>
-              </Stat>
-            </Tooltip>
+        <Flex direction="column" mt={2}>
+          <HStack ml={5} mb={2} spacing="4px" style={{ fontSize: "14px" }}>
+            {stats.num_double_kill > 0 &&
+              <Tooltip hasArrow label={`${stats.num_double_kill} Double Kills`}>
+                <Flex direction="row" align="center" style={{ background: '#5bd75b', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
+                  <i className="fas fa-dice-two"></i>&nbsp;{stats.num_double_kill}
+                </Flex>
+              </Tooltip>
+            }
+            {stats.num_triple_kill > 0 &&
+              <Tooltip hasArrow label={`${stats.num_triple_kill} Triple Kills`}>
+                <Flex direction="row" align="center" style={{ background: '#87cefa', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
+                  <i className="fas fa-dice-three"></i>&nbsp;{stats.num_triple_kill}
+                </Flex>
+              </Tooltip>
+            }
+            {stats.num_quadra_kill > 0 &&
+              <Tooltip hasArrow label={`${stats.num_quadra_kill} Quadra Kills`}>
+                <Flex direction="row" align="center" style={{ background: '#ffa500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
+                  <i className="fas fa-dice-four"></i>&nbsp;{stats.num_quadra_kill}
+                </Flex>
+              </Tooltip>
+            }
+            {stats.num_penta_kill > 0 &&
+              <Tooltip hasArrow label={`${stats.num_penta_kill} Penta Kills`}>
+                <Flex direction="row" align="center" style={{ background: '#ff4500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
+                  <i className="fas fa-dice-five"></i>&nbsp;{stats.num_penta_kill}
+                </Flex>
+              </Tooltip>
+            }
           </HStack>
           <HStack>
-            <Tooltip hasArrow label={`Damage: ${roundNumber(stats.total_damage_done / getTotalMinutes())} / Healing: ${roundNumber(stats.total_healing_done / getTotalMinutes())}`}>
-              <Stat width="140px">
-                <StatLabel>Effective Damage/min</StatLabel>
-                <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / getTotalMinutes())))}</StatNumber>
-                <StatHelpText>{damageStarRating(effectiveDamage / getTotalMinutes())}</StatHelpText>
+            <HStack ml={7} mr="100px" spacing="40px">
+              <Stat width="120px">
+                <StatLabel>Wins</StatLabel>
+                <StatNumber color="blue.300">{stats.win}</StatNumber>
+                <StatHelpText>Games Won</StatHelpText>
               </Stat>
+              <Stat>
+                <StatLabel>Losses</StatLabel>
+                <StatNumber color="red.300">{stats.loss}</StatNumber>
+                <StatHelpText>Games Lost</StatHelpText>
+              </Stat>
+              <Tooltip hasArrow label={`${roundNumber(stats.kill / (stats.win + stats.loss))} / ${roundNumber(stats.death / (stats.win + stats.loss))} / ${roundNumber(stats.assist / (stats.win + stats.loss))}`}>
+                <Stat width="120px">
+                  <StatLabel>KDA</StatLabel>
+                  <StatNumber>{getKDAElement(stats)}</StatNumber>
+                  <StatHelpText>
+                    {kdaStarRating(kda)}
+                  </StatHelpText>
+                </Stat>
+              </Tooltip>
+            </HStack>
+            <HStack>
+              <Tooltip hasArrow label={`Damage: ${roundNumber(stats.total_damage_done / getTotalMinutes())} / Healing: ${roundNumber(stats.total_healing_done / getTotalMinutes())}`}>
+                <Stat width="140px">
+                  <StatLabel>Effective Damage/min</StatLabel>
+                  <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / getTotalMinutes())))}</StatNumber>
+                  <StatHelpText>{damageStarRating(effectiveDamage / getTotalMinutes())}</StatHelpText>
+                </Stat>
+              </Tooltip>
+              <Stat width="140px">
+                <StatLabel>Damage Taken/min</StatLabel>
+                <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / getTotalMinutes())))}</StatNumber>
+                <StatHelpText>{damageStarRating(damageTaken / getTotalMinutes())}</StatHelpText>
+              </Stat>
+            </HStack>
+            <Tooltip hasArrow label={`${roundNumber(carryPotential * 100)}%`}>
+              <VStack>
+                <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
+                {carryPotential ?
+                  <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color={getPotentialColor(carryPotential)}>
+                    <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px", color: getPotentialColor(carryPotential) }}>{getPotentialRank(carryPotential)}</span></CircularProgressLabel>
+                  </CircularProgress>
+                  :
+                  <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500" />
+                }
+              </VStack>
             </Tooltip>
-            <Stat width="140px">
-              <StatLabel>Damage Taken/min</StatLabel>
-              <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / getTotalMinutes())))}</StatNumber>
-              <StatHelpText>{damageStarRating(damageTaken / getTotalMinutes())}</StatHelpText>
-            </Stat>
           </HStack>
-          <Tooltip hasArrow label={`${roundNumber(carryPotential * 100)}%`}>
-            <VStack>
-              <Text><span style={{ fontSize: "14px", width: "auto" }}>Potential</span></Text>
-              {carryPotential ?
-                <CircularProgress size="60px" thickness="5px" key={carryPotential} value={carryPotential * 100} color={getPotentialColor(carryPotential)}>
-                  <CircularProgressLabel><span style={{ fontFamily: "Roboto", fontSize: "12px", color: getPotentialColor(carryPotential) }}>{getPotentialRank(carryPotential)}</span></CircularProgressLabel>
-                </CircularProgress>
-                :
-                <CircularProgress isIndeterminate size="60px" thickness="5px" color="blue.500" />
-              }
-            </VStack>
-          </Tooltip>
-        </HStack>
+        </Flex>
       </Flex>
-    </div>
+    </Flex>
   );
 }
 
