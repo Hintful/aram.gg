@@ -1,11 +1,18 @@
-import { Button, Center, CircularProgress, CircularProgressLabel, Divider, HStack, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, CircularProgressLabel, Divider, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useForceUpdate, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import IconBox from './IconBox';
 import ChampionStats from './ChampionStats';
 import { roundNumber } from './ChampionStats';
-import { StarIcon } from '@chakra-ui/icons';
+import { AiOutlineArrowDown } from 'react-icons/ai';
+import useForceUpdate_ from 'use-force-update';
+
+const winsDesc = (a, b) => {
+  if (a.win > b.win) { return -1; }
+  else if(a.win < b.win) { return 1; }
+  else { return 0; }
+}
 
 const getKDAStyle = (kda, shadow = false) => {
   if (kda < 1.0) { return { color: '#ababab' }; }
@@ -69,6 +76,9 @@ const Profile = ({ location }) => {
   const [numLosses, setNumLosses] = useState(null);
   const { id } = useParams();
   const username = id;
+
+  const forceUpdate = useForceUpdate_();
+  
 
   const formatUsername = (username) => {
     return username.split(" ").join("").toLowerCase();
@@ -194,13 +204,27 @@ const Profile = ({ location }) => {
           </>
         }
 
+        <HStack width="50vw">
+          <Button colorScheme="teal"
+            onClick={() => {
+              setUserChampionStats([...userChampionStats].sort(winsDesc));
+              forceUpdate();
+            }}
+          >
+            Wins&nbsp;<Icon as={AiOutlineArrowDown}/>
+          </Button>
+          <Button colorScheme="teal">
+            KDA&nbsp;<Icon as={AiOutlineArrowDown}/>
+          </Button>
+        </HStack>
+
         <Divider />
         <VStack width="50vw">
 
           {userChampionStats.length > 0 ?
             userChampionStats.map((stat, i) => (
               <div key={i}>
-                <ChampionStats stats={stat} />
+                <ChampionStats stats={stat} key={`ChampionStats-${i}`} />
                 <Divider orientation="horizontal" />
               </div>
             ))

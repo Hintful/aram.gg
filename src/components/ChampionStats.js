@@ -122,16 +122,6 @@ const getKDAStarRating = (kda) => {
   else { return 5; }
 }
 
-const kdaStarRating = (kda) => {
-  const star = getKDAStarRating(kda);
-
-  return (
-    Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
-    ))
-  )
-}
-
 const getDamageStarRating = (value) => {
   if (value < 500) { return 0; }
   else if (value < 750) { return 1; }
@@ -141,18 +131,8 @@ const getDamageStarRating = (value) => {
   else { return 5; }
 }
 
-const damageStarRating = (value) => {
-  const star = getDamageStarRating(value);
-
-  return (
-    Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getDamageStyle(value, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
-    ))
-  )
-}
-
-const getCarryPotential = (wins, losses, kda, effectiveDamage, damageTaken) => {
-  const starRatingPotential = ((getKDAStarRating(kda)) + Math.max(getDamageStarRating(effectiveDamage), getDamageStarRating(damageTaken))) / 10;
+const getCarryPotential = (wins, losses, kda, effectiveDamageStarRating, damageTakenStarRating) => {
+  const starRatingPotential = ((getKDAStarRating(kda)) + Math.max(effectiveDamageStarRating, damageTakenStarRating)) / 10;
   const winrate = wins / (wins + losses);
 
   if (wins + losses > 2) {
@@ -168,12 +148,13 @@ const ChampionStats = ({ stats }) => {
   const [kda, setKDA] = useState(null);
   const [effectiveDamage, setEffectiveDamage] = useState(null); // total damage done + total healing done
   const [damageTaken, setDamageTaken] = useState(null);
+  const [totalMinutes, setTotalMinutes] = useState(null);
+
+  const [kdaStarRating, setKdaStarRating] = useState(null);
+  const [effectiveDamageStarRating, setEffectiveDamageStarRating] = useState(null);
+  const [damageTakenStarRating, setDamageTakenStarRating] = useState(null);
+
   const [carryPotential, setCarryPotential] = useState(null);
-
-
-  const getTotalMinutes = () => {
-    return stats.total_game_length / 60;
-  }
 
   useEffect(() => {
     setChampionData(Object.values(JSON.parse(JSON.stringify(champion_data_json)).data));
@@ -186,12 +167,16 @@ const ChampionStats = ({ stats }) => {
       setKDA(stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist));
       setEffectiveDamage(stats.total_damage_done + stats.total_healing_done);
       setDamageTaken(stats.total_damage_taken);
+      setTotalMinutes(stats.total_game_length / 60);
     }
-  }, [championData]) // run when championData finishes loading
+  }, [championData, stats]) // run when championData finishes loading
 
   useEffect(() => {
-    setCarryPotential(getCarryPotential(stats.win, stats.loss, kda, effectiveDamage / getTotalMinutes(), damageTaken / getTotalMinutes()));
-  }, [kda])
+    setKdaStarRating(getKDAStarRating(kda));
+    setEffectiveDamageStarRating(getDamageStarRating(effectiveDamage / totalMinutes));
+    setDamageTakenStarRating(getDamageStarRating(damageTaken / totalMinutes));
+    setCarryPotential(getCarryPotential(stats.win, stats.loss, kda, effectiveDamageStarRating, damageTakenStarRating));
+  }, [kda, effectiveDamage, damageTaken]);
 
   return (
     <Flex direction="column">
@@ -262,23 +247,38 @@ const ChampionStats = ({ stats }) => {
                   <StatLabel>KDA</StatLabel>
                   <StatNumber>{getKDAElement(stats)}</StatNumber>
                   <StatHelpText>
-                    {kdaStarRating(kda)}
+                    {/* {kdaStarRating(kda)}
+                     */}
+                    {
+                      Array(5).fill("").map((_, i) => (
+                        <span style={i < kdaStarRating ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
+                      ))
+                    }
                   </StatHelpText>
                 </Stat>
               </Tooltip>
             </HStack>
             <HStack>
-              <Tooltip hasArrow label={`Damage: ${roundNumber(stats.total_damage_done / getTotalMinutes())} / Healing: ${roundNumber(stats.total_healing_done / getTotalMinutes())}`}>
+              <Tooltip hasArrow label={`Damage: ${roundNumber(stats.total_damage_done / totalMinutes)} / Healing: ${roundNumber(stats.total_healing_done / totalMinutes)}`}>
                 <Stat width="140px">
                   <StatLabel>Effective Damage/min</StatLabel>
-                  <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / getTotalMinutes())))}</StatNumber>
-                  <StatHelpText>{damageStarRating(effectiveDamage / getTotalMinutes())}</StatHelpText>
+                  <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / totalMinutes)))}</StatNumber>
+                  <StatHelpText>{
+                    Array(5).fill("").map((_, i) => (
+                      <span style={i < effectiveDamageStarRating ? getDamageStyle(effectiveDamage / totalMinutes, true) : { color: "gray.500" }} key={`effectiveDamageStarRating${effectiveDamageStarRating}${i}`}><i className="fas fa-star"></i></span>
+                    ))
+                  }</StatHelpText>
                 </Stat>
               </Tooltip>
               <Stat width="140px">
                 <StatLabel>Damage Taken/min</StatLabel>
-                <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / getTotalMinutes())))}</StatNumber>
-                <StatHelpText>{damageStarRating(damageTaken / getTotalMinutes())}</StatHelpText>
+                <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / totalMinutes)))}</StatNumber>
+                {console.log(damageTakenStarRating)}
+                <StatHelpText>{
+                  Array(5).fill("").map((_, i) => (
+                    <span style={i < damageTakenStarRating ? getDamageStyle(damageTaken / totalMinutes, true) : { color: "gray.500" }} key={`damageTakenStarRating${damageTakenStarRating}${i}`}><i className="fas fa-star"></i></span>
+                  ))
+                }</StatHelpText>
               </Stat>
             </HStack>
             <Tooltip hasArrow label={`${roundNumber(carryPotential * 100)}%`}>
