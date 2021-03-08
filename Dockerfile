@@ -7,6 +7,7 @@ EXPOSE 35729
 
 # Set working directory
 WORKDIR /frontend
+COPY . /frontend
 ADD . /frontend
 
 RUN apt-get update -y
