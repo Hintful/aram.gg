@@ -1,4 +1,4 @@
-import { Center, CircularProgress, CircularProgressLabel, Divider, HStack, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, CircularProgressLabel, Divider, HStack, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -175,14 +175,28 @@ const Profile = ({ location }) => {
         }
 
         <Divider />
-
+        {console.log(userChampionStats)}
         <VStack width="50vw">
-          {userChampionStats.map((stat, i) => (
-            <>
-              <ChampionStats stats={stat} key={i} />
-              <Divider orientation="horizontal" />
-            </>
-          ))}
+
+          {userChampionStats.length > 0 ?
+            userChampionStats.map((stat, i) => (
+              <>
+                <ChampionStats stats={stat} key={i} />
+                <Divider orientation="horizontal" />
+              </>
+            ))
+            :
+            <VStack>
+              <Text mt={10} mb={5} fontWeight="600">
+                Please refresh the page in a bit - we're fetching your ARAM game data!
+              </Text>
+              <Button colorScheme="teal" variant="outline" onClick={() => {
+                window.location.reload();
+              }}>
+                <i class="fas fa-sync-alt"></i>&nbsp;Refresh
+              </Button>
+            </VStack>
+          }
         </VStack>
 
       </VStack>
