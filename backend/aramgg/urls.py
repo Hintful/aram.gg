@@ -16,6 +16,21 @@ urlpatterns = [
         views.ChampionDetailView.as_view(),
         name="rest_api_user_champion",
     ),
+    path(
+        "rest_api/ranking/most_kill/",
+        views.RankingMostKillView.as_view(),
+        name="rest_api_ranking_most_kill",
+    ),
+    path(
+        "rest_api/ranking/most_death/",
+        views.RankingMostDeathView.as_view(),
+        name="rest_api_ranking_most_death",
+    ),
+    path(
+        "rest_api/ranking/most_assist/",
+        views.RankingMostAssistView.as_view(),
+        name="rest_api_ranking_most_assist",
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

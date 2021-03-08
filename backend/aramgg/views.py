@@ -1,4 +1,5 @@
 from django.core.exceptions import ViewDoesNotExist, ObjectDoesNotExist
+from django.db.models import Sum
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import status
@@ -18,6 +19,81 @@ class UserView(APIView):
 class ChampionView(APIView):
     serializer_class = ChampionSerializer
     queryset = Champion.objects.all()
+
+
+class RankingMostKillView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+        max_kill_user_data = User.objects.annotate(
+            avg_kill_per_game=Sum("champion__kill")
+            / (Sum("champion__win") + Sum("champion__loss"))
+        ).order_by("-avg_kill_per_game")[:3]
+
+        for i, user in zip(range(len(max_kill_user_data)), max_kill_user_data):
+            user_serializer = UserSerializer(user)
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "user": user_serializer.data,
+                        "avg_kill": user.avg_kill_per_game,
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
+class RankingMostAssistView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+        max_assist_user_data = User.objects.annotate(
+            avg_assist_per_game=Sum("champion__assist")
+            / (Sum("champion__win") + Sum("champion__loss"))
+        ).order_by("-avg_assist_per_game")[:3]
+
+        for i, user in zip(range(len(max_assist_user_data)), max_assist_user_data):
+            user_serializer = UserSerializer(user)
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "user": user_serializer.data,
+                        "avg_assist": user.avg_assist_per_game,
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
+class RankingMostDeathView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+        max_death_user_data = User.objects.annotate(
+            avg_death_per_game=Sum("champion__death")
+            / (Sum("champion__win") + Sum("champion__loss"))
+        ).order_by("-avg_death_per_game")[:3]
+
+        for i, user in zip(range(len(max_death_user_data)), max_death_user_data):
+            user_serializer = UserSerializer(user)
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "user": user_serializer.data,
+                        "avg_kill": user.avg_death_per_game,
+                    }
+                }
+            )
+
+        return Response(top_three)
 
 
 class UserDetailView(APIView):
