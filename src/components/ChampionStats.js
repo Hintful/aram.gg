@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
 import { GiDiceSixFacesTwo, GiDiceSixFacesThree, GiDiceSixFacesFour, GiDiceSixFacesFive, GiDiceSixFacesSix } from 'react-icons/gi'
 import MultikillTag from './tags/MultikillTag';
+import StarTag from './tags/StarTag';
 
 
 /* stats = {
@@ -50,21 +51,21 @@ const getURLName = (name) => {
   }
 }
 
-const getKDAStyle = (kda, shadow = false) => {
-  if (kda < 1.5) { return { color: '#ababab' }; }
-  else if (kda < 2.3) { return { color: '#676767' }; }
-  else if (kda < 3.1) { return { color: '#90ee90' }; }
-  else if (kda < 4) { return { color: '#87cefa' }; }
-  else if (kda < 5) { return { color: '#ffa500', textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
+const getKDAStyle = (rating, shadow = false) => {
+  if (rating < 1) { return { color: '#ababab' }; }
+  else if (rating < 2) { return { color: '#676767' }; }
+  else if (rating < 3) { return { color: '#90ee90' }; }
+  else if (rating < 4) { return { color: '#87cefa' }; }
+  else if (rating < 5) { return { color: '#ffa500', textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
 }
 
-const getDamageStyle = (value, shadow = false) => {
-  if (value < 700) { return { color: "#ababab" }; }
-  else if (value < 1200) { return { color: "#676767" }; }
-  else if (value < 1650) { return { color: "#90ee90" }; }
-  else if (value < 2100) { return { color: "#87cefa" }; }
-  else if (value < 2700) { return { color: "#ffa500", textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
+const getDamageStyle = (rating, shadow = false) => {
+  if (rating < 1) { return { color: "#ababab" }; }
+  else if (rating < 2) { return { color: "#676767" }; }
+  else if (rating < 3) { return { color: "#90ee90" }; }
+  else if (rating < 4) { return { color: "#87cefa" }; }
+  else if (rating < 5) { return { color: "#ffa500", textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
 }
 
@@ -92,11 +93,10 @@ export const roundNumber = (num) => {
   return (Math.round(num * 10) / 10).toFixed(1);
 }
 
-const getKDAElement = (stats) => {
-  const kda = stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist);
+const getKDAElement = (kda) => {
 
   return (
-    <span style={getKDAStyle(kda)}>
+    <span style={getKDAStyle(getKDAStarRating(kda))}>
       {kda}
     </span>
   )
@@ -104,7 +104,7 @@ const getKDAElement = (stats) => {
 
 const getDamageElement = (value) => {
   return (
-    <span style={getDamageStyle(parseInt(value.split(',').join('')))}>
+    <span style={getDamageStyle(getDamageStarRating(parseInt(value.split(',').join(''))))}>
       {value}
     </span>
   )
@@ -115,20 +115,19 @@ const formatNumber = (num) => {
 }
 
 const getKDAStarRating = (kda) => {
-  if (kda < 1) { return 0; }
-  else if (kda < 1.5) { return 1; }
-  else if (kda < 2.3) { return 2; }
-  else if (kda < 3.1) { return 3; }
-  else if (kda < 4) { return 4; }
+  if (kda < 2) { return kda / 1; }
+  else if(kda < 2.8) { return 2 + (kda - 2)/0.8; }
+  else if(kda < 3.5) { return 3 + (kda - 2.8)/0.7; }
+  else if(kda < 4.5) { return 4 + (kda - 3.5); }
   else { return 5; }
 }
 
 const getDamageStarRating = (value) => {
   if (value < 500) { return 0; }
-  else if (value < 750) { return 1; }
-  else if (value < 1200) { return 2; }
-  else if (value < 1650) { return 3; }
-  else if (value < 2100) { return 4; }
+  else if (value < 1000) { return 1 + (value - 500)/500; }
+  else if(value < 1400) { return 2 + (value - 1000)/400; }
+  else if(value < 1800) { return 3 + (value - 1400)/400; }
+  else if(value < 2350) { return 4 + (value - 1850)/550; }
   else { return 5; }
 }
 
@@ -216,15 +215,9 @@ const ChampionStats = ({ stats }) => {
               <Tooltip hasArrow label={`${roundNumber(stats.kill / (stats.win + stats.loss))} / ${roundNumber(stats.death / (stats.win + stats.loss))} / ${roundNumber(stats.assist / (stats.win + stats.loss))}`}>
                 <Stat width="120px">
                   <StatLabel>KDA</StatLabel>
-                  <StatNumber>{getKDAElement(stats)}</StatNumber>
+                  <StatNumber>{getKDAElement(kda)}</StatNumber>
                   <StatHelpText>
-                    {/* {kdaStarRating(kda)}
-                     */}
-                    {
-                      Array(5).fill("").map((_, i) => (
-                        <span style={i < kdaStarRating ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
-                      ))
-                    }
+                    <StarTag style={getKDAStyle(kdaStarRating, true)} value={kdaStarRating} />
                   </StatHelpText>
                 </Stat>
               </Tooltip>
@@ -235,9 +228,7 @@ const ChampionStats = ({ stats }) => {
                   <StatLabel>Effective Damage/min</StatLabel>
                   <StatNumber>{getDamageElement(formatNumber(Math.round(effectiveDamage / totalMinutes)))}</StatNumber>
                   <StatHelpText>{
-                    Array(5).fill("").map((_, i) => (
-                      <span style={i < effectiveDamageStarRating ? getDamageStyle(effectiveDamage / totalMinutes, true) : { color: "gray.500" }} key={`effectiveDamageStarRating${effectiveDamageStarRating}${i}`}><i className="fas fa-star"></i></span>
-                    ))
+                    <StarTag style={getDamageStyle(effectiveDamageStarRating, true)} value={effectiveDamageStarRating} />
                   }</StatHelpText>
                 </Stat>
               </Tooltip>
@@ -245,9 +236,7 @@ const ChampionStats = ({ stats }) => {
                 <StatLabel>Damage Taken/min</StatLabel>
                 <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / totalMinutes)))}</StatNumber>
                 <StatHelpText>{
-                  Array(5).fill("").map((_, i) => (
-                    <span style={i < damageTakenStarRating ? getDamageStyle(damageTaken / totalMinutes, true) : { color: "gray.500" }} key={`damageTakenStarRating${damageTakenStarRating}${i}`}><i className="fas fa-star"></i></span>
-                  ))
+                  <StarTag style={getDamageStyle(damageTakenStarRating, true)} value={damageTakenStarRating} />
                 }</StatHelpText>
               </Stat>
             </HStack>
