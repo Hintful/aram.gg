@@ -44,7 +44,7 @@ import StarTag from './tags/StarTag';
   "num_max_legendary_kill"
 } */
 
-const getURLName = (name) => {
+export const getURLName = (name) => {
   if (name === "Wukong") {
     return 'MonkeyKing';
   } else if (name === "LeBlanc") {

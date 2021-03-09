@@ -4,10 +4,9 @@ import { v4 as uuidv4 } from 'uuid';
 const baseColor = "gray.500"
 const star = <i className="fas fa-star"></i>;
 const halfStar = <i className="fas fa-star-half-alt"></i>;
-const emptyStar = <i class="far fa-star"></i>;
+const emptyStar = <i className="far fa-star"></i>;
 
 const StarTag = ({style, value}) => {
-  console.log(style);
   if (value < 0.25) { return (Array(5).fill("").map((_, i) => (<span style={{ color: baseColor }} key={uuidv4()}>{star}</span>))); }
   else if(value < 0.75) { return <div>
     {(Array(1).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{halfStar}</span>)))}
