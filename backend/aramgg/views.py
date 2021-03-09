@@ -105,6 +105,90 @@ class RankingChampWithMostDeath(APIView):
         return Response(top_three)
 
 
+class RankingMostDamageDoneInAGameView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+        most_damage_done_user_data = User.objects.annotate(
+            damage_done=F("champion__most_damage_done"),
+            champ_id=F("champion__champion_id"),
+        ).order_by("-damage_done")[:3]
+
+        for i, user in zip(
+            range(len(most_damage_done_user_data)), most_damage_done_user_data
+        ):
+            user_serializer = UserSerializer(user)
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "user": user_serializer.data,
+                        "damage_done": user.damage_done,
+                        "champ_id": user.champ_id,
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
+class RankingMostDamageTakenInAGameView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+        most_damage_taken_user_data = User.objects.annotate(
+            damage_taken=F("champion__most_damage_taken"),
+            champ_id=F("champion__champion_id"),
+        ).order_by("-damage_taken")[:3]
+
+        for i, user in zip(
+            range(len(most_damage_taken_user_data)), most_damage_taken_user_data
+        ):
+            user_serializer = UserSerializer(user)
+            top_three.append(
+                {
+                    f"{i+1}": {
+                        "user": user_serializer.data,
+                        "damage_taken": user.damage_taken,
+                        "champ_id": user.champ_id,
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
+class RankingMostHealingDoneInAGameView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        top_three = list()
+        most_healing_done_user_data = User.objects.annotate(
+            healing_done=F("champion__most_healing_done"),
+            champ_id=F("champion__champion_id"),
+        ).order_by("-healing_done")[:3]
+
+        for i, user in zip(
+            range(len(most_healing_done_user_data)), most_healing_done_user_data
+        ):
+            user_serializer = UserSerializer(user)
+            top_three.append(
+                {
+                    f"{i + 1}": {
+                        "user": user_serializer.data,
+                        "healing_done": user.healing_done,
+                        "champ_id": user.champ_id,
+                    }
+                }
+            )
+
+        return Response(top_three)
+
+
 class RankingMostKillInAGameView(APIView):
     queryset = User.objects.all()
 

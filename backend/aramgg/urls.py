@@ -47,6 +47,21 @@ urlpatterns = [
         name="rest_api_ranking_most_avg_death",
     ),
     path(
+        "rest_api/ranking/most_damage_done_in_one_game/",
+        views.RankingMostDamageDoneInAGameView.as_view(),
+        name="rest_api_ranking_most_damage_done",
+    ),
+    path(
+        "rest_api/ranking/most_damage_taken_in_one_game/",
+        views.RankingMostDamageTakenInAGameView.as_view(),
+        name="rest_api_ranking_most_damage_taken",
+    ),
+    path(
+        "rest_api/ranking/most_healing_done_in_one_game/",
+        views.RankingMostHealingDoneInAGameView.as_view(),
+        name="rest_api_ranking_most_healing_done",
+    ),
+    path(
         "rest_api/ranking/champ_with_most_kill/",
         views.RankingChampWithMostKill.as_view(),
         name="rest_api_ranking_champ_with_most_kill",
