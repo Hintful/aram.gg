@@ -9,7 +9,7 @@ import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import useForceUpdate_ from 'use-force-update';
 import { winsAsc, winsDesc, gamesAsc, gamesDesc, kdaAsc, kdaDesc, effectiveDamageAsc, effectiveDamageDesc, damageTakenAsc, damageTakenDesc } from './functions/ComparisonFunctions';
 
-const getKDAStyle = (kda, shadow = false) => {
+export const getKDAStyle = (kda, shadow = false) => {
   if (kda < 1.0) { return { color: '#ababab' }; }
   else if (kda < 2.0) { return { color: '#676767' }; }
   else if (kda < 3.0) { return { color: '#90ee90' }; }
@@ -34,23 +34,6 @@ const getKDAElement = (kda) => {
     )
   }
 
-}
-
-export const kdaStarRating = (kda, starSize = 3) => {
-  let star = 0;
-
-  if (!kda) { star = 0; }
-  else if (kda < 1.0) { star = 1; }
-  else if (kda < 2.0) { star = 2; }
-  else if (kda < 3.0) { star = 3; }
-  else if (kda < 3.7) { star = 4; }
-  else { star = 5; }
-
-  return (
-    Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
-    ))
-  )
 }
 
 const getWinrateColor = (winrate) => {
