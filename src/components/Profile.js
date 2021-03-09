@@ -132,7 +132,7 @@ const Profile = ({ location }) => {
   }, [userChampionStats])
 
   return (
-    <Center h="auto" mb="50px" className="profile-container">
+    <Center h="auto" mt="50px" mb="50px" className="profile-container">
       <VStack spacing={5}>
         <VStack>
           <Text fontSize={32} className="sName" mt={10}>{username}</Text>
