@@ -1,24 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Box, Divider, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
-import IconBox from '../IconBox';
-import { Link } from 'react-router-dom';
+import { HStack, Text, VStack } from '@chakra-ui/layout';
 import champion_data_json from '../json/champion.json';
-import { getURLName } from '../ChampionStats';
-import { Image } from '@chakra-ui/image';
-import { v4 as uuidv4 } from 'uuid';
-import { Spinner } from '@chakra-ui/spinner';
+import SilverPodium from './SilverPodium';
+import GoldPodium from './GoldPodium';
+import BronzePodium from './BronzePodium';
 
-const bgColor = {
-  bronze: '#cd7f32',
-  silver: '#c0c0c0',
-  gold: '#ffd700'
-}
-const bgColorRGBA = {
-  bronze: 'rgba(205,127,50,0.6)',
-  silver: 'rgba(192,192,192,0.6)',
-  gold: 'rgba(255,215,0,0.6)'
-}
+
 
 const MostKillInOneGameRanking = () => {
 
@@ -82,55 +70,9 @@ const MostKillInOneGameRanking = () => {
       <HStack spacing="40px">
         {rankingData &&
           <>
-            <Link to={`/profile/${silverUserData.username}`}>
-              <Flex className="rank-element" p="40px" mt="50px" direction="column" align="center" justify="center" style={{ background: bgColorRGBA.silver, boxShadow: `0 10px 0px ${bgColor.silver}` }}>
-                <IconBox profile_icon_id={silverUserData.profile_icon} level={silverUserData.level} showStarRating={false} />
-                <Text fontFamily="Source Sans Pro" fontSize="18px"><span style={{ fontWeight: 600 }}>{silverUserData.username.toUpperCase()}</span></Text>
-                <Text fontFamily="Source Sans Pro" fontSize="14px">🥈 <span style={{ fontWeight: 600 }}>{silverRecord.max_kill}</span> Kills</Text>
-
-                <VStack mt={7} spacing="5px">
-                  {console.log(silverChampionName)}
-                  {silverChampionName !== '' ?
-                    <Image w="40px" key={silverChampionName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(silverChampionName)}.png`} />
-                    :
-                    <Spinner size="40px" color="teal.500" />
-                  }
-                  <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{silverChampionName}</span></Text>
-                </VStack>
-              </Flex>
-            </Link>
-            <Link to={`/profile/${goldUserData.username}`}>
-              <Flex className="rank-element" p="40px" direction="column" align="center" justify="center" style={{ background: bgColorRGBA.gold, boxShadow: `0 10px 0px ${bgColor.gold}` }}>
-                <IconBox profile_icon_id={goldUserData.profile_icon} level={goldUserData.level} showStarRating={false} />
-                <Text fontFamily="Source Sans Pro" fontSize="18px"><span style={{ fontWeight: 600 }}>{goldUserData.username.toUpperCase()}</span></Text>
-                <Text fontFamily="Source Sans Pro" fontSize="14px">🥇 <span style={{ fontWeight: 600 }}>{goldRecord.max_kill}</span> Kills</Text>
-
-                <VStack mt={7} spacing="5px">
-                  {goldChampionName !== '' ?
-                    <Image w="40px" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(goldChampionName)}.png`} />
-                    :
-                    <Spinner size="40px" color="teal.500" />
-                  }
-                  <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{goldChampionName}</span></Text>
-                </VStack>
-              </Flex>
-            </Link>
-            <Link to={`/profile/${bronzeUserData.username}`}>
-              <Flex className="rank-element" p="40px" mt="100px" direction="column" align="center" justify="center" style={{ background: bgColorRGBA.bronze, boxShadow: `0 10px 0px ${bgColor.bronze}` }}>
-                <IconBox profile_icon_id={bronzeUserData.profile_icon} level={bronzeUserData.level} showStarRating={false} />
-                <Text fontFamily="Source Sans Pro" fontSize="18px"><span style={{ fontWeight: 600 }}>{bronzeUserData.username.toUpperCase()}</span></Text>
-                <Text fontFamily="Source Sans Pro" fontSize="14px">🥉 <span style={{ fontWeight: 600 }}>{bronzeRecord.max_kill}</span> Kills</Text>
-
-                <VStack mt={7} spacing="5px">
-                  {bronzeChampionName !== '' ?
-                    <Image w="40px" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(bronzeChampionName)}.png`} />
-                    :
-                    <Spinner size="40px" color="teal.500" />
-                  }
-                  <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{bronzeChampionName}</span></Text>
-                </VStack>
-              </Flex>
-            </Link>
+            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_kill} championName={silverChampionName} />
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_kill} championName={goldChampionName} />
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_kill} championName={bronzeChampionName} />
           </>
         }
       </HStack>

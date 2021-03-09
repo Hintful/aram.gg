@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios'
 import { Divider, Text, VStack } from '@chakra-ui/layout';
 import MostKillInOneGameRanking from './MostKillInOneGameRanking';
 
