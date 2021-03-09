@@ -7,7 +7,7 @@ const halfStar = <i className="fas fa-star-half-alt"></i>;
 const emptyStar = <i className="far fa-star"></i>;
 
 const StarTag = ({style, value}) => {
-  if (value < 0.25) { return (Array(5).fill("").map((_, i) => (<span style={{ color: baseColor }} key={uuidv4()}>{star}</span>))); }
+  if (value < 0.25) { return (Array(5).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{emptyStar}</span>))); }
   else if(value < 0.75) { return <div>
     {(Array(1).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{halfStar}</span>)))}
     {(Array(4).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{emptyStar}</span>)))}</div>

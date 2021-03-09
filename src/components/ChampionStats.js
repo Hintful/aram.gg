@@ -136,7 +136,7 @@ export const getKDAStarRating = (kda) => {
 }
 
 export const getDamageStarRating = (value) => {
-  if (value < 500) { return 0; }
+  if (value < 500) { return value / 500; }
   else if (value < 1000) { return 1 + (value - 500)/500; }
   else if(value < 1400) { return 2 + (value - 1000)/400; }
   else if(value < 1800) { return 3 + (value - 1400)/400; }
