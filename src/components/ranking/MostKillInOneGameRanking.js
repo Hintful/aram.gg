@@ -7,6 +7,7 @@ import champion_data_json from '../json/champion.json';
 import { getURLName } from '../ChampionStats';
 import { Image } from '@chakra-ui/image';
 import { v4 as uuidv4 } from 'uuid';
+import { Spinner } from '@chakra-ui/spinner';
 
 const bgColor = {
   bronze: '#cd7f32',
@@ -92,8 +93,7 @@ const MostKillInOneGameRanking = () => {
                   {silverChampionName !== '' ?
                     <Image w="40px" key={silverChampionName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(silverChampionName)}.png`} />
                     :
-                    <>
-                    </>
+                    <Spinner size="40px" color="teal.500" />
                   }
                   <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{silverChampionName}</span></Text>
                 </VStack>
@@ -109,8 +109,7 @@ const MostKillInOneGameRanking = () => {
                   {goldChampionName !== '' ?
                     <Image w="40px" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(goldChampionName)}.png`} />
                     :
-                    <>
-                    </>
+                    <Spinner size="40px" color="teal.500" />
                   }
                   <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{goldChampionName}</span></Text>
                 </VStack>
@@ -126,8 +125,7 @@ const MostKillInOneGameRanking = () => {
                   {bronzeChampionName !== '' ?
                     <Image w="40px" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(bronzeChampionName)}.png`} />
                     :
-                    <>
-                    </>
+                    <Spinner size="40px" color="teal.500" />
                   }
                   <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{bronzeChampionName}</span></Text>
                 </VStack>
