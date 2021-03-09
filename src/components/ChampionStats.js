@@ -134,13 +134,13 @@ const getDamageStarRating = (value) => {
 
 const getCarryPotential = (wins, losses, kdaStarRating, effectiveDamageStarRating, damageTakenStarRating) => {
   const starRatingPotential = (kdaStarRating + Math.max(effectiveDamageStarRating, damageTakenStarRating)) / 10;
-  const winrate = wins / (wins + losses);
+  // const winrate = wins / (wins + losses);
 
-  if (wins + losses > 2) {
-    return (starRatingPotential + winrate) / 2;
-  } else {
+  // if (wins + losses > 2) {
+  //   return (starRatingPotential + winrate) / 2;
+  // } else {
     return starRatingPotential;
-  }
+  // }
 }
 
 const ChampionStats = ({ stats }) => {
