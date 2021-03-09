@@ -1,18 +1,13 @@
-import { Button, Center, CircularProgress, CircularProgressLabel, Divider, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useForceUpdate, VStack } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, CircularProgressLabel, Divider, Flex, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useForceUpdate, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import IconBox from './IconBox';
 import ChampionStats from './ChampionStats';
 import { roundNumber } from './ChampionStats';
-import { AiOutlineArrowDown } from 'react-icons/ai';
+import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import useForceUpdate_ from 'use-force-update';
-
-const winsDesc = (a, b) => {
-  if (a.win > b.win) { return -1; }
-  else if(a.win < b.win) { return 1; }
-  else { return 0; }
-}
+import { winsAsc, winsDesc, gamesAsc, gamesDesc, kdaAsc, kdaDesc, effectiveDamageAsc, effectiveDamageDesc, damageTakenAsc, damageTakenDesc } from './functions/ComparisonFunctions';
 
 const getKDAStyle = (kda, shadow = false) => {
   if (kda < 1.0) { return { color: '#ababab' }; }
@@ -77,8 +72,15 @@ const Profile = ({ location }) => {
   const { id } = useParams();
   const username = id;
 
-  const forceUpdate = useForceUpdate_();
-  
+  // sort button orientations
+  // 0 unselected, 1 descending, 2 ascending
+  const [gamesSort, setGamesSort] = useState(0);
+  const [winsSort, setWinsSort] = useState(0);
+  const [kdaSort, setKdaSort] = useState(0);
+  const [effectiveDamageSort, setEffectiveDamageSort] = useState(0);
+  const [damageTakenSort, setDamageTakenSort] = useState(0);
+
+
 
   const formatUsername = (username) => {
     return username.split(" ").join("").toLowerCase();
@@ -169,7 +171,7 @@ const Profile = ({ location }) => {
           <Text fontWeight="600">Winrate</Text>
           {numWins ?
             <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color={getWinrateColor(numWins / (numWins + numLosses))}>
-              <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px"}}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
+              <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
             </CircularProgress>
             :
             <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
@@ -204,19 +206,105 @@ const Profile = ({ location }) => {
           </>
         }
 
-        <HStack width="50vw">
-          <Button colorScheme="teal"
-            onClick={() => {
-              setUserChampionStats([...userChampionStats].sort(winsDesc));
-              forceUpdate();
-            }}
-          >
-            Wins&nbsp;<Icon as={AiOutlineArrowDown}/>
-          </Button>
-          <Button colorScheme="teal">
-            KDA&nbsp;<Icon as={AiOutlineArrowDown}/>
-          </Button>
-        </HStack>
+        { /* Show sort menu only if numGames > 0 */ }
+        {numGames > 0 &&
+          <Flex direction="row" justify="center" align="center" width="50vw" style={{ gap: "5px", marginTop: "70px" }}>
+            <Button colorScheme="teal"
+              onClick={() => {
+                if (gamesSort === 1) { setGamesSort(2); }
+                else { setGamesSort(1); }
+
+                // TODO --------- Hacky solution; need fix
+                if (gamesSort === 1) { setUserChampionStats([...userChampionStats].sort(gamesAsc)); }
+                else { setUserChampionStats([...userChampionStats].sort(gamesDesc)); }
+
+                setWinsSort(0);
+                setKdaSort(0);
+                setEffectiveDamageSort(0);
+                setDamageTakenSort(0);
+              }}
+            >
+              # of Games&nbsp;
+            {gamesSort === 1 ? <Icon as={AiOutlineArrowDown} /> : gamesSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
+            </Button>
+
+            <Button colorScheme="teal"
+              onClick={() => {
+                if (winsSort === 1) { setWinsSort(2); }
+                else { setWinsSort(1); }
+
+                // TODO --------- Hacky solution; need fix
+                if (winsSort === 1) { setUserChampionStats([...userChampionStats].sort(winsAsc)); }
+                else { setUserChampionStats([...userChampionStats].sort(winsDesc)); }
+
+                setGamesSort(0);
+                setKdaSort(0);
+                setEffectiveDamageSort(0);
+                setDamageTakenSort(0);
+              }}
+            >
+              Wins&nbsp;
+            {winsSort === 1 ? <Icon as={AiOutlineArrowDown} /> : winsSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
+            </Button>
+
+            <Button colorScheme="teal"
+              onClick={() => {
+                if (kdaSort === 1) { setKdaSort(2); }
+                else { setKdaSort(1); }
+
+                // TODO --------- Hacky solution; need fix
+                if (kdaSort === 1) { setUserChampionStats([...userChampionStats].sort(kdaAsc)); }
+                else { setUserChampionStats([...userChampionStats].sort(kdaDesc)); }
+
+                setGamesSort(0);
+                setWinsSort(0);
+                setEffectiveDamageSort(0);
+                setDamageTakenSort(0);
+              }}
+            >
+              KDA&nbsp;
+            {kdaSort === 1 ? <Icon as={AiOutlineArrowDown} /> : kdaSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
+            </Button>
+
+            <Button colorScheme="teal"
+              onClick={() => {
+                if (effectiveDamageSort === 1) { setEffectiveDamageSort(2); }
+                else { setEffectiveDamageSort(1); }
+
+                // TODO --------- Hacky solution; need fix
+                if (effectiveDamageSort === 1) { setUserChampionStats([...userChampionStats].sort(effectiveDamageAsc)); }
+                else { setUserChampionStats([...userChampionStats].sort(effectiveDamageDesc)); }
+
+                setGamesSort(0);
+                setWinsSort(0);
+                setKdaSort(0);
+                setDamageTakenSort(0);
+              }}
+            >
+              Effective Damage&nbsp;
+            {effectiveDamageSort === 1 ? <Icon as={AiOutlineArrowDown} /> : effectiveDamageSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
+            </Button>
+
+            <Button colorScheme="teal"
+              onClick={() => {
+                if (damageTakenSort === 1) { setDamageTakenSort(2); }
+                else { setDamageTakenSort(1); }
+
+                // TODO --------- Hacky solution; need fix
+                if (damageTakenSort === 1) { setUserChampionStats([...userChampionStats].sort(damageTakenAsc)); }
+                else { setUserChampionStats([...userChampionStats].sort(damageTakenDesc)); }
+
+                setGamesSort(0);
+                setWinsSort(0);
+                setKdaSort(0);
+                setEffectiveDamageSort(0);
+              }}
+            >
+              Damage Taken&nbsp;
+            {damageTakenSort === 1 ? <Icon as={AiOutlineArrowDown} /> : damageTakenSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
+            </Button>
+          </Flex>
+        }
 
         <Divider />
         <VStack width="50vw">
