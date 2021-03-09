@@ -1,4 +1,4 @@
-import { Button, Center, CircularProgress, CircularProgressLabel, Divider, Flex, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, useForceUpdate, VStack } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, CircularProgressLabel, Divider, Flex, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, Tooltip, useForceUpdate, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
@@ -230,18 +230,20 @@ const Profile = ({ location }) => {
               </CircularProgress>
             }
           </VStack>
-          <VStack>
-            <Text fontWeight="600">Performance</Text>
-            {performance ?
-              <CircularProgress size="100px" thickness="5px" value={performance * 100} color={getPotentialColor(performance)}>
-                <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px", color: getPotentialColor(performance) }}>{getPotentialRank(performance)}</span></CircularProgressLabel>
-              </CircularProgress>
-              :
-              <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
+          <Tooltip hasArrow label={`${roundNumber(performance * 100)}%`}>
+            <VStack>
+              <Text fontWeight="600">Performance</Text>
+              {performance ?
+                <CircularProgress size="100px" thickness="5px" value={performance * 100} color={getPotentialColor(performance)}>
+                  <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px", color: getPotentialColor(performance) }}>{getPotentialRank(performance)}</span></CircularProgressLabel>
+                </CircularProgress>
+                :
+                <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
 
-              </CircularProgress>
-            }
-          </VStack>
+                </CircularProgress>
+              }
+            </VStack>
+          </Tooltip>
         </HStack>
 
         {numGames ?
