@@ -81,7 +81,7 @@ const getDamageStyle = (rating, shadow = false) => {
   else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
 }
 
-const getPotentialColor = (potential) => {
+export const getPotentialColor = (potential) => {
   if (potential < 0.3) { return '#ababab'; }
   else if (potential < 0.5) { return '#676767'; }
   else if (potential < 0.65) { return '#90ee90'; }
@@ -91,7 +91,7 @@ const getPotentialColor = (potential) => {
   else { return '#d900e4'; }
 }
 
-const getPotentialRank = (potential) => {
+export const getPotentialRank = (potential) => {
   const potentialThreshold = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 100];
   const potentialRank = ['F-', 'F', 'F+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS', 'SSS'];
 
@@ -127,7 +127,7 @@ const formatNumber = (num) => {
   return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-const getKDAStarRating = (kda) => {
+export const getKDAStarRating = (kda) => {
   if (kda < 2) { return kda / 1; }
   else if(kda < 2.8) { return 2 + (kda - 2)/0.8; }
   else if(kda < 3.5) { return 3 + (kda - 2.8)/0.7; }
@@ -135,7 +135,7 @@ const getKDAStarRating = (kda) => {
   else { return 5; }
 }
 
-const getDamageStarRating = (value) => {
+export const getDamageStarRating = (value) => {
   if (value < 500) { return 0; }
   else if (value < 1000) { return 1 + (value - 500)/500; }
   else if(value < 1400) { return 2 + (value - 1000)/400; }
@@ -144,7 +144,7 @@ const getDamageStarRating = (value) => {
   else { return 5; }
 }
 
-const getCarryPotential = (wins, losses, kdaStarRating, effectiveDamageStarRating, damageTakenStarRating) => {
+export const getCarryPotential = (wins, losses, kdaStarRating, effectiveDamageStarRating, damageTakenStarRating) => {
   const starRatingPotential = (kdaStarRating + Math.max(effectiveDamageStarRating, damageTakenStarRating)) / 10;
   // const winrate = wins / (wins + losses);
 

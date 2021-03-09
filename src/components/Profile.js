@@ -4,9 +4,8 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import IconBox from './IconBox';
 import ChampionStats from './ChampionStats';
-import { roundNumber } from './ChampionStats';
+import { roundNumber, getKDAStarRating, getDamageStarRating, getCarryPotential } from './ChampionStats';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
-import useForceUpdate_ from 'use-force-update';
 import { winsAsc, winsDesc, gamesAsc, gamesDesc, kdaAsc, kdaDesc, effectiveDamageAsc, effectiveDamageDesc, damageTakenAsc, damageTakenDesc } from './functions/ComparisonFunctions';
 import MultikillTag from './tags/MultikillTag';
 
@@ -34,7 +33,36 @@ const getKDAElement = (kda) => {
       </HStack>
     )
   }
+}
 
+// const getPotentialColor = (potential) => {
+//   if (potential < 0.3) { return '#ababab'; }
+//   else if (potential < 0.5) { return '#676767'; }
+//   else if (potential < 0.65) { return '#90ee90'; }
+//   else if (potential < 0.75) { return '#87cefa'; }
+//   else if (potential < 0.9) { return '#ffa500'; }
+//   else if (potential < 1) { return '#ff4500'; }
+//   else { return '#d900e4'; }
+// }
+const getPotentialColor = (potential) => {
+  if (potential < 0.2) { return '#ababab'; }
+  else if (potential < 0.43) { return '#676767'; }
+  else if (potential < 0.55) { return '#90ee90'; }
+  else if (potential < 0.65) { return '#87cefa'; }
+  else if (potential < 0.8) { return '#ffa500'; }
+  else if (potential < 0.9) { return '#ff4500'; }
+  else { return '#d900e4'; }
+}
+
+const getPotentialRank = (potential) => {
+  const potentialThreshold = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1, 100];
+  const potentialRank = ['F-', 'F', 'F+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS', 'SSS'];
+
+  for (let i = 0; i < potentialThreshold.length; i++) {
+    if (potential < potentialThreshold[i]) {
+      return potentialRank[i];
+    }
+  }
 }
 
 const getWinrateColor = (winrate) => {
@@ -71,7 +99,8 @@ const Profile = ({ location }) => {
   const [effectiveDamageSort, setEffectiveDamageSort] = useState(0);
   const [damageTakenSort, setDamageTakenSort] = useState(0);
 
-
+  // overall performance metric
+  const [performance, setPerformance] = useState(null);
 
   const formatUsername = (username) => {
     return username.split(" ").join("").toLowerCase();
@@ -117,6 +146,12 @@ const Profile = ({ location }) => {
     const penta = userChampionStats.reduce((total, championStat) => total + championStat.num_penta_kill, 0);
     const legendary = userChampionStats.reduce((total, championStat) => total + championStat.num_legendary_kill, 0);
 
+    // calculate overall performance
+    const totalPerformance = userChampionStats.reduce((total, championStat) => total + (
+      getCarryPotential(championStat.win, championStat.loss, getKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
+        getDamageStarRating((championStat.total_damage_done + championStat.total_healing_done) / (championStat.total_game_length / 60)),
+        getDamageStarRating(championStat.total_damage_taken / (championStat.total_game_length / 60)))), 0);
+
     // set basic stat states
     setNumGames(totalNumGames);
     setTotalKDA((kills + assists) / deaths)
@@ -129,6 +164,9 @@ const Profile = ({ location }) => {
     setNumQuadraKill(quadra);
     setNumPentaKill(penta);
     setNumLegendaryKill(legendary);
+
+    // set overall performance
+    setPerformance(totalPerformance / userChampionStats.length); // average performance
   }, [userChampionStats])
 
   return (
@@ -179,18 +217,32 @@ const Profile = ({ location }) => {
           </Stat>
         </HStack>
 
-        <VStack>
-          <Text fontWeight="600">Winrate</Text>
-          {numWins ?
-            <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color={getWinrateColor(numWins / (numWins + numLosses))}>
-              <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
-            </CircularProgress>
-            :
-            <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
+        <HStack spacing="50px">
+          <VStack>
+            <Text fontWeight="600">Winrate</Text>
+            {numWins ?
+              <CircularProgress size="100px" thickness="5px" value={numWins / (numWins + numLosses) * 100} color={getWinrateColor(numWins / (numWins + numLosses))}>
+                <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px" }}>{roundNumber(numWins / (numWins + numLosses) * 100)}%</span></CircularProgressLabel>
+              </CircularProgress>
+              :
+              <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
 
-            </CircularProgress>
-          }
-        </VStack>
+              </CircularProgress>
+            }
+          </VStack>
+          <VStack>
+            <Text fontWeight="600">Performance</Text>
+            {performance ?
+              <CircularProgress size="100px" thickness="5px" value={performance * 100} color={getPotentialColor(performance)}>
+                <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px", color: getPotentialColor(performance) }}>{getPotentialRank(performance)}</span></CircularProgressLabel>
+              </CircularProgress>
+              :
+              <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
+
+              </CircularProgress>
+            }
+          </VStack>
+        </HStack>
 
         {numGames ?
           <Text fontFamily="Roboto" fontSize={14}>
@@ -218,7 +270,7 @@ const Profile = ({ location }) => {
           </>
         }
 
-        { /* Show sort menu only if numGames > 0 */ }
+        { /* Show sort menu only if numGames > 0 */}
         {numGames > 0 &&
           <Flex direction="row" justify="center" align="center" width="50vw" style={{ gap: "5px", marginTop: "70px" }}>
             <Button colorScheme="teal"
