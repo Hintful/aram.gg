@@ -5,6 +5,7 @@ import './App.scss';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
+import Ranking from './components/ranking/Ranking';
 
 function App() {
   const location = useLocation();
@@ -15,6 +16,7 @@ function App() {
       <Switch location={location} key={location.pathname}>
         <Route exact path='/' component={Main} />
         <Route path='/profile/:id' component={Profile} />
+        <Route path='/ranking' component={Ranking} />
         <Route path='*'>
           <Redirect to='/'/>
         </Route>

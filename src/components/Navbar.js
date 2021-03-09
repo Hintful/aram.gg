@@ -7,13 +7,20 @@ const Navbar = () => {
   const history = useHistory();
 
   return (
-    <Stack direction={'column'} style={{ position: 'fixed', top: '0', left: '0', width: '100%', background: 'rgba(255,255,255,0.8)', zIndex: "1"}}>
+    <Stack direction={'column'} style={{ position: 'fixed', top: '0', left: '0', width: '100%', background: 'rgba(255,255,255,0.8)', zIndex: "1" }}>
       <HStack justify="space-between" pt="8px" pl="8px">
-        <Link to='/'>
-          <Text className="navbar-logo" fontSize={20}>
-            ARAM.GG
+        <HStack>
+          <Link to='/'>
+            <Text className="navbar-logo" fontSize={20}>
+              ARAM.GG
           </Text>
-        </Link>
+          </Link>
+          <Link to='/ranking'>
+            <Text fontFamily="Roboto Condensed" ml={3} fontSize={16}>
+              Ranking
+            </Text>
+          </Link>
+        </HStack>
         <form
           onSubmit={(e) => {
             e.preventDefault();

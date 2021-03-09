@@ -21,7 +21,7 @@ const kdaStarRating = (kda, starSize = 3) => {
   )
 }
 
-const IconBox = ({ profile_icon_id, level, totalKDA }) => {
+const IconBox = ({ profile_icon_id, level, totalKDA = null, showStarRating = true }) => {
   return (
     <VStack mb={5}>
       { profile_icon_id ?
@@ -36,9 +36,11 @@ const IconBox = ({ profile_icon_id, level, totalKDA }) => {
           <Spinner color="teal.500" />
         </Flex>
       }
+      { showStarRating && 
       <Flex flexDirection="row">
         {kdaStarRating(totalKDA, 5)}
       </Flex>
+      }
     </VStack>
   );
 }

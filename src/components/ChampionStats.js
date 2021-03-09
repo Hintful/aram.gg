@@ -16,11 +16,17 @@ import StarTag from './tags/StarTag';
   "kill"
   "death"
   "assist"
+
   "total_damage_done"
   "total_damage_taken"
   "total_healing_done"
   "total_game_length"
+  "longest_game_length"
+  "most_damage_done"
+  "most_damage_taken"
 
+  "most_gold_spent"
+  "most_gold_earned"
   "total_gold_spent"
   "total_gold_earned"
 
@@ -30,6 +36,12 @@ import StarTag from './tags/StarTag';
   "num_quadra_kill"
   "num_penta_kill"
   "num_legendary_kill"
+
+  "num_max_double_kill"
+  "num_max_triple_kill"
+  "num_max_quadra_kill"
+  "num_max_penta_kill"
+  "num_max_legendary_kill"
 } */
 
 const getURLName = (name) => {
