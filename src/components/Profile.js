@@ -8,6 +8,7 @@ import { roundNumber } from './ChampionStats';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import useForceUpdate_ from 'use-force-update';
 import { winsAsc, winsDesc, gamesAsc, gamesDesc, kdaAsc, kdaDesc, effectiveDamageAsc, effectiveDamageDesc, damageTakenAsc, damageTakenDesc } from './functions/ComparisonFunctions';
+import MultikillTag from './tags/MultikillTag';
 
 export const getKDAStyle = (kda, shadow = false) => {
   if (kda < 1.0) { return { color: '#ababab' }; }
@@ -54,6 +55,13 @@ const Profile = ({ location }) => {
   const [numLosses, setNumLosses] = useState(null);
   const { id } = useParams();
   const username = id;
+
+  // multikill stats
+  const [numDoubleKill, setNumDoubleKill] = useState(null);
+  const [numTripleKill, setNumTripleKill] = useState(null);
+  const [numQuadraKill, setNumQuadraKill] = useState(null);
+  const [numPentaKill, setNumPentaKill] = useState(null);
+  const [numLegendaryKill, setNumLegendaryKill] = useState(null);
 
   // sort button orientations
   // 0 unselected, 1 descending, 2 ascending
@@ -103,10 +111,24 @@ const Profile = ({ location }) => {
     const wins = userChampionStats.reduce((total, championStat) => total + championStat.win, 0)
     const losses = userChampionStats.reduce((total, championStat) => total + championStat.loss, 0)
 
+    const double = userChampionStats.reduce((total, championStat) => total + championStat.num_double_kill, 0);
+    const triple = userChampionStats.reduce((total, championStat) => total + championStat.num_triple_kill, 0);
+    const quadra = userChampionStats.reduce((total, championStat) => total + championStat.num_quadra_kill, 0);
+    const penta = userChampionStats.reduce((total, championStat) => total + championStat.num_penta_kill, 0);
+    const legendary = userChampionStats.reduce((total, championStat) => total + championStat.num_legendary_kill, 0);
+
+    // set basic stat states
     setNumGames(totalNumGames);
     setTotalKDA((kills + assists) / deaths)
     setNumWins(wins);
     setNumLosses(losses);
+
+    // set multikill stat states
+    setNumDoubleKill(double);
+    setNumTripleKill(triple);
+    setNumQuadraKill(quadra);
+    setNumPentaKill(penta);
+    setNumLegendaryKill(legendary);
   }, [userChampionStats])
 
   return (
@@ -121,8 +143,15 @@ const Profile = ({ location }) => {
               <Spinner color="teal.500" /> Loading..
             </div>
           }
-
         </VStack>
+
+        <Flex direction="row" align="center" justify="center" style={{ fontSize: "14px", gap: "3px" }}>
+          <MultikillTag multikill={2} count={numDoubleKill} />
+          <MultikillTag multikill={3} count={numTripleKill} />
+          <MultikillTag multikill={4} count={numQuadraKill} />
+          <MultikillTag multikill={5} count={numPentaKill} />
+          <MultikillTag multikill={6} count={numLegendaryKill} />
+        </Flex>
 
         <HStack spacing="40px">
           <Stat width="120px">
