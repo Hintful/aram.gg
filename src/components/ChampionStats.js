@@ -131,8 +131,8 @@ const getDamageStarRating = (value) => {
   else { return 5; }
 }
 
-const getCarryPotential = (wins, losses, kda, effectiveDamageStarRating, damageTakenStarRating) => {
-  const starRatingPotential = ((getKDAStarRating(kda)) + Math.max(effectiveDamageStarRating, damageTakenStarRating)) / 10;
+const getCarryPotential = (wins, losses, kdaStarRating, effectiveDamageStarRating, damageTakenStarRating) => {
+  const starRatingPotential = (kdaStarRating + Math.max(effectiveDamageStarRating, damageTakenStarRating)) / 10;
   const winrate = wins / (wins + losses);
 
   if (wins + losses > 2) {
@@ -175,8 +175,8 @@ const ChampionStats = ({ stats }) => {
     setKdaStarRating(getKDAStarRating(kda));
     setEffectiveDamageStarRating(getDamageStarRating(effectiveDamage / totalMinutes));
     setDamageTakenStarRating(getDamageStarRating(damageTaken / totalMinutes));
-    setCarryPotential(getCarryPotential(stats.win, stats.loss, kda, effectiveDamageStarRating, damageTakenStarRating));
-  }, [kda, effectiveDamage, damageTaken]);
+    setCarryPotential(getCarryPotential(stats.win, stats.loss, kdaStarRating, effectiveDamageStarRating, damageTakenStarRating));
+  }, [kda, effectiveDamage, damageTaken, kdaStarRating]);
 
   return (
     <Flex direction="column">
@@ -273,7 +273,6 @@ const ChampionStats = ({ stats }) => {
               <Stat width="140px">
                 <StatLabel>Damage Taken/min</StatLabel>
                 <StatNumber>{getDamageElement(formatNumber(Math.round(damageTaken / totalMinutes)))}</StatNumber>
-                {console.log(damageTakenStarRating)}
                 <StatHelpText>{
                   Array(5).fill("").map((_, i) => (
                     <span style={i < damageTakenStarRating ? getDamageStyle(damageTaken / totalMinutes, true) : { color: "gray.500" }} key={`damageTakenStarRating${damageTakenStarRating}${i}`}><i className="fas fa-star"></i></span>
