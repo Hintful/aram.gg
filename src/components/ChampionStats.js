@@ -4,6 +4,7 @@ import { Stat, StatLabel, StatNumber, StatHelpText, CircularProgress, CircularPr
 import React, { useEffect, useState } from 'react';
 import champion_data_json from './json/champion.json';
 import { GiDiceSixFacesTwo, GiDiceSixFacesThree, GiDiceSixFacesFour, GiDiceSixFacesFive, GiDiceSixFacesSix } from 'react-icons/gi'
+import MultikillTag from './tags/MultikillTag';
 
 
 /* stats = {
@@ -194,41 +195,11 @@ const ChampionStats = ({ stats }) => {
         </Flex>
         <Flex direction="column" mt={2}>
           <HStack ml={5} mb={2} height={5} spacing="4px" style={{ fontSize: "14px" }}>
-            {stats.num_double_kill > 0 &&
-              <Tooltip hasArrow label={stats.num_double_kill !== 1 ? `${stats.num_double_kill} Double Kills` : `${stats.num_double_kill} Double Kill`}>
-                <Flex direction="row" align="center" style={{ background: '#5bd75b', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <Icon as={GiDiceSixFacesTwo} />&nbsp;{stats.num_double_kill}
-                </Flex>
-              </Tooltip>
-            }
-            {stats.num_triple_kill > 0 &&
-              <Tooltip hasArrow label={stats.num_triple_kill !== 1 ? `${stats.num_triple_kill} Triple Kills` : `${stats.num_triple_kill} Triple Kill`}>
-                <Flex direction="row" align="center" style={{ background: '#87cefa', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <Icon as={GiDiceSixFacesThree} />&nbsp;{stats.num_triple_kill}
-                </Flex>
-              </Tooltip>
-            }
-            {stats.num_quadra_kill > 0 &&
-              <Tooltip hasArrow label={stats.num_quadra_kill !== 1 ? `${stats.num_quadra_kill} Quadra Kills` : `${stats.num_quadra_kill} Quadra Kill`}>
-                <Flex direction="row" align="center" style={{ background: '#ffa500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <Icon as={GiDiceSixFacesFour} />&nbsp;{stats.num_quadra_kill}
-                </Flex>
-              </Tooltip>
-            }
-            {stats.num_penta_kill > 0 &&
-              <Tooltip hasArrow label={stats.num_penta_kill !== 1 ? `${stats.num_penta_kill} Penta Kills` : `${stats.num_penta_kill} Penta Kill`}>
-                <Flex direction="row" align="center" style={{ background: '#ff4500', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <Icon as={GiDiceSixFacesFive} />&nbsp;{stats.num_penta_kill}
-                </Flex>
-              </Tooltip>
-            }
-            {stats.num_legendary_kill > 0 &&
-              <Tooltip hasArrow label={stats.num_legendary_kill !== 1 ? `${stats.num_penta_legendary} Legendary Kills` : `${stats.num_legendary_kill} Legendary Kill`}>
-                <Flex direction="row" align="center" style={{ background: '#c700fd', color: 'white', padding: "0 4px", borderRadius: "4px" }}>
-                  <Icon as={GiDiceSixFacesSix} />&nbsp;{stats.num_legendary_kill}
-                </Flex>
-              </Tooltip>
-            }
+            <MultikillTag multikill={2} count={stats.num_double_kill} />
+            <MultikillTag multikill={3} count={stats.num_triple_kill} />
+            <MultikillTag multikill={4} count={stats.num_quadra_kill} />
+            <MultikillTag multikill={5} count={stats.num_penta_kill} />
+            <MultikillTag multikill={6} count={stats.num_legendary_kill} />
           </HStack>
           <HStack>
             <HStack ml={7} mr="100px" spacing="40px">
