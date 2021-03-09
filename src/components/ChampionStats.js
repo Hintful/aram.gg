@@ -75,15 +75,16 @@ const getPotentialColor = (potential) => {
   else if (potential < 0.65) { return '#90ee90'; }
   else if (potential < 0.75) { return '#87cefa'; }
   else if (potential < 0.9) { return '#ffa500'; }
-  else { return '#ff4500'; }
+  else if (potential < 1) { return '#ff4500'; }
+  else { return '#d900e4'; }
 }
 
 const getPotentialRank = (potential) => {
-  const potentialThreshold = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1];
-  const potentialRank = ['F-', 'F', 'F+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS'];
+  const potentialThreshold = [0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 100];
+  const potentialRank = ['F-', 'F', 'F+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS', 'SSS'];
 
   for (let i = 0; i < potentialThreshold.length; i++) {
-    if (potential <= potentialThreshold[i]) {
+    if (potential < potentialThreshold[i]) {
       return potentialRank[i];
     }
   }
