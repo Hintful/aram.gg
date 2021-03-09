@@ -1,6 +1,8 @@
 import React from 'react';
 import { Divider, Text, VStack } from '@chakra-ui/layout';
 import MostKillInOneGameRanking from './MostKillInOneGameRanking';
+import MostDeathInOneGameRanking from './MostDeathInOneGameRanking';
+import MostAssistInOneGameRanking from './MostAssistInOneGameRanking';
 
 const Ranking = () => {
   return (  
@@ -11,7 +13,8 @@ const Ranking = () => {
 
       { /* Ranking Panel */ }
       <MostKillInOneGameRanking />
-      <Divider/>
+      <MostAssistInOneGameRanking />
+      <MostDeathInOneGameRanking />
     </VStack>
   );
 }

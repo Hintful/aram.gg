@@ -8,7 +8,7 @@ import BronzePodium from './BronzePodium';
 
 
 
-const MostKillInOneGameRanking = () => {
+const MostDeathInOneGameRanking = () => {
 
   const [rankingData, setRankingData] = useState(null);
   const [championData, setChampionData] = useState([]);
@@ -30,7 +30,7 @@ const MostKillInOneGameRanking = () => {
 
   async function getRankingData() {
     // ranking data
-    axios.get('http://localhost:8000/aramgg/rest_api/ranking/most_kill_in_one_game/')
+    axios.get('http://localhost:8000/aramgg/rest_api/ranking/most_death_in_one_game/')
       .then(res => {
         setRankingData(res.data);
       })
@@ -66,13 +66,13 @@ const MostKillInOneGameRanking = () => {
 
   return (
     <VStack mt="50px" mb="100px">
-      <Text fontFamily="Roboto Condensed" fontSize="24px">⚔️ Most Kills in One Game</Text>
+      <Text fontFamily="Roboto Condensed" fontSize="24px">💀 Most Deaths in One Game</Text>
       <HStack spacing="40px">
         {rankingData &&
           <>
-            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_kill} championName={silverChampionName} unit='Kill' />
-            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_kill} championName={goldChampionName} unit='Kill' />
-            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_kill} championName={bronzeChampionName} unit='Kill' />
+            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_death} championName={silverChampionName} unit='Death'/>
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_death} championName={goldChampionName} unit='Death'/>
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_death} championName={bronzeChampionName} unit='Death'/>
           </>
         }
       </HStack>
@@ -80,4 +80,4 @@ const MostKillInOneGameRanking = () => {
   );
 }
 
-export default MostKillInOneGameRanking;
+export default MostDeathInOneGameRanking;
