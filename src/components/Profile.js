@@ -1,7 +1,7 @@
-import { Button, Center, CircularProgress, CircularProgressLabel, Divider, Flex, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, Tooltip, useForceUpdate, VStack } from '@chakra-ui/react';
+import { Button, Center, CircularProgress, CircularProgressLabel, Divider, Flex, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, Tooltip, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import IconBox from './IconBox';
 import ChampionStats from './ChampionStats';
 import { roundNumber, getKDAStarRating, getDamageStarRating, getCarryPotential } from './ChampionStats';
@@ -93,6 +93,9 @@ const Profile = ({ location }) => {
   // overall performance metric
   const [performance, setPerformance] = useState(null);
 
+  // for link
+  const history = useHistory();
+
   const formatUsername = (username) => {
     return username.split(" ").join("").toLowerCase();
   }
@@ -163,6 +166,7 @@ const Profile = ({ location }) => {
   return (
     <Center h="auto" mt="50px" mb="50px" className="profile-container">
       <VStack spacing={5}>
+        { /* Username / Iconbox */}
         <VStack>
           <Text fontSize={32} className="sName" mt={10}>{username}</Text>
           {userDetail ?
@@ -174,6 +178,8 @@ const Profile = ({ location }) => {
           }
         </VStack>
 
+
+        { /* Multi-kill stats */}
         <Flex direction="row" align="center" justify="center" style={{ fontSize: "14px", gap: "3px" }}>
           <MultikillTag multikill={2} count={numDoubleKill} />
           <MultikillTag multikill={3} count={numTripleKill} />
@@ -182,6 +188,18 @@ const Profile = ({ location }) => {
           <MultikillTag multikill={6} count={numLegendaryKill} />
         </Flex>
 
+
+        { /* Achievement Modal */}
+        <Button onClick={() => {
+          history.push({
+            pathname: `/profile/${username}/achievements`
+          })
+        }}>Achievements</Button>
+
+        
+
+
+        { /* Wins/Losses/KDA Stat */}
         <HStack spacing="40px">
           <Stat width="120px">
             <StatLabel>Wins</StatLabel>
@@ -208,6 +226,8 @@ const Profile = ({ location }) => {
           </Stat>
         </HStack>
 
+
+        { /* Winrate/Performance Stats */}
         <HStack spacing="50px">
           <VStack>
             <Text fontWeight="600">Winrate</Text>
@@ -237,6 +257,8 @@ const Profile = ({ location }) => {
           </Tooltip>
         </HStack>
 
+
+        {/* Number of games analyzed / Refresh button */}
         {numGames ?
           <Text fontFamily="Roboto" fontSize={14}>
             Total number of games analyzed:&nbsp;
@@ -263,7 +285,7 @@ const Profile = ({ location }) => {
           </>
         }
 
-        { /* Show sort menu only if numGames > 0 */}
+        { /* Sorting Menu */}
         {numGames > 0 &&
           <Flex direction="row" justify="center" align="center" width="50vw" style={{ gap: "5px", marginTop: "70px" }}>
             <Button colorScheme="teal"
@@ -363,6 +385,8 @@ const Profile = ({ location }) => {
           </Flex>
         }
 
+
+        { /* Champion stats */}
         <Divider />
         <VStack width="50vw">
 

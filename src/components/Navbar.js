@@ -17,7 +17,7 @@ const Navbar = () => {
           </Link>
           <Link to='/ranking'>
             <Text fontFamily="Roboto Condensed" ml={3} fontSize={16}>
-              Ranking
+              👑 Ranking
             </Text>
           </Link>
         </HStack>
