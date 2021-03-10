@@ -13,7 +13,7 @@ const SilverPodium = ({ username, profile_icon, level, value, showChampion = tru
       <Flex className="rank-element" p="40px" mt="50px" direction="column" align="center" justify="center" style={{ background: bgColorRGBA.silver, boxShadow: `0 10px 0px ${bgColor.silver}` }}>
         <IconBox profile_icon_id={profile_icon} level={level} showStarRating={false} />
         <Text fontFamily="Source Sans Pro" fontSize="18px"><span style={{ fontWeight: 600 }}>{username.toUpperCase()}</span></Text>
-        <Text fontFamily="Source Sans Pro" fontSize="14px">🥈 <span style={{ fontWeight: 600 }}>{value}</span> {unit}s</Text>
+        <Text fontFamily="Source Sans Pro" fontSize="14px">🥈 <span style={{ fontWeight: 600 }}>{value}</span> {unit}</Text>
 
         {showChampion &&
           <VStack mt={7} spacing="5px">

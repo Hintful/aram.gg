@@ -70,9 +70,9 @@ const MostKillInOneGameRanking = () => {
       <HStack spacing="40px">
         {rankingData &&
           <>
-            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_kill} championName={silverChampionName} unit='Kill' />
-            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_kill} championName={goldChampionName} unit='Kill' />
-            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_kill} championName={bronzeChampionName} unit='Kill' />
+            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_kill} championName={silverChampionName} unit='Kills' />
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_kill} championName={goldChampionName} unit='Kills' />
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_kill} championName={bronzeChampionName} unit='Kills' />
           </>
         }
       </HStack>

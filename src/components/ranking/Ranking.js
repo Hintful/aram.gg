@@ -3,6 +3,9 @@ import { Divider, Text, VStack } from '@chakra-ui/layout';
 import MostKillInOneGameRanking from './MostKillInOneGameRanking';
 import MostDeathInOneGameRanking from './MostDeathInOneGameRanking';
 import MostAssistInOneGameRanking from './MostAssistInOneGameRanking';
+import MostDamageDoneInOneGameRanking from './MostDamageDoneInOneGameRanking';
+import MostHealingDoneInOneGameRanking from './MostHealingDoneInOneGameRanking';
+import MostDamageTakenInOneGameRanking from './MostDamageDoneInOneGameRanking copy';
 
 const Ranking = () => {
   return (  
@@ -15,6 +18,9 @@ const Ranking = () => {
       <MostKillInOneGameRanking />
       <MostAssistInOneGameRanking />
       <MostDeathInOneGameRanking />
+      <MostDamageDoneInOneGameRanking />
+      <MostHealingDoneInOneGameRanking />
+      <MostDamageTakenInOneGameRanking />
     </VStack>
   );
 }

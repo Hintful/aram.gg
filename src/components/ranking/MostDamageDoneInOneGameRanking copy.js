@@ -5,10 +5,11 @@ import champion_data_json from '../json/champion.json';
 import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
+import { formatNumber } from '../ChampionStats';
 
 
 
-const MostAssistInOneGameRanking = () => {
+const MostDamageTakenInOneGameRanking = () => {
 
   const [rankingData, setRankingData] = useState(null);
   const [championData, setChampionData] = useState([]);
@@ -30,7 +31,7 @@ const MostAssistInOneGameRanking = () => {
 
   async function getRankingData() {
     // ranking data
-    axios.get('http://localhost:8000/aramgg/rest_api/ranking/most_assist_in_one_game/')
+    axios.get('http://localhost:8000/aramgg/rest_api/ranking/most_damage_taken_in_one_game/')
       .then(res => {
         setRankingData(res.data);
       })
@@ -66,13 +67,13 @@ const MostAssistInOneGameRanking = () => {
 
   return (
     <VStack mt="50px" mb="100px">
-      <Text fontFamily="Roboto Condensed" fontSize="24px">🤝 Most Assists in One Game</Text>
+      <Text fontFamily="Roboto Condensed" fontSize="24px">🛡️ Most Damage Taken in One Game</Text>
       <HStack spacing="40px">
         {rankingData &&
           <>
-            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_assist} championName={silverChampionName} unit='Assists' />
-            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_assist} championName={goldChampionName} unit='Assists' />
-            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_assist} championName={bronzeChampionName} unit='Assists' />
+            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={formatNumber(silverRecord.damage_taken)} championName={silverChampionName} unit='Damage' />
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={formatNumber(goldRecord.damage_taken)} championName={goldChampionName} unit='Damage' />
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={formatNumber(bronzeRecord.damage_taken)} championName={bronzeChampionName} unit='Damage' />
           </>
         }
       </HStack>
@@ -80,4 +81,4 @@ const MostAssistInOneGameRanking = () => {
   );
 }
 
-export default MostAssistInOneGameRanking;
+export default MostDamageTakenInOneGameRanking;

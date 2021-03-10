@@ -70,9 +70,9 @@ const MostDeathInOneGameRanking = () => {
       <HStack spacing="40px">
         {rankingData &&
           <>
-            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_death} championName={silverChampionName} unit='Death'/>
-            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_death} championName={goldChampionName} unit='Death'/>
-            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_death} championName={bronzeChampionName} unit='Death'/>
+            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_death} championName={silverChampionName} unit='Deaths'/>
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={goldRecord.max_death} championName={goldChampionName} unit='Deaths'/>
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={bronzeRecord.max_death} championName={bronzeChampionName} unit='Deaths'/>
           </>
         }
       </HStack>
