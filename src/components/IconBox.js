@@ -2,26 +2,19 @@ import { Image } from '@chakra-ui/image';
 import { Box, Center, Flex, Text, VStack, HStack } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import React, { useEffect } from 'react';
-import { getKDAStyle } from './Profile';
+import { getKDAStarRating } from './ChampionStats';
+import StarTag from './tags/StarTag';
 
-const kdaStarRating = (kda, starSize = 3) => {
-  let star = 0;
-
-  if (!kda) { star = 0; }
-  else if (kda < 1.0) { star = 1; }
-  else if (kda < 2.0) { star = 2; }
-  else if (kda < 3.0) { star = 3; }
-  else if (kda < 3.7) { star = 4; }
-  else { star = 5; }
-
-  return (
-    Array(5).fill("").map((_, i) => (
-      <span style={i < star ? getKDAStyle(kda, true) : { color: "gray.500" }} key={i}><i className="fas fa-star"></i></span>
-    ))
-  )
+const getStarRatingStyle = (star) => {
+  if (star < 1 || !star) { return { color: '#ababab' }; }
+  else if (star < 2) { return { color: '#676767' }; }
+  else if (star < 3) { return { color: '#90ee90' }; }
+  else if (star < 4) { return { color: '#87cefa' }; }
+  else if (star < 5) { return { color: '#ffa500', textShadow: '0px 0px 4px #ffa500' }; }
+  else { return { color: '#ff4500', textShadow: '0px 0px 4px #ff4500' }; }
 }
 
-const IconBox = ({ profile_icon_id, level, totalKDA = null, showStarRating = true }) => {
+const IconBox = ({ profile_icon_id, level, totalKDA = null, performance = null, showStarRating = true }) => {
   return (
     <VStack mb={5}>
       { profile_icon_id ?
@@ -36,10 +29,11 @@ const IconBox = ({ profile_icon_id, level, totalKDA = null, showStarRating = tru
           <Spinner color="teal.500" />
         </Flex>
       }
-      { showStarRating && 
-      <Flex flexDirection="row">
-        {kdaStarRating(totalKDA, 5)}
-      </Flex>
+      { showStarRating &&
+        <Flex flexDirection="row">
+          {/* {kdaStarRating(totalKDA, 5)} */}
+          <StarTag style={getStarRatingStyle(((performance * 5) + getKDAStarRating(totalKDA)) / 2)} value={((performance * 5) + getKDAStarRating(totalKDA)) / 2} />
+        </Flex>
       }
     </VStack>
   );

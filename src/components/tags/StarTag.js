@@ -1,13 +1,12 @@
 import React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
-const baseColor = "gray.500"
 const star = <i className="fas fa-star"></i>;
 const halfStar = <i className="fas fa-star-half-alt"></i>;
 const emptyStar = <i className="far fa-star"></i>;
 
 const StarTag = ({style, value}) => {
-  if (value < 0.25) { return (Array(5).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{emptyStar}</span>))); }
+  if (value < 0.25 || !value) { return (Array(5).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{emptyStar}</span>))); }
   else if(value < 0.75) { return <div>
     {(Array(1).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{halfStar}</span>)))}
     {(Array(4).fill("").map((_, i) => (<span style={ style } key={uuidv4()}>{emptyStar}</span>)))}</div>

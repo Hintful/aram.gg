@@ -35,15 +35,6 @@ const getKDAElement = (kda) => {
   }
 }
 
-// const getPotentialColor = (potential) => {
-//   if (potential < 0.3) { return '#ababab'; }
-//   else if (potential < 0.5) { return '#676767'; }
-//   else if (potential < 0.65) { return '#90ee90'; }
-//   else if (potential < 0.75) { return '#87cefa'; }
-//   else if (potential < 0.9) { return '#ffa500'; }
-//   else if (potential < 1) { return '#ff4500'; }
-//   else { return '#d900e4'; }
-// }
 const getPotentialColor = (potential) => {
   if (potential < 0.2) { return '#ababab'; }
   else if (potential < 0.43) { return '#676767'; }
@@ -175,7 +166,7 @@ const Profile = ({ location }) => {
         <VStack>
           <Text fontSize={32} className="sName" mt={10}>{username}</Text>
           {userDetail ?
-            <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={totalKDA} />
+            <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={totalKDA} performance={performance} />
             :
             <div>
               <Spinner color="teal.500" /> Loading..
