@@ -1,9 +1,13 @@
 import { HStack, Text, VStack } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { achievements } from './AchievementRequirement';
 import AchievementTag from './tags/AchievementTag';
+import IconBox from './IconBox';
+import { getKDAStarRating, getDamageStarRating, getCarryPotential } from './ChampionStats';
+import { Spinner } from '@chakra-ui/spinner';
+import { Button } from '@chakra-ui/button';
 
 const formatUsername = (username) => {
   return username.split(" ").join("").toLowerCase();
@@ -17,6 +21,10 @@ const Achievements = () => {
 
   // user cumulative stats
   const [userStats, setUserStats] = useState(null);
+  const [performance, setPerformance] = useState(null);
+
+  // for link
+  const history = useHistory();
 
   async function getUserData() {
     // user data
@@ -110,6 +118,12 @@ const Achievements = () => {
       localNumMaxLegendaryKill = Math.max(localNumMaxLegendaryKill, stats.num_max_legendary_kill);
     })
 
+    // calculate performance
+    const totalPerformance = userChampionStats.reduce((total, championStat) => total + (
+      getCarryPotential(championStat.win, championStat.loss, getKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
+        getDamageStarRating((championStat.total_damage_done + championStat.total_healing_done) / (championStat.total_game_length / 60)),
+        getDamageStarRating(championStat.total_damage_taken / (championStat.total_game_length / 60)))), 0);
+
     setUserStats({
       numWins: localNumWins,
       numLosses: localNumLosses,
@@ -142,27 +156,49 @@ const Achievements = () => {
       numMaxPentaKill: localNumMaxPentaKill,
       numMaxLegendaryKill: localNumMaxLegendaryKill
     })
+
+    setPerformance(totalPerformance / userChampionStats.length);
   }, [userChampionStats]);
 
   return (
     <VStack mt="50px">
-      <Text fontSize={32} className="sName" mt={10}>{username}</Text>
-      <HStack>
-        {
-          userStats &&
-          achievements.map(achievement => {
-            let reqMet = 0;
-            Object.keys(achievement.requirements).forEach(requirement => {
-              if (userStats[requirement] >= achievement.requirements[requirement]) {
-                reqMet += 1;
+      <VStack mb={5}>
+        <Text fontSize={32} className="sName" mt={10} mb={1}>{username}</Text>
+        {userDetail && userStats ?
+          <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={(userStats.numKills + userStats.numAssists) / userStats.numDeaths} performance={performance} />
+          :
+          <div>
+            <Spinner color="teal.500" /> Loading..
+          </div>
+        }
+      </VStack>
+
+      { /* Achievement Button */}
+      <Button mb={10} onClick={() => {
+        history.push({
+          pathname: `/profile/${username}`
+        })
+      }}>Back to Profile</Button>
+
+      <VStack>
+        <Text fontSize={18} fontFamily="Roboto Condensed" mb={5}>🏆 Achievements Earned</Text>
+        <HStack>
+          {
+            userStats &&
+            achievements.map(achievement => {
+              let reqMet = 0;
+              Object.keys(achievement.requirements).forEach(requirement => {
+                if (userStats[requirement] >= achievement.requirements[requirement]) {
+                  reqMet += 1;
+                }
+              })
+              if (reqMet === Object.keys(achievement.requirements).length) {
+                return <AchievementTag achievement={achievement} />
               }
             })
-            if (reqMet === Object.keys(achievement.requirements).length) {
-              return <AchievementTag achievement={achievement} />
-            }
-          })
-        }
-      </HStack>
+          }
+        </HStack>
+      </VStack>
     </VStack>
   );
 }

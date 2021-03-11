@@ -166,7 +166,6 @@ const Profile = ({ location }) => {
   return (
     <Center h="auto" mt="50px" mb="50px" className="profile-container">
       <VStack spacing={5}>
-        { /* Username / Iconbox */}
         <VStack>
           <Text fontSize={32} className="sName" mt={10}>{username}</Text>
           {userDetail ?
@@ -189,7 +188,7 @@ const Profile = ({ location }) => {
         </Flex>
 
 
-        { /* Achievement Modal */}
+        { /* Achievement Button */}
         <Button onClick={() => {
           history.push({
             pathname: `/profile/${username}/achievements`
