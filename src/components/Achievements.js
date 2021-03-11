@@ -161,7 +161,8 @@ const Achievements = () => {
       numMaxTripleKill: localNumMaxTripleKill,
       numMaxQuadraKill: localNumMaxQuadraKill,
       numMaxPentaKill: localNumMaxPentaKill,
-      numMaxLegendaryKill: localNumMaxLegendaryKill
+      numMaxLegendaryKill: localNumMaxLegendaryKill,
+      largestKillingSpree: localLargestKillingSpree
     })
 
     setPerformance(totalPerformance / userChampionStats.length);
@@ -200,7 +201,7 @@ const Achievements = () => {
         </Text>
         
         { !categorizeAchievements ?
-          <HStack w="70vw" wrap="wrap">
+          <HStack wrap="wrap" p={10}>
             {
               userStats &&
               achievements.sort(achievementRarityDesc).map(achievement => {
@@ -222,7 +223,7 @@ const Achievements = () => {
             <>
               <VStack mb={10}>
                 <Text fontSize={18} fontWeight='600' color={rarityColor[5 - i]} fontFamily="Roboto Condensed" mb={5}>{rarityDesc[5 - i]}</Text>
-                <HStack w="70vw" wrap="wrap">
+                <HStack wrap="wrap" p={10}>
                   {userStats &&
                     achievements.filter(achievement => achievement.rarity === (5 - i)).map(achievement => {
                       console.log("rendered");
