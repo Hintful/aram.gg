@@ -10,7 +10,14 @@ const AchievementTag = ({ achievement }) => {
   return (
     <>
       <ReactTooltip place="top" type="dark" effect="float"/>
-        <Flex direction="row" align="center" style={{ background: rarityColor[achievement.rarity], fontSize: "14px", color: 'white', padding: '0 5px', borderRadius: '4px' }}
+        <Flex direction="row" align="center" 
+        style={{ 
+          background: rarityColor[achievement.rarity], 
+          boxShadow: achievement.rarity >= 2 ? `0px 0px 3px ${achievement.rarity - 1}px ${rarityColor[achievement.rarity]}` : 'none',
+          fontSize: "14px", 
+          color: 'white', 
+          padding: '0 5px', 
+          borderRadius: '4px' }}
           data-html={true}
           data-tip={`<span style='font-weight: 600; color: ${rarityColor[achievement.rarity]}'>${rarityDesc[achievement.rarity]}</span><hr>${achievement.description}`}
         >
