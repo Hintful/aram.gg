@@ -2,8 +2,11 @@ import os
 from typing import Dict, List, Any
 
 import django
+from requests import Response
+from rest_framework import status
 
 from aramgg.config import RIOT_API_KEY
+from aramgg.exceptions import SummonerNotFoundException, RateLimitExceededException
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "backend.local_settings"
 django.setup()
@@ -20,32 +23,42 @@ class RiotApiRequests:
         self.summoner_name = summoner_name
         self.request_limit = request_limit
 
+    def check_rate_limit(self, request: Response) -> None:
+        if request.status_code == status.HTTP_429_TOO_MANY_REQUESTS:
+            raise RateLimitExceededException(
+                f"Rate limit exceeded with summoner name: {self.summoner_name}"
+            )
+
+    def check_if_summoner_exists(self, request: Response) -> None:
+        if request.status_code == status.HTTP_404_NOT_FOUND:
+            raise SummonerNotFoundException(f"Summoner not found: {self.summoner_name}")
+
     def get_account_info(self) -> User:
         """ Get account information based on the summoner name """
 
         url = f"{BASE_URL}/lol/summoner/v4/summoners/by-name/{self.summoner_name}"
         request = requests.get(url=url, params=PARAMS)
+        self.check_rate_limit(request)
+        self.check_if_summoner_exists(request)
+
         data = request.json()
-        try:
-            User.objects.update_or_create(
-                username=data["name"].replace(" ", "").lower(),
-                defaults={
-                    "profile_icon": data["profileIconId"],
-                    "account_id": data["accountId"],
-                    "level": data["summonerLevel"],
-                },
-            )
-        except KeyError:
-            raise KeyError(f"Cannot find a summoner named {self.summoner_name}")
+        User.objects.update_or_create(
+            username=data["name"].replace(" ", "").lower(),
+            defaults={
+                "profile_icon": data["profileIconId"],
+                "account_id": data["accountId"],
+                "level": data["summonerLevel"],
+            },
+        )
 
         return User.objects.get(username=self.summoner_name)
 
-    @staticmethod
-    def get_match_list(user: User) -> List[Dict[str, int]]:
+    def get_match_list(self, user: User) -> List[Dict[str, int]]:
         """ Get list of game IDs and timestamps based on the summoner's account ID """
 
         url = f"{BASE_URL}/lol/match/v4/matchlists/by-account/{user.account_id}"
         request = requests.get(url=url, params=PARAMS)
+        self.check_rate_limit(request)
         match_list = request.json()
         final_list = [
             {"gameId": match["gameId"], "timestamp": match["timestamp"]}
@@ -184,18 +197,20 @@ class RiotApiRequests:
     @staticmethod
     def update_max_record(champion: Champion, attribute: str, new_val: Any) -> None:
         """Replace original value to new value if new value is greater than the original val"""
+
         original_val = getattr(champion, attribute)
         update_val = new_val if original_val < new_val else original_val
         setattr(champion, attribute, update_val)
         champion.save()
 
-    @staticmethod
-    def get_match_data(match_id: int) -> Dict:
+    def get_match_data(self, match_id: int) -> Dict:
         """ Get information about specific match based on the match ID """
 
         url = f"{BASE_URL}/lol/match/v4/matches/{match_id}"
         request = requests.get(url=url, params=PARAMS)
+        self.check_rate_limit(request)
         data = request.json()
+
         return data
 
     def get_total_match_info(self) -> List:
@@ -222,5 +237,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="hint", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="", request_limit=10)
     total_match_info = riot_api.get_total_match_info()
