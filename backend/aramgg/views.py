@@ -31,6 +31,7 @@ class RankingChampWithMostKill(APIView):
         max_avg_kill_champ_data = (
             Champion.objects.values("champion_id")
             .annotate(avg_kill=Sum("kill") / (Sum("win") + Sum("loss")))
+            .filter(avg_kill__isnull=False)
             .order_by("-avg_kill")[:3]
         )
 
@@ -59,6 +60,7 @@ class RankingChampWithMostAssist(APIView):
         max_avg_assist_champ_data = (
             Champion.objects.values("champion_id")
             .annotate(avg_assist=Sum("assist") / (Sum("win") + Sum("loss")))
+            .filter(avg_assist__isnull=False)
             .order_by("-avg_assist")[:3]
         )
 
@@ -87,6 +89,7 @@ class RankingChampWithMostDeath(APIView):
         max_avg_death_champ_data = (
             Champion.objects.values("champion_id")
             .annotate(avg_death=Sum("death") / (Sum("win") + Sum("loss")))
+            .filter(avg_death__isnull=False)
             .order_by("-avg_death")[:3]
         )
 
@@ -111,10 +114,14 @@ class RankingMostDamageDoneInAGameView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        most_damage_done_user_data = User.objects.annotate(
-            damage_done=F("champion__most_damage_done"),
-            champ_id=F("champion__champion_id"),
-        ).order_by("-damage_done")[:3]
+        most_damage_done_user_data = (
+            User.objects.annotate(
+                damage_done=F("champion__most_damage_done"),
+                champ_id=F("champion__champion_id"),
+            )
+            .filter(damage_done__isnull=False)
+            .order_by("-damage_done")[:3]
+        )
 
         for i, user in zip(
             range(len(most_damage_done_user_data)), most_damage_done_user_data
@@ -139,10 +146,14 @@ class RankingMostDamageTakenInAGameView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        most_damage_taken_user_data = User.objects.annotate(
-            damage_taken=F("champion__most_damage_taken"),
-            champ_id=F("champion__champion_id"),
-        ).order_by("-damage_taken")[:3]
+        most_damage_taken_user_data = (
+            User.objects.annotate(
+                damage_taken=F("champion__most_damage_taken"),
+                champ_id=F("champion__champion_id"),
+            )
+            .filter(damage_taken__isnull=False)
+            .order_by("-damage_taken")[:3]
+        )
 
         for i, user in zip(
             range(len(most_damage_taken_user_data)), most_damage_taken_user_data
@@ -167,10 +178,14 @@ class RankingMostHealingDoneInAGameView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        most_healing_done_user_data = User.objects.annotate(
-            healing_done=F("champion__most_healing_done"),
-            champ_id=F("champion__champion_id"),
-        ).order_by("-healing_done")[:3]
+        most_healing_done_user_data = (
+            User.objects.annotate(
+                healing_done=F("champion__most_healing_done"),
+                champ_id=F("champion__champion_id"),
+            )
+            .filter(healing_done__isnull=False)
+            .order_by("-healing_done")[:3]
+        )
 
         for i, user in zip(
             range(len(most_healing_done_user_data)), most_healing_done_user_data
@@ -221,10 +236,14 @@ class RankingMostAssistInAGameView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        max_assist_user_data = User.objects.annotate(
-            assist_per_game=F("champion__num_max_assist"),
-            champ_id=F("champion__champion_id"),
-        ).order_by("-assist_per_game")[:3]
+        max_assist_user_data = (
+            User.objects.annotate(
+                assist_per_game=F("champion__num_max_assist"),
+                champ_id=F("champion__champion_id"),
+            )
+            .filter(assist_per_game__isnull=False)
+            .order_by("-assist_per_game")[:3]
+        )
 
         for i, user in zip(range(len(max_assist_user_data)), max_assist_user_data):
             user_serializer = UserSerializer(user)
@@ -247,10 +266,14 @@ class RankingMostDeathInAGameView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        max_death_user_data = User.objects.annotate(
-            death_per_game=F("champion__num_max_death"),
-            champ_id=F("champion__champion_id"),
-        ).order_by("-death_per_game")[:3]
+        max_death_user_data = (
+            User.objects.annotate(
+                death_per_game=F("champion__num_max_death"),
+                champ_id=F("champion__champion_id"),
+            )
+            .filter(death_per_game__isnull=False)
+            .order_by("-death_per_game")[:3]
+        )
 
         for i, user in zip(range(len(max_death_user_data)), max_death_user_data):
             user_serializer = UserSerializer(user)
@@ -273,10 +296,14 @@ class RankingMostAverageKillView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        max_kill_user_data = User.objects.annotate(
-            avg_kill_per_game=Sum("champion__kill")
-            / (Sum("champion__win") + Sum("champion__loss"))
-        ).order_by("-avg_kill_per_game")[:3]
+        max_kill_user_data = (
+            User.objects.annotate(
+                avg_kill_per_game=Sum("champion__kill")
+                / (Sum("champion__win") + Sum("champion__loss"))
+            )
+            .filter(avg_kill_per_game__isnull=False)
+            .order_by("-avg_kill_per_game")[:3]
+        )
 
         for i, user in zip(range(len(max_kill_user_data)), max_kill_user_data):
             user_serializer = UserSerializer(user)
@@ -298,10 +325,14 @@ class RankingMostAverageAssistView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        max_assist_user_data = User.objects.annotate(
-            avg_assist_per_game=Sum("champion__assist")
-            / (Sum("champion__win") + Sum("champion__loss"))
-        ).order_by("-avg_assist_per_game")[:3]
+        max_assist_user_data = (
+            User.objects.annotate(
+                avg_assist_per_game=Sum("champion__assist")
+                / (Sum("champion__win") + Sum("champion__loss"))
+            )
+            .filter(avg_assist_per_game__isnull=False)
+            .order_by("-avg_assist_per_game")[:3]
+        )
 
         for i, user in zip(range(len(max_assist_user_data)), max_assist_user_data):
             user_serializer = UserSerializer(user)
@@ -323,10 +354,14 @@ class RankingMostAverageDeathView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        max_death_user_data = User.objects.annotate(
-            avg_death_per_game=Sum("champion__death")
-            / (Sum("champion__win") + Sum("champion__loss"))
-        ).order_by("-avg_death_per_game")[:3]
+        max_death_user_data = (
+            User.objects.annotate(
+                avg_death_per_game=Sum("champion__death")
+                / (Sum("champion__win") + Sum("champion__loss"))
+            )
+            .filter(avg_death_per_game__isnull=False)
+            .order_by("-avg_death_per_game")[:3]
+        )
 
         for i, user in zip(range(len(max_death_user_data)), max_death_user_data):
             user_serializer = UserSerializer(user)
