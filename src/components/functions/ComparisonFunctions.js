@@ -58,3 +58,15 @@ export const damageTakenAsc = (a, b) => {
   else if (a.total_damage_taken / a.total_game_length > b.total_damage_taken / b.total_game_length) { return 1; }
   else { return 0; }
 }
+
+export const achievementRarityDesc = (a, b) => {
+  if (a.rarity > b.rarity) { return -1; }
+  else if(a.rarity < b.rarity) { return 1; }
+  else { return 0; }
+}
+
+export const achievementRarityAsc = (a, b) => {
+  if (a.rarity < b.rarity) { return -1; }
+  else if(a.rarity > b.rarity) { return 1; }
+  else { return 0; }
+}

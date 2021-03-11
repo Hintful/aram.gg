@@ -1,4 +1,4 @@
-import { HStack, Text, VStack } from '@chakra-ui/layout';
+import { Divider, HStack, Text, VStack } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
@@ -8,10 +8,14 @@ import IconBox from './IconBox';
 import { getKDAStarRating, getDamageStarRating, getCarryPotential } from './ChampionStats';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
+import { achievementRarityDesc } from './functions/ComparisonFunctions';
 
 const formatUsername = (username) => {
   return username.split(" ").join("").toLowerCase();
 }
+
+const rarityColor = ["#676767", "#5bd75b", "#87cefa", "#ffa500", "#ff4500", "#c700fd"];
+const rarityDesc = ["Common", "Uncommon", "Rare", "Very Rare", "Extremely Rare", "Legendary"];
 
 const Achievements = () => {
   const [userDetail, setUserDetail] = useState([]); // init
@@ -25,6 +29,9 @@ const Achievements = () => {
 
   // for link
   const history = useHistory();
+
+  // categorize achievements
+  const [categorizeAchievements, setCategorizeAchievements] = useState(true);
 
   async function getUserData() {
     // user data
@@ -161,7 +168,7 @@ const Achievements = () => {
   }, [userChampionStats]);
 
   return (
-    <VStack mt="50px">
+    <VStack mt="50px" className="achievement-container">
       <VStack mb={5}>
         <Text fontSize={32} className="sName" mt={10} mb={1}>{username}</Text>
         {userDetail && userStats ?
@@ -173,31 +180,70 @@ const Achievements = () => {
         }
       </VStack>
 
-      { /* Achievement Button */}
+      { /* Back to Profile button */}
       <Button mb={10} onClick={() => {
         history.push({
           pathname: `/profile/${username}`
         })
       }}>Back to Profile</Button>
 
-      <VStack>
-        <Text fontSize={18} fontFamily="Roboto Condensed" mb={5}>🏆 Achievements Earned</Text>
-        <HStack>
-          {
-            userStats &&
-            achievements.map(achievement => {
-              let reqMet = 0;
-              Object.keys(achievement.requirements).forEach(requirement => {
-                if (userStats[requirement] >= achievement.requirements[requirement]) {
-                  reqMet += 1;
+      <Button mb="100px" colorScheme="teal" onClick={() => {
+        setCategorizeAchievements(!categorizeAchievements)
+      }}>
+        { categorizeAchievements ? "Categorized by Rarity" : "Non-categorized" }
+      </Button>
+
+      <VStack mb="100px">
+        <Text fontSize={26} fontFamily="Roboto Condensed">🏆 Achievements Earned</Text>
+        <Text fontSize={16} fontFamily="Roboto Condensed" mb={7}>
+          Hover the mouse over each achievement to see detailed description!
+        </Text>
+        
+        { !categorizeAchievements ?
+          <HStack w="70vw" wrap="wrap">
+            {
+              userStats &&
+              achievements.sort(achievementRarityDesc).map(achievement => {
+                console.log("rendered");
+                let reqMet = 0;
+                Object.keys(achievement.requirements).forEach(requirement => {
+                  if (userStats[requirement] >= achievement.requirements[requirement]) {
+                    reqMet += 1;
+                  }
+                })
+                if (reqMet === Object.keys(achievement.requirements).length) {
+                  return <AchievementTag achievement={achievement} />
                 }
               })
-              if (reqMet === Object.keys(achievement.requirements).length) {
-                return <AchievementTag achievement={achievement} />
-              }
-            })
-          }
-        </HStack>
+            }
+          </HStack>
+          :
+          Array(6).fill(0).map((_, i) => (
+            <>
+              <VStack mb={10}>
+                <Text fontSize={18} fontWeight='600' color={rarityColor[5 - i]} fontFamily="Roboto Condensed" mb={5}>{rarityDesc[5 - i]}</Text>
+                <HStack w="70vw" wrap="wrap">
+                  {userStats &&
+                    achievements.filter(achievement => achievement.rarity === (5 - i)).map(achievement => {
+                      console.log("rendered");
+                      let reqMet = 0;
+                      Object.keys(achievement.requirements).forEach(requirement => {
+
+                        if (userStats[requirement] >= achievement.requirements[requirement]) {
+                          reqMet += 1;
+                        }
+                      })
+                      if (reqMet === Object.keys(achievement.requirements).length) {
+                        return <AchievementTag achievement={achievement} />
+                      }
+                    })
+                  }
+                </HStack>
+              </VStack>
+              <Divider mb={5} />
+            </>
+          ))
+        }
       </VStack>
     </VStack>
   );
