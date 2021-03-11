@@ -19,6 +19,7 @@
     "react-icons": "^4.2.0",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "react-sparkle": "^1.0.8",
     "react-tooltip": "^4.2.15",
     "sass": "^1.32.8",
     "use-force-update": "^1.0.7",
