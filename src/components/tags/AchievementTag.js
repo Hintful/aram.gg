@@ -11,7 +11,9 @@ const rarityDesc = ["Common", "Uncommon", "Rare", "Very Rare", "Extremely Rare",
 const AchievementTag = ({ achievement }) => {
   return (
     <>
-      <Tooltip hasArrow label={achievement.description} bg={rarityColor[achievement.rarity]}>
+      <Tooltip hasArrow label={achievement.description} 
+        // bg={rarityColor[achievement.rarity]}
+      >
         <Flex direction="row" align="center"
           style={{
             position: 'relative',
