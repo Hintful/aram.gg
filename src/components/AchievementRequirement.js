@@ -371,7 +371,7 @@ export const achievements = [
     name: "Double-kill Expert",
     rarity: 2,
     requirements: {
-      numDoubleKill: 50
+      numDoubleKill: 100
     },
     description: 'Perform 100 Double Kills'
   }, {
@@ -457,7 +457,7 @@ export const achievements = [
     requirements: {
       numPentaKill: 25
     },
-    description: 'Perform 10 Penta Kills'
+    description: 'Perform 25 Penta Kills'
   }, {
     name: "This is actually possible?",
     rarity: 5,
