@@ -1,5 +1,5 @@
 from django.core.exceptions import ViewDoesNotExist, ObjectDoesNotExist
-from django.http import Http404
+from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import status
 from rest_framework.response import Response
@@ -25,7 +25,7 @@ class RankingChampWithMostKill(APIView):
     queryset = Champion.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_champs = get_top_champs(
             num_champs=3, attribute="avg_kill", column_name="kill"
         )
@@ -36,7 +36,7 @@ class RankingChampWithMostAssist(APIView):
     queryset = Champion.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_champs = get_top_champs(
             num_champs=3, attribute="avg_assist", column_name="assist"
         )
@@ -47,7 +47,7 @@ class RankingChampWithMostDeath(APIView):
     queryset = Champion.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_champs = get_top_champs(
             num_champs=3, attribute="avg_death", column_name="death"
         )
@@ -58,7 +58,7 @@ class RankingMostDamageDoneInAGameView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="damage_done",
@@ -72,7 +72,7 @@ class RankingMostDamageTakenInAGameView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="damage_taken",
@@ -86,7 +86,7 @@ class RankingMostHealingDoneInAGameView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="healing_done",
@@ -100,7 +100,7 @@ class RankingMostKillInAGameView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="max_kill",
@@ -114,7 +114,7 @@ class RankingMostAssistInAGameView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="max_assist",
@@ -128,7 +128,7 @@ class RankingMostDeathInAGameView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="max_death",
@@ -142,7 +142,7 @@ class RankingMostAverageKillView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3, attribute="avg_kill", column_name="kill", is_based_on_avg=True
         )
@@ -153,7 +153,7 @@ class RankingMostAverageAssistView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="avg_assist",
@@ -167,7 +167,7 @@ class RankingMostAverageDeathView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=3,
             attribute="avg_death",
@@ -181,7 +181,7 @@ class Top50MostKillsInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=50,
             attribute="max_kill",
@@ -195,7 +195,7 @@ class Top50MostDeathsInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=50,
             attribute="max_death",
@@ -209,7 +209,7 @@ class Top50MostAssistsInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=50,
             attribute="max_assist",
@@ -223,7 +223,7 @@ class Top50MostDamageDoneInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=50,
             attribute="damage_done",
@@ -237,7 +237,7 @@ class Top50MostDamageTakenInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=50,
             attribute="damage_taken",
@@ -251,7 +251,7 @@ class Top50MostHealingDoneInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(request, *args, **kwargs):
+    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
         top_users = get_top_users(
             num_users=50,
             attribute="healing_done",
@@ -273,7 +273,7 @@ class UserDetailView(APIView):
                 f"Selected user record for the user {self.kwargs['username']} does not exist. "
             )
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         username = self.kwargs["username"]
         try:
             riot_api = RiotApiRequests(summoner_name=username, request_limit=10)
@@ -300,7 +300,7 @@ class ChampionDetailView(APIView):
                 f"Selected champion record for the user {username} does not exist. "
             )
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         username = self.kwargs["username"]
         champions = get_list_or_404(Champion, user__username__exact=username)
         serializer = ChampionSerializer(champions, many=True)
