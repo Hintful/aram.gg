@@ -6,6 +6,8 @@ import Achievements from './components/Achievements';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
+import MostAssistInOneGameRanking from './components/ranking/MostAssistInOneGameRanking';
+import MostDeathInOneGameRanking from './components/ranking/MostDeathInOneGameRanking';
 import MostKillInOneGameRanking from './components/ranking/MostKillInOneGameRanking';
 import Ranking from './components/ranking/Ranking';
 import Stats from './components/Stats';
@@ -28,6 +30,8 @@ function App() {
         { /* Ranking/Leaderboard */}
         <Route exact path='/ranking' component={Ranking} />
         <Route exact path='/ranking/most_kills_one_game' component={MostKillInOneGameRanking} />
+        <Route exact path='/ranking/most_deaths_one_game' component={MostDeathInOneGameRanking} />
+        <Route exact path='/ranking/most_assists_one_game' component={MostAssistInOneGameRanking} />
 
         { /* 404 */ }
         <Route path='*'>

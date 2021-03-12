@@ -11,27 +11,42 @@ import { useHistory } from 'react-router';
 
 const Ranking = () => {
   const history = useHistory();
-  return (  
+  return (
     <VStack mt="100px">
       <Text fontSize="36px" mb={10} style={{ letterSpacing: "-1px" }}>
         👑 Ranking
       </Text>
 
-      <Button colorScheme="teal"
-        onClick={() => {
-          history.push({ pathname: '/ranking/most_kills_one_game' });
-        }}
-      >
-        Most Kills in a Single Game
-      </Button>
-      { /* Ranking Panel */ }
-      <MostAssistInOneGameRanking />
-      <MostDeathInOneGameRanking />
+      <VStack>
+        <Button colorScheme="teal"
+          onClick={() => {
+            history.push({ pathname: '/ranking/most_kills_one_game' });
+          }}
+        >
+          Most Kills in a Single Game
+        </Button>
+        <Button colorScheme="teal"
+          onClick={() => {
+            history.push({ pathname: '/ranking/most_assists_one_game' });
+          }}
+        >
+          Most Assists in a Single Game
+        </Button>
+        <Button colorScheme="teal"
+          onClick={() => {
+            history.push({ pathname: '/ranking/most_deaths_one_game' });
+          }}
+        >
+          Most Deaths in a Single Game
+        </Button>
+      </VStack>
+
+      { /* Ranking Panel */}
       <MostDamageDoneInOneGameRanking />
       <MostHealingDoneInOneGameRanking />
       <MostDamageTakenInOneGameRanking />
     </VStack>
   );
 }
- 
+
 export default Ranking;

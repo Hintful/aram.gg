@@ -5,6 +5,8 @@ import champion_data_json from '../json/champion.json';
 import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
+import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
+import { Link } from 'react-router-dom';
 
 
 
@@ -12,6 +14,8 @@ const MostDeathInOneGameRanking = () => {
 
   const [rankingData, setRankingData] = useState(null);
   const [championData, setChampionData] = useState([]);
+
+  const [top50Data, setTop50Data] = useState(null);
 
   // parse user data
   const goldUserData = rankingData ? rankingData[0]["1"].user : null;
@@ -33,6 +37,14 @@ const MostDeathInOneGameRanking = () => {
     axios.get('http://localhost:8000/aramgg/rest_api/ranking/most_death_in_one_game/')
       .then(res => {
         setRankingData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    axios.get('http://localhost:8000/aramgg/rest_api/ranking/top50_most_deaths_in_one_game/')
+      .then(res => {
+        setTop50Data(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -65,7 +77,7 @@ const MostDeathInOneGameRanking = () => {
   }, [championData, goldRecord, silverRecord, bronzeRecord])
 
   return (
-    <VStack mt="50px" mb="100px">
+    <VStack mt="100px" mb="100px">
       <Text fontFamily="Roboto Condensed" fontSize="24px">💀 Most Deaths in One Game</Text>
       <HStack spacing="40px">
         {rankingData &&
@@ -76,6 +88,32 @@ const MostDeathInOneGameRanking = () => {
           </>
         }
       </HStack>
+      <Text fontFamily="Roboto Condensed" fontSize="22px">👑 Leaderboard</Text>
+      { top50Data &&
+        <Table w="500px" variant="striped" colorScheme="gray" mb="100px">
+          <TableCaption>Most Deaths in One Game Ranking</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Rank</Th>
+              <Th>Summoner Name</Th>
+              <Th isNumeric>Number of Deaths</Th>
+            </Tr>
+          </Thead>
+          <Tbody fontFamily="Roboto" fontSize="14px">
+            { top50Data.map((entry, i) => {
+              return (
+                <Tr>
+                  <Td>{ i === 0 ? '1 🥇' : i === 1 ? '2 🥈' : i === 2 ? '3 🥉' : i + 1 }</Td>
+                  <Td><Link href={`/profile/${entry.username}`}>
+                    <span style={{ color: "#008080" }}>{ entry.username.toUpperCase() }</span>
+                  </Link></Td>
+                  <Td isNumeric>{ entry.most_deaths }</Td>
+                </Tr>
+              )
+            })}
+          </Tbody>
+        </Table>
+      }
     </VStack>
   );
 }

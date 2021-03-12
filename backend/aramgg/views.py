@@ -403,6 +403,54 @@ class Top50MostKillsInOneGame(APIView):
 
         return Response(ranking)
 
+class Top50MostDeathsInOneGame(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(req, *ars, **kwargs):
+        ranking = []
+        most_deaths_in_one_game_user_data = (
+            User.objects.annotate(
+                deaths_in_one_game=F("champion__num_max_death"),
+                champ_id=F("champion__champion_id")
+            ).filter(deaths_in_one_game__isnull=False)
+            .order_by("-deaths_in_one_game")[:50]
+        )
+    
+        for i, user in zip(range(len(most_deaths_in_one_game_user_data)), most_deaths_in_one_game_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append({
+                "username": user_serializer.data["username"],
+                "most_deaths": user.deaths_in_one_game,
+                "champ_id": user.champ_id
+            })
+
+        return Response(ranking)
+
+class Top50MostAssistsInOneGame(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(req, *ars, **kwargs):
+        ranking = []
+        most_assists_in_one_game_user_data = (
+            User.objects.annotate(
+                assists_in_one_game=F("champion__num_max_assist"),
+                champ_id=F("champion__champion_id")
+            ).filter(assists_in_one_game__isnull=False)
+            .order_by("-assists_in_one_game")[:50]
+        )
+    
+        for i, user in zip(range(len(most_assists_in_one_game_user_data)), most_assists_in_one_game_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append({
+                "username": user_serializer.data["username"],
+                "most_assists": user.assists_in_one_game,
+                "champ_id": user.champ_id
+            })
+
+        return Response(ranking)
+
 
 class UserDetailView(APIView):
     serializer_class = UserSerializer

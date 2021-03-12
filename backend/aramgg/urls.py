@@ -81,6 +81,16 @@ urlpatterns = [
         "rest_api/ranking/top50_most_kills_in_one_game/",
         views.Top50MostKillsInOneGame.as_view(),
         name="rest_api_top50_most_kills_in_one_game"
+    ),
+    path(
+        "rest_api/ranking/top50_most_deaths_in_one_game/",
+        views.Top50MostDeathsInOneGame.as_view(),
+        name="rest_api_top50_most_deaths_in_one_game"
+    ),
+    path(
+        "rest_api/ranking/top50_most_assists_in_one_game/",
+        views.Top50MostAssistsInOneGame.as_view(),
+        name="rest_api_top50_most_assists_in_one_game"
     )
 ]
 
