@@ -102,8 +102,8 @@ export const getPotentialRank = (potential) => {
   }
 }
 
-export const roundNumber = (num) => {
-  return (Math.round(num * 10) / 10).toFixed(1);
+export const roundNumber = (num, dec = 1) => {
+  return (Math.round(num * Math.pow(10, dec)) / Math.pow(10, dec)).toFixed(dec);
 }
 
 const getKDAElement = (kda) => {

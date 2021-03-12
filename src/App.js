@@ -7,6 +7,7 @@ import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
 import Ranking from './components/ranking/Ranking';
+import Stats from './components/Stats';
 
 function App() {
   const location = useLocation();
@@ -18,6 +19,7 @@ function App() {
         <Route exact path='/' component={Main} />
         <Route exact path='/profile/:id' component={Profile} />
         <Route exact path='/profile/:id/achievements' component={Achievements} />
+        <Route exact path='/profile/:id/stats' component={Stats} />
         <Route path='/ranking' component={Ranking} />
         <Route path='*'>
           <Redirect to='/'/>

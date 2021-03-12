@@ -489,7 +489,8 @@ const Profile = ({ location }) => {
 
         </Center>
         :
-        <Text>Loading...</Text>
+        <>
+        </>
       }
     </>
   );
