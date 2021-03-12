@@ -22,11 +22,11 @@ class ChampionView(APIView):
 
 
 class BaseRankingAPIView(APIView):
-    num_champs = None
-    num_users = None
-    attribute = None
-    column_name = None
-    is_based_one_avg = None
+    num_champs: int = None
+    num_users: int = None
+    attribute: str = None
+    column_name: str = None
+    is_based_one_avg: bool = None
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -202,6 +202,7 @@ class UserDetailView(APIView):
     def get_queryset(self):
         try:
             return get_object_or_404(User, username__exact=self.kwargs["username"])
+
         except Http404:
             raise ViewDoesNotExist(
                 f"Selected user record for the user {self.kwargs['username']} does not exist. "
@@ -209,6 +210,7 @@ class UserDetailView(APIView):
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         username = self.kwargs["username"]
+
         try:
             riot_api = RiotApiRequests(summoner_name=username, request_limit=10)
             riot_api.get_account_info()
@@ -238,4 +240,5 @@ class ChampionDetailView(APIView):
         username = self.kwargs["username"]
         champions = get_list_or_404(Champion, user__username__exact=username)
         serializer = ChampionSerializer(champions, many=True)
+
         return Response(serializer.data)
