@@ -1,5 +1,4 @@
 from django.core.exceptions import ViewDoesNotExist, ObjectDoesNotExist
-from django.db.models import Sum, F
 from django.http import Http404
 from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import status
@@ -9,6 +8,7 @@ from rest_framework.views import APIView
 from .api import RiotApiRequests
 from .models import User, Champion
 from .serializers import UserSerializer, ChampionSerializer
+from .utils import get_top_champs, get_top_users
 
 
 class UserView(APIView):
@@ -26,28 +26,10 @@ class RankingChampWithMostKill(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-
-        max_avg_kill_champ_data = (
-            Champion.objects.values("champion_id")
-            .annotate(avg_kill=Sum("kill") / (Sum("win") + Sum("loss")))
-            .filter(avg_kill__isnull=False)
-            .order_by("-avg_kill")[:3]
+        top_champs = get_top_champs(
+            num_champs=3, attribute="avg_kill", column_name="kill"
         )
-
-        for i, champ in zip(
-            range(len(max_avg_kill_champ_data)), max_avg_kill_champ_data
-        ):
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "champion_id": champ["champion_id"],
-                        "avg_kill": champ["avg_kill"],
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_champs)
 
 
 class RankingChampWithMostAssist(APIView):
@@ -55,28 +37,10 @@ class RankingChampWithMostAssist(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-
-        max_avg_assist_champ_data = (
-            Champion.objects.values("champion_id")
-            .annotate(avg_assist=Sum("assist") / (Sum("win") + Sum("loss")))
-            .filter(avg_assist__isnull=False)
-            .order_by("-avg_assist")[:3]
+        top_champs = get_top_champs(
+            num_champs=3, attribute="avg_assist", column_name="assist"
         )
-
-        for i, champ in zip(
-            range(len(max_avg_assist_champ_data)), max_avg_assist_champ_data
-        ):
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "champion_id": champ["champion_id"],
-                        "avg_assist": champ["avg_assist"],
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_champs)
 
 
 class RankingChampWithMostDeath(APIView):
@@ -84,28 +48,10 @@ class RankingChampWithMostDeath(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-
-        max_avg_death_champ_data = (
-            Champion.objects.values("champion_id")
-            .annotate(avg_death=Sum("death") / (Sum("win") + Sum("loss")))
-            .filter(avg_death__isnull=False)
-            .order_by("-avg_death")[:3]
+        top_champs = get_top_champs(
+            num_champs=3, attribute="avg_death", column_name="death"
         )
-
-        for i, champ in zip(
-            range(len(max_avg_death_champ_data)), max_avg_death_champ_data
-        ):
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "champion_id": champ["champion_id"],
-                        "avg_death": champ["avg_death"],
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_champs)
 
 
 class RankingMostDamageDoneInAGameView(APIView):
@@ -113,31 +59,13 @@ class RankingMostDamageDoneInAGameView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        most_damage_done_user_data = (
-            User.objects.annotate(
-                damage_done=F("champion__most_damage_done"),
-                champ_id=F("champion__champion_id"),
-            )
-            .filter(damage_done__isnull=False)
-            .order_by("-damage_done")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="damage_done",
+            column_name="most_damage_done",
+            is_based_on_avg=False,
         )
-
-        for i, user in zip(
-            range(len(most_damage_done_user_data)), most_damage_done_user_data
-        ):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "damage_done": user.damage_done,
-                        "champ_id": user.champ_id,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostDamageTakenInAGameView(APIView):
@@ -145,31 +73,13 @@ class RankingMostDamageTakenInAGameView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        most_damage_taken_user_data = (
-            User.objects.annotate(
-                damage_taken=F("champion__most_damage_taken"),
-                champ_id=F("champion__champion_id"),
-            )
-            .filter(damage_taken__isnull=False)
-            .order_by("-damage_taken")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="damage_taken",
+            column_name="most_damage_taken",
+            is_based_on_avg=False,
         )
-
-        for i, user in zip(
-            range(len(most_damage_taken_user_data)), most_damage_taken_user_data
-        ):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "damage_taken": user.damage_taken,
-                        "champ_id": user.champ_id,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostHealingDoneInAGameView(APIView):
@@ -177,31 +87,13 @@ class RankingMostHealingDoneInAGameView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        most_healing_done_user_data = (
-            User.objects.annotate(
-                healing_done=F("champion__most_healing_done"),
-                champ_id=F("champion__champion_id"),
-            )
-            .filter(healing_done__isnull=False)
-            .order_by("-healing_done")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="healing_done",
+            column_name="most_healing_done",
+            is_based_on_avg=False,
         )
-
-        for i, user in zip(
-            range(len(most_healing_done_user_data)), most_healing_done_user_data
-        ):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i + 1}": {
-                        "user": user_serializer.data,
-                        "healing_done": user.healing_done,
-                        "champ_id": user.champ_id,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostKillInAGameView(APIView):
@@ -209,28 +101,13 @@ class RankingMostKillInAGameView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        max_kill_user_data = (
-            User.objects.annotate(
-                kill_per_game=F("champion__num_max_kill"),
-                champ_id=F("champion__champion_id"),
-            ).filter(kill_per_game__isnull=False)
-            .order_by("-kill_per_game")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="max_kill",
+            column_name="num_max_kill",
+            is_based_on_avg=False,
         )
-
-        for i, user in zip(range(len(max_kill_user_data)), max_kill_user_data):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "max_kill": user.kill_per_game,
-                        "champ_id": user.champ_id,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostAssistInAGameView(APIView):
@@ -238,29 +115,13 @@ class RankingMostAssistInAGameView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        max_assist_user_data = (
-            User.objects.annotate(
-                assist_per_game=F("champion__num_max_assist"),
-                champ_id=F("champion__champion_id"),
-            )
-            .filter(assist_per_game__isnull=False)
-            .order_by("-assist_per_game")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="max_assist",
+            column_name="num_max_assist",
+            is_based_on_avg=False,
         )
-
-        for i, user in zip(range(len(max_assist_user_data)), max_assist_user_data):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "max_assist": user.assist_per_game,
-                        "champ_id": user.champ_id,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostDeathInAGameView(APIView):
@@ -268,29 +129,13 @@ class RankingMostDeathInAGameView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        max_death_user_data = (
-            User.objects.annotate(
-                death_per_game=F("champion__num_max_death"),
-                champ_id=F("champion__champion_id"),
-            )
-            .filter(death_per_game__isnull=False)
-            .order_by("-death_per_game")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="max_death",
+            column_name="num_max_death",
+            is_based_on_avg=False,
         )
-
-        for i, user in zip(range(len(max_death_user_data)), max_death_user_data):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "max_death": user.death_per_game,
-                        "champ_id": user.champ_id,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostAverageKillView(APIView):
@@ -298,28 +143,10 @@ class RankingMostAverageKillView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        max_kill_user_data = (
-            User.objects.annotate(
-                avg_kill_per_game=Sum("champion__kill")
-                / (Sum("champion__win") + Sum("champion__loss"))
-            )
-            .filter(avg_kill_per_game__isnull=False)
-            .order_by("-avg_kill_per_game")[:3]
+        top_users = get_top_users(
+            num_users=3, attribute="avg_kill", column_name="kill", is_based_on_avg=True
         )
-
-        for i, user in zip(range(len(max_kill_user_data)), max_kill_user_data):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "avg_kill": user.avg_kill_per_game,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostAverageAssistView(APIView):
@@ -327,28 +154,13 @@ class RankingMostAverageAssistView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        max_assist_user_data = (
-            User.objects.annotate(
-                avg_assist_per_game=Sum("champion__assist")
-                / (Sum("champion__win") + Sum("champion__loss"))
-            )
-            .filter(avg_assist_per_game__isnull=False)
-            .order_by("-avg_assist_per_game")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="avg_assist",
+            column_name="assist",
+            is_based_on_avg=True,
         )
-
-        for i, user in zip(range(len(max_assist_user_data)), max_assist_user_data):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "avg_assist": user.avg_assist_per_game,
-                    }
-                }
-            )
-
-        return Response(top_three)
+        return Response(top_users)
 
 
 class RankingMostAverageDeathView(APIView):
@@ -356,172 +168,97 @@ class RankingMostAverageDeathView(APIView):
 
     @staticmethod
     def get(request, *args, **kwargs):
-        top_three = list()
-        max_death_user_data = (
-            User.objects.annotate(
-                avg_death_per_game=Sum("champion__death")
-                / (Sum("champion__win") + Sum("champion__loss"))
-            )
-            .filter(avg_death_per_game__isnull=False)
-            .order_by("-avg_death_per_game")[:3]
+        top_users = get_top_users(
+            num_users=3,
+            attribute="avg_death",
+            column_name="death",
+            is_based_on_avg=True,
         )
+        return Response(top_users)
 
-        for i, user in zip(range(len(max_death_user_data)), max_death_user_data):
-            user_serializer = UserSerializer(user)
-            top_three.append(
-                {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        "avg_death": user.avg_death_per_game,
-                    }
-                }
-            )
-
-        return Response(top_three)
 
 class Top50MostKillsInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(req, *ars, **kwargs):
-        ranking = []
-        most_kills_in_one_game_user_data = (
-            User.objects.annotate(
-                kills_in_one_game=F("champion__num_max_kill"),
-                champ_id=F("champion__champion_id")
-            ).filter(kills_in_one_game__isnull=False)
-            .order_by("-kills_in_one_game")[:50]
+    def get(request, *args, **kwargs):
+        top_users = get_top_users(
+            num_users=50,
+            attribute="max_kill",
+            column_name="num_max_kill",
+            is_based_on_avg=False,
         )
-    
-        for i, user in zip(range(len(most_kills_in_one_game_user_data)), most_kills_in_one_game_user_data):
-            user_serializer = UserSerializer(user)
-            ranking.append({
-                "username": user_serializer.data["username"],
-                "most_kills": user.kills_in_one_game,
-                "champ_id": user.champ_id
-            })
+        return Response(top_users)
 
-        return Response(ranking)
 
 class Top50MostDeathsInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(req, *ars, **kwargs):
-        ranking = []
-        most_deaths_in_one_game_user_data = (
-            User.objects.annotate(
-                deaths_in_one_game=F("champion__num_max_death"),
-                champ_id=F("champion__champion_id")
-            ).filter(deaths_in_one_game__isnull=False)
-            .order_by("-deaths_in_one_game")[:50]
+    def get(request, *args, **kwargs):
+        top_users = get_top_users(
+            num_users=50,
+            attribute="max_death",
+            column_name="num_max_death",
+            is_based_on_avg=False,
         )
-    
-        for i, user in zip(range(len(most_deaths_in_one_game_user_data)), most_deaths_in_one_game_user_data):
-            user_serializer = UserSerializer(user)
-            ranking.append({
-                "username": user_serializer.data["username"],
-                "most_deaths": user.deaths_in_one_game,
-                "champ_id": user.champ_id
-            })
+        return Response(top_users)
 
-        return Response(ranking)
 
 class Top50MostAssistsInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(req, *ars, **kwargs):
-        ranking = []
-        most_assists_in_one_game_user_data = (
-            User.objects.annotate(
-                assists_in_one_game=F("champion__num_max_assist"),
-                champ_id=F("champion__champion_id")
-            ).filter(assists_in_one_game__isnull=False)
-            .order_by("-assists_in_one_game")[:50]
+    def get(request, *args, **kwargs):
+        top_users = get_top_users(
+            num_users=50,
+            attribute="max_assist",
+            column_name="num_max_assist",
+            is_based_on_avg=False,
         )
-    
-        for i, user in zip(range(len(most_assists_in_one_game_user_data)), most_assists_in_one_game_user_data):
-            user_serializer = UserSerializer(user)
-            ranking.append({
-                "username": user_serializer.data["username"],
-                "most_assists": user.assists_in_one_game,
-                "champ_id": user.champ_id
-            })
+        return Response(top_users)
 
-        return Response(ranking)
 
 class Top50MostDamageDoneInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(req, *ars, **kwargs):
-        ranking = []
-        most_damage_done_in_one_game_user_data = (
-            User.objects.annotate(
-                damage_done_in_one_game=F("champion__most_damage_done"),
-                champ_id=F("champion__champion_id")
-            ).filter(damage_done_in_one_game__isnull=False)
-            .order_by("-damage_done_in_one_game")[:50]
+    def get(request, *args, **kwargs):
+        top_users = get_top_users(
+            num_users=50,
+            attribute="damage_done",
+            column_name="most_damage_done",
+            is_based_on_avg=False,
         )
-    
-        for i, user in zip(range(len(most_damage_done_in_one_game_user_data)), most_damage_done_in_one_game_user_data):
-            user_serializer = UserSerializer(user)
-            ranking.append({
-                "username": user_serializer.data["username"],
-                "most_damage_done": user.damage_done_in_one_game,
-                "champ_id": user.champ_id
-            })
+        return Response(top_users)
 
-        return Response(ranking)
 
 class Top50MostDamageTakenInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(req, *ars, **kwargs):
-        ranking = []
-        most_damage_taken_in_one_game_user_data = (
-            User.objects.annotate(
-                damage_taken_in_one_game=F("champion__most_damage_taken"),
-                champ_id=F("champion__champion_id")
-            ).filter(damage_taken_in_one_game__isnull=False)
-            .order_by("-damage_taken_in_one_game")[:50]
+    def get(request, *args, **kwargs):
+        top_users = get_top_users(
+            num_users=50,
+            attribute="damage_taken",
+            column_name="most_damage_taken",
+            is_based_on_avg=False,
         )
-    
-        for i, user in zip(range(len(most_damage_taken_in_one_game_user_data)), most_damage_taken_in_one_game_user_data):
-            user_serializer = UserSerializer(user)
-            ranking.append({
-                "username": user_serializer.data["username"],
-                "most_damage_taken": user.damage_taken_in_one_game,
-                "champ_id": user.champ_id
-            })
+        return Response(top_users)
 
-        return Response(ranking)
 
 class Top50MostHealingDoneInOneGame(APIView):
     queryset = User.objects.all()
 
     @staticmethod
-    def get(req, *ars, **kwargs):
-        ranking = []
-        most_healing_done_in_one_game_user_data = (
-            User.objects.annotate(
-                healing_done_in_one_game=F("champion__most_healing_done"),
-                champ_id=F("champion__champion_id")
-            ).filter(healing_done_in_one_game__isnull=False)
-            .order_by("-healing_done_in_one_game")[:50]
+    def get(request, *args, **kwargs):
+        top_users = get_top_users(
+            num_users=50,
+            attribute="healing_done",
+            column_name="most_healing_done",
+            is_based_on_avg=False,
         )
-    
-        for i, user in zip(range(len(most_healing_done_in_one_game_user_data)), most_healing_done_in_one_game_user_data):
-            user_serializer = UserSerializer(user)
-            ranking.append({
-                "username": user_serializer.data["username"],
-                "most_healing_done": user.healing_done_in_one_game,
-                "champ_id": user.champ_id
-            })
-
-        return Response(ranking)
+        return Response(top_users)
 
 
 class UserDetailView(APIView):
