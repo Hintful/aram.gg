@@ -21,244 +21,178 @@ class ChampionView(APIView):
     queryset = Champion.objects.all()
 
 
-class RankingChampWithMostKill(APIView):
+class BaseRankingAPIView(APIView):
+    num_champs = None
+    num_users = None
+    attribute = None
+    column_name = None
+    is_based_one_avg = None
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        derived_class_name = self.__class__.__name__.lower()
+        if "champ" in derived_class_name:
+            self.is_champ_ranking = True
+        else:
+            self.is_champ_ranking = False
+
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        if self.is_champ_ranking:
+            top_list = get_top_champs(
+                num_champs=self.num_champs,
+                attribute=self.attribute,
+                column_name=self.column_name,
+            )
+        else:
+            top_list = get_top_users(
+                num_users=self.num_users,
+                attribute=self.attribute,
+                column_name=self.column_name,
+                is_based_on_avg=self.is_based_one_avg,
+            )
+
+        return Response(top_list)
+
+
+class RankingChampWithMostKill(BaseRankingAPIView):
     queryset = Champion.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_champs = get_top_champs(
-            num_champs=3, attribute="avg_kill", column_name="kill"
-        )
-        return Response(top_champs)
+    num_champs = 3
+    attribute = "avg_kill"
+    column_name = "kill"
 
 
-class RankingChampWithMostAssist(APIView):
+class RankingChampWithMostAssist(BaseRankingAPIView):
     queryset = Champion.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_champs = get_top_champs(
-            num_champs=3, attribute="avg_assist", column_name="assist"
-        )
-        return Response(top_champs)
+    num_champs = 3
+    attribute = "avg_assist"
+    column_name = "assist"
 
 
-class RankingChampWithMostDeath(APIView):
+class RankingChampWithMostDeath(BaseRankingAPIView):
     queryset = Champion.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_champs = get_top_champs(
-            num_champs=3, attribute="avg_death", column_name="death"
-        )
-        return Response(top_champs)
+    num_champs = 3
+    attribute = "avg_death"
+    column_name = "death"
 
 
-class RankingMostDamageDoneInAGameView(APIView):
+class RankingMostDamageDoneInAGameView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="damage_done",
-            column_name="most_damage_done",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "damage_done"
+    column_name = "most_damage_done"
+    is_based_one_avg = False
 
 
-class RankingMostDamageTakenInAGameView(APIView):
+class RankingMostDamageTakenInAGameView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="damage_taken",
-            column_name="most_damage_taken",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "damage_taken"
+    column_name = "most_damage_taken"
+    is_based_one_avg = False
 
 
-class RankingMostHealingDoneInAGameView(APIView):
+class RankingMostHealingDoneInAGameView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="healing_done",
-            column_name="most_healing_done",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "healing_done"
+    column_name = "most_healing_done"
+    is_based_one_avg = False
 
 
-class RankingMostKillInAGameView(APIView):
+class RankingMostKillInAGameView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="max_kill",
-            column_name="num_max_kill",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "max_kill"
+    column_name = "num_max_kill"
+    is_based_one_avg = False
 
 
-class RankingMostAssistInAGameView(APIView):
+class RankingMostAssistInAGameView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="max_assist",
-            column_name="num_max_assist",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "max_assist"
+    column_name = "num_max_assist"
+    is_based_one_avg = False
 
 
-class RankingMostDeathInAGameView(APIView):
+class RankingMostDeathInAGameView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="max_death",
-            column_name="num_max_death",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "max_death"
+    column_name = "num_max_death"
+    is_based_one_avg = False
 
 
-class RankingMostAverageKillView(APIView):
+class RankingMostAverageKillView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3, attribute="avg_kill", column_name="kill", is_based_on_avg=True
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "avg_kill"
+    column_name = "kill"
+    is_based_one_avg = True
 
 
-class RankingMostAverageAssistView(APIView):
+class RankingMostAverageAssistView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="avg_assist",
-            column_name="assist",
-            is_based_on_avg=True,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "avg_assist"
+    column_name = "assist"
+    is_based_one_avg = True
 
 
-class RankingMostAverageDeathView(APIView):
+class RankingMostAverageDeathView(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=3,
-            attribute="avg_death",
-            column_name="death",
-            is_based_on_avg=True,
-        )
-        return Response(top_users)
+    num_users = 3
+    attribute = "avg_death"
+    column_name = "death"
+    is_based_one_avg = True
 
 
-class Top50MostKillsInOneGame(APIView):
+class Top50MostKillsInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=50,
-            attribute="max_kill",
-            column_name="num_max_kill",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 50
+    attribute = "max_kill"
+    column_name = "num_max_kill"
+    is_based_one_avg = False
 
 
-class Top50MostDeathsInOneGame(APIView):
+class Top50MostDeathsInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=50,
-            attribute="max_death",
-            column_name="num_max_death",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 50
+    attribute = "max_death"
+    column_name = "num_max_death"
+    is_based_one_avg = False
 
 
-class Top50MostAssistsInOneGame(APIView):
+class Top50MostAssistsInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=50,
-            attribute="max_assist",
-            column_name="num_max_assist",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 50
+    attribute = "max_assist"
+    column_name = "num_max_assist"
+    is_based_one_avg = False
 
 
-class Top50MostDamageDoneInOneGame(APIView):
+class Top50MostDamageDoneInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=50,
-            attribute="damage_done",
-            column_name="most_damage_done",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 50
+    attribute = "damage_done"
+    column_name = "most_damage_done"
+    is_based_one_avg = False
 
 
-class Top50MostDamageTakenInOneGame(APIView):
+class Top50MostDamageTakenInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=50,
-            attribute="damage_taken",
-            column_name="most_damage_taken",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 50
+    attribute = "damage_taken"
+    column_name = "most_damage_taken"
+    is_based_one_avg = False
 
 
-class Top50MostHealingDoneInOneGame(APIView):
+class Top50MostHealingDoneInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
-
-    @staticmethod
-    def get(request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        top_users = get_top_users(
-            num_users=50,
-            attribute="healing_done",
-            column_name="most_healing_done",
-            is_based_on_avg=False,
-        )
-        return Response(top_users)
+    num_users = 50
+    attribute = "healing_done"
+    column_name = "most_healing_done"
+    is_based_one_avg = False
 
 
 class UserDetailView(APIView):
