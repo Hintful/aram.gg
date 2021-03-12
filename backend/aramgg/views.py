@@ -376,6 +376,30 @@ class RankingMostAverageDeathView(APIView):
 
         return Response(top_three)
 
+class Top50MostKillsInOneGame(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(req, *ars, **kwargs):
+        ranking = []
+        most_kills_in_one_game_user_data = (
+            User.objects.annotate(
+                kills_in_one_game=F("champion__num_max_kill"),
+                champ_id=F("champion__champion_id")
+            ).filter(kills_in_one_game__isnull=False)
+            .order_by("-kills_in_one_game")[:50]
+        )
+    
+        for i, user in zip(range(len(most_kills_in_one_game_user_data)), most_kills_in_one_game_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append({
+                "username": user_serializer.data["username"],
+                "most_kills": user.kills_in_one_game,
+                "champ_id": user.champ_id
+            })
+
+        return Response(ranking)
+
 
 class UserDetailView(APIView):
     serializer_class = UserSerializer

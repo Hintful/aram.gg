@@ -76,6 +76,12 @@ urlpatterns = [
         views.RankingChampWithMostDeath.as_view(),
         name="rest_api_ranking_champ_with_most_death",
     ),
+
+    path(
+        "rest_api/ranking/top50_most_kills_in_one_game/",
+        views.Top50MostKillsInOneGame.as_view(),
+        name="rest_api_top50_most_kills_in_one_game"
+    )
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
