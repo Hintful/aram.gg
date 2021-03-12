@@ -18,21 +18,21 @@ const Ranking = () => {
       </Text>
 
       <VStack spacing="20px">
-        <Button colorScheme="teal"
+        <Button colorScheme="blue"
           onClick={() => {
             history.push({ pathname: '/ranking/most_kills_one_game' });
           }}
         >
           Most Kills in a Single Game
         </Button>
-        <Button colorScheme="teal"
+        <Button colorScheme="blue"
           onClick={() => {
             history.push({ pathname: '/ranking/most_assists_one_game' });
           }}
         >
           Most Assists in a Single Game
         </Button>
-        <Button colorScheme="teal"
+        <Button colorScheme="blue"
           onClick={() => {
             history.push({ pathname: '/ranking/most_deaths_one_game' });
           }}
@@ -40,21 +40,21 @@ const Ranking = () => {
           Most Deaths in a Single Game
         </Button>
         <Divider />
-        <Button colorScheme="teal"
+        <Button colorScheme="blue"
           onClick={() => {
             history.push({ pathname: '/ranking/most_damage_done_one_game' });
           }}
         >
           Most Damage Done in a Single Game
         </Button>
-        <Button colorScheme="teal"
+        <Button colorScheme="blue"
           onClick={() => {
             history.push({ pathname: '/ranking/most_damage_taken_one_game' });
           }}
         >
           Most Damage Taken in a Single Game
         </Button>
-        <Button colorScheme="teal"
+        <Button colorScheme="blue"
           onClick={() => {
             history.push({ pathname: '/ranking/most_healing_done_one_game' });
           }}
