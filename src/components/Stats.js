@@ -246,15 +246,15 @@ const Stats = () => {
               </Tr>
               <Tr>
                 <Td>Average Kills per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numKills / (userStats.numWins + userStats.numLosses))}</Td>
+                <Td isNumeric>{roundNumber(userStats.numKills / (userStats.numWins + userStats.numLosses))}/game</Td>
               </Tr>
               <Tr>
                 <Td>Average Deaths per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numDeaths / (userStats.numWins + userStats.numLosses))}</Td>
+                <Td isNumeric>{roundNumber(userStats.numDeaths / (userStats.numWins + userStats.numLosses))}/game</Td>
               </Tr>
               <Tr>
                 <Td>Average Assists per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numAssists / (userStats.numWins + userStats.numLosses))}</Td>
+                <Td isNumeric>{roundNumber(userStats.numAssists / (userStats.numWins + userStats.numLosses))}/game</Td>
               </Tr>
               <Tr>
                 <Td>Average KDA</Td>
@@ -273,12 +273,12 @@ const Stats = () => {
                 <Td isNumeric>{formatNumber(userStats.totalHealingDone)}</Td>
               </Tr>
               <Tr>
-                <Td>Average Effective Damage Done per minute</Td>
-                <Td isNumeric>{formatNumber(roundNumber((userStats.totalDamageDone + userStats.totalHealingDone) / (userStats.totalGameLength / 60)))}</Td>
+                <Td>Average Effective Damage Done</Td>
+                <Td isNumeric>{formatNumber(roundNumber((userStats.totalDamageDone + userStats.totalHealingDone) / (userStats.totalGameLength / 60)))}/min</Td>
               </Tr>
               <Tr>
-                <Td>Average Damage Taken per minute</Td>
-                <Td isNumeric>{formatNumber(roundNumber(userStats.totalDamageTaken / (userStats.totalGameLength / 60)))}</Td>
+                <Td>Average Damage Taken</Td>
+                <Td isNumeric>{formatNumber(roundNumber(userStats.totalDamageTaken / (userStats.totalGameLength / 60)))}/min</Td>
               </Tr>
               <Tr>
                 <Td>Total Game Length</Td>
@@ -306,19 +306,19 @@ const Stats = () => {
               </Tr>
               <Tr>
                 <Td>Average Double Kills per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numDoubleKill / (userStats.numWins + userStats.numLosses), 2)}</Td>
+                <Td isNumeric>{roundNumber(userStats.numDoubleKill / (userStats.numWins + userStats.numLosses), 2)}/game</Td>
               </Tr>
               <Tr>
                 <Td>Average Triple Kills per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numTripleKill / (userStats.numWins + userStats.numLosses), 2)}</Td>
+                <Td isNumeric>{roundNumber(userStats.numTripleKill / (userStats.numWins + userStats.numLosses), 2)}/game</Td>
               </Tr>
               <Tr>
                 <Td>Average Quadra Kills per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numQuadraKill / (userStats.numWins + userStats.numLosses), 2)}</Td>
+                <Td isNumeric>{roundNumber(userStats.numQuadraKill / (userStats.numWins + userStats.numLosses), 2)}/game</Td>
               </Tr>
               <Tr>
                 <Td>Average Penta Kills per game</Td>
-                <Td isNumeric>{roundNumber(userStats.numPentaKill / (userStats.numWins + userStats.numLosses), 2)}</Td>
+                <Td isNumeric>{roundNumber(userStats.numPentaKill / (userStats.numWins + userStats.numLosses), 2)}/game</Td>
               </Tr>
               <Tr>
                 <Td>Maximum Kills in one game</Td>
