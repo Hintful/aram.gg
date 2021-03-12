@@ -210,10 +210,13 @@ class RankingMostKillInAGameView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         top_three = list()
-        max_kill_user_data = User.objects.annotate(
-            kill_per_game=F("champion__num_max_kill"),
-            champ_id=F("champion__champion_id"),
-        ).order_by("-kill_per_game")[:3]
+        max_kill_user_data = (
+            User.objects.annotate(
+                kill_per_game=F("champion__num_max_kill"),
+                champ_id=F("champion__champion_id"),
+            ).filter(kill_per_game__isnull=False)
+            .order_by("-kill_per_game")[:3]
+        )
 
         for i, user in zip(range(len(max_kill_user_data)), max_kill_user_data):
             user_serializer = UserSerializer(user)
