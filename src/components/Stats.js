@@ -190,12 +190,19 @@ const Stats = () => {
         }
       </VStack>
 
-      { /* Back to Profile button */}
-      <Button mb={10} onClick={() => {
-        history.push({
-          pathname: `/profile/${username}`
-        })
-      }}>Back to Profile</Button>
+      { /* Back to Profile/Achievements button */}
+      <HStack>
+        <Button mb={10} onClick={() => {
+          history.push({
+            pathname: `/profile/${username}`
+          })
+        }}>Back to Profile</Button>
+        <Button mb={10} onClick={() => {
+          history.push({
+            pathname: `/profile/${username}/achievements`
+          })
+        }}>Achievements</Button>
+      </HStack>
 
       <VStack>
         <Text fontSize={26} fontFamily="Roboto Condensed">📊 Statistics and Records</Text>

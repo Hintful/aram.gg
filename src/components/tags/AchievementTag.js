@@ -27,11 +27,11 @@ const AchievementTag = ({ achievement }) => {
           }}>
           {
             achievement.rarity === 3 ?
-              <Sparkles color="yellow" count={10} overflowPx={5} fadeoutSpeed={10} flicker={false} />
+              <Sparkles color="yellow" count={5} overflowPx={5} fadeoutSpeed={10} flicker={false} />
               : achievement.rarity === 4 ?
-                <Sparkles color="red" count={25} overflowPx={10} fadeOutSpeed={25} flicker={false} />
+                <Sparkles color={rarityColor[4]} count={25} overflowPx={15} fadeOutSpeed={20} flicker={false} />
                 : achievement.rarity === 5 ?
-                  <Sparkles color="pink" count={50} overflowPx={20} fadeOutSpeed={50} flicker={false} />
+                  <Sparkles color={rarityColor[5]} count={50} overflowPx={25} fadeOutSpeed={30} flicker={false} />
                   :
                   <>
                   </>

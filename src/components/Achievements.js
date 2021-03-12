@@ -181,17 +181,24 @@ const Achievements = () => {
         }
       </VStack>
 
-      { /* Back to Profile button */}
-      <Button mb={10} onClick={() => {
-        history.push({
-          pathname: `/profile/${username}`
-        })
-      }}>Back to Profile</Button>
+      { /* Back to Profile/Stats button */}
+      <HStack>
+        <Button mb={10} onClick={() => {
+          history.push({
+            pathname: `/profile/${username}`
+          })
+        }}>Back to Profile</Button>
+        <Button mb={10} onClick={() => {
+          history.push({
+            pathname: `/profile/${username}/stats`
+          })
+        }}>Stats/Records</Button>
+      </HStack>
 
       <Button mb="100px" colorScheme="teal" onClick={() => {
         setCategorizeAchievements(!categorizeAchievements)
       }}>
-        { categorizeAchievements ? "Categorized by Rarity" : "Non-categorized" }
+        {categorizeAchievements ? "Categorized by Rarity" : "Non-categorized"}
       </Button>
 
       <VStack mb="100px">
@@ -199,8 +206,8 @@ const Achievements = () => {
         <Text fontSize={16} fontFamily="Roboto Condensed" mb={7}>
           Hover the mouse over each achievement to see detailed description!
         </Text>
-        
-        { !categorizeAchievements ?
+
+        {!categorizeAchievements ?
           <HStack wrap="wrap" p={10}>
             {
               userStats &&
