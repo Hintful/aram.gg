@@ -65,9 +65,9 @@ const MostKillInOneGameRanking = () => {
     let bronzeChampionInfo = undefined;
 
     if (championData.length > 0) {
-      goldChampionInfo = championData.filter(data => parseInt(data.key) === (goldRecord ? goldRecord.champ_id : ''))[0];
-      silverChampionInfo = championData.filter(data => parseInt(data.key) === (silverRecord ? silverRecord.champ_id : ''))[0];
-      bronzeChampionInfo = championData.filter(data => parseInt(data.key) === (bronzeRecord ? bronzeRecord.champ_id : ''))[0];
+      goldChampionInfo = championData.filter(data => parseInt(data.key) === (goldRecord ? goldRecord.champion_id : ''))[0];
+      silverChampionInfo = championData.filter(data => parseInt(data.key) === (silverRecord ? silverRecord.champion_id : ''))[0];
+      bronzeChampionInfo = championData.filter(data => parseInt(data.key) === (bronzeRecord ? bronzeRecord.champion_id : ''))[0];
 
       if (goldChampionInfo !== undefined) { setGoldChampionName(goldChampionInfo.name) }
       if (silverChampionInfo !== undefined) { setSilverChampionName(silverChampionInfo.name) }
@@ -108,7 +108,7 @@ const MostKillInOneGameRanking = () => {
                     <span style={{ color: "#008080" }}>{ entry.username.toUpperCase() }</span>
                   </Link></Td>
                   {/* <Td>wip</Td> */}
-                  <Td isNumeric>{ entry.most_kills }</Td>
+                  <Td isNumeric>{ entry.max_kill }</Td>
                 </Tr>
               )
             })}
