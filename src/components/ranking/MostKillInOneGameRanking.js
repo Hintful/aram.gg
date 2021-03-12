@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { HStack, Text, VStack } from '@chakra-ui/layout';
+import { HStack, Link, Text, VStack } from '@chakra-ui/layout';
 import champion_data_json from '../json/champion.json';
 import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
@@ -104,7 +104,9 @@ const MostKillInOneGameRanking = () => {
               return (
                 <Tr>
                   <Td>{ i === 0 ? '1 🥇' : i === 1 ? '2 🥈' : i === 2 ? '3 🥉' : i + 1 }</Td>
-                  <Td>{ entry.username.toUpperCase() }</Td>
+                  <Td><Link href={`/profile/${entry.username}`}>
+                    <span style={{ color: "#008080" }}>{ entry.username.toUpperCase() }</span>
+                  </Link></Td>
                   {/* <Td>wip</Td> */}
                   <Td isNumeric>{ entry.most_kills }</Td>
                 </Tr>
