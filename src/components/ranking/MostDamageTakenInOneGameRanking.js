@@ -19,14 +19,14 @@ const MostDamageTakenInOneGameRanking = () => {
   const [top50Data, setTop50Data] = useState(null);
 
   // parse user data
-  const goldUserData = rankingData ? rankingData[0]["1"].user : null;
-  const silverUserData = rankingData ? rankingData[1]["2"].user : null;
-  const bronzeUserData = rankingData ? rankingData[2]["3"].user : null;
+  const goldUserData = rankingData ? rankingData[0].user : null;
+  const silverUserData = rankingData ? rankingData[1].user : null;
+  const bronzeUserData = rankingData ? rankingData[2].user : null;
 
   // parse record
-  const goldRecord = rankingData ? rankingData[0]["1"] : null
-  const silverRecord = rankingData ? rankingData[1]["2"] : null
-  const bronzeRecord = rankingData ? rankingData[2]["3"] : null
+  const goldRecord = rankingData ? rankingData[0] : null
+  const silverRecord = rankingData ? rankingData[1] : null
+  const bronzeRecord = rankingData ? rankingData[2] : null
 
   // used champion info
   const [goldChampionName, setGoldChampionName] = useState('');
@@ -105,8 +105,8 @@ const MostDamageTakenInOneGameRanking = () => {
               return (
                 <Tr>
                   <Td>{ i === 0 ? '1 🥇' : i === 1 ? '2 🥈' : i === 2 ? '3 🥉' : i + 1 }</Td>
-                  <Td><Link href={`/profile/${entry.username}`}>
-                    <span style={{ color: "#008080" }}>{ entry.username.toUpperCase() }</span>
+                  <Td><Link href={`/profile/${entry.user.username}`}>
+                    <span style={{ color: "#008080" }}>{ entry.user.username.toUpperCase() }</span>
                   </Link></Td>
                   <Td isNumeric>{ formatNumber(entry.damage_taken) }</Td>
                 </Tr>
