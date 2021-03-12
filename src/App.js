@@ -6,6 +6,7 @@ import Achievements from './components/Achievements';
 import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
+import MostKillInOneGameRanking from './components/ranking/MostKillInOneGameRanking';
 import Ranking from './components/ranking/Ranking';
 import Stats from './components/Stats';
 
@@ -16,11 +17,19 @@ function App() {
     <div className="App">
       <Navbar />
       <Switch location={location} key={location.pathname}>
+        { /* Main */ }
         <Route exact path='/' component={Main} />
+
+        { /* Profile */ }
         <Route exact path='/profile/:id' component={Profile} />
         <Route exact path='/profile/:id/achievements' component={Achievements} />
         <Route exact path='/profile/:id/stats' component={Stats} />
-        <Route path='/ranking' component={Ranking} />
+
+        { /* Ranking/Leaderboard */}
+        <Route exact path='/ranking' component={Ranking} />
+        <Route exact path='/ranking/most_kills_one_game' component={MostKillInOneGameRanking} />
+
+        { /* 404 */ }
         <Route path='*'>
           <Redirect to='/'/>
         </Route>
