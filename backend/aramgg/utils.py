@@ -21,10 +21,8 @@ def get_top_champs(num_champs: int, attribute: str, column_name: str) -> List:
     for i, champ in zip(range(len(champion_data)), champion_data):
         top_champs.append(
             {
-                f"{i+1}": {
-                    "champion_id": champ["champion_id"],
-                    attribute: champ[attribute],
-                }
+                "champion_id": champ["champion_id"],
+                attribute: champ[attribute],
             }
         )
 
@@ -55,20 +53,16 @@ def get_top_users(
         if is_based_on_avg:
             top_users.append(
                 {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        attribute: getattr(user, attribute),
-                    }
+                    "user": user_serializer.data,
+                    attribute: getattr(user, attribute),
                 }
             )
         else:
             top_users.append(
                 {
-                    f"{i+1}": {
-                        "user": user_serializer.data,
-                        attribute: getattr(user, attribute),
-                        "champion_id": user.champion_id,
-                    }
+                    "user": user_serializer.data,
+                    attribute: getattr(user, attribute),
+                    "champion_id": user.champion_id,
                 }
             )
 
