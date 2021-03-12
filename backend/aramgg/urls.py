@@ -91,7 +91,22 @@ urlpatterns = [
         "rest_api/ranking/top50_most_assists_in_one_game/",
         views.Top50MostAssistsInOneGame.as_view(),
         name="rest_api_top50_most_assists_in_one_game"
-    )
+    ),
+    path(
+        "rest_api/ranking/top50_most_damage_done_in_one_game/",
+        views.Top50MostDamageDoneInOneGame.as_view(),
+        name="rest_api_top50_most_damage_done_in_one_game"
+    ),
+    path(
+        "rest_api/ranking/top50_most_damage_taken_in_one_game/",
+        views.Top50MostDamageTakenInOneGame.as_view(),
+        name="rest_api_top50_most_damage_taken_in_one_game"
+    ),
+    path(
+        "rest_api/ranking/top50_most_healing_done_in_one_game/",
+        views.Top50MostHealingDoneInOneGame.as_view(),
+        name="rest_api_top50_most_healing_done_in_one_game"
+    ),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

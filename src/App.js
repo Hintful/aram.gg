@@ -7,7 +7,10 @@ import Main from './components/Main';
 import Navbar from './components/Navbar';
 import Profile from './components/Profile';
 import MostAssistInOneGameRanking from './components/ranking/MostAssistInOneGameRanking';
+import MostDamageDoneInOneGameRanking from './components/ranking/MostDamageDoneInOneGameRanking';
+import MostDamageTakenInOneGameRanking from './components/ranking/MostDamageTakenInOneGameRanking';
 import MostDeathInOneGameRanking from './components/ranking/MostDeathInOneGameRanking';
+import MostHealingDoneInOneGameRanking from './components/ranking/MostHealingDoneInOneGameRanking';
 import MostKillInOneGameRanking from './components/ranking/MostKillInOneGameRanking';
 import Ranking from './components/ranking/Ranking';
 import Stats from './components/Stats';
@@ -32,7 +35,10 @@ function App() {
         <Route exact path='/ranking/most_kills_one_game' component={MostKillInOneGameRanking} />
         <Route exact path='/ranking/most_deaths_one_game' component={MostDeathInOneGameRanking} />
         <Route exact path='/ranking/most_assists_one_game' component={MostAssistInOneGameRanking} />
-
+        <Route exact path='/ranking/most_damage_done_one_game' component={MostDamageDoneInOneGameRanking} />
+        <Route exact path='/ranking/most_healing_done_one_game' component={MostHealingDoneInOneGameRanking} />
+        <Route exact path='/ranking/most_damage_taken_one_game' component={MostDamageTakenInOneGameRanking} />
+        
         { /* 404 */ }
         <Route path='*'>
           <Redirect to='/'/>

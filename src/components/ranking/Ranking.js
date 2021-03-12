@@ -5,7 +5,7 @@ import MostDeathInOneGameRanking from './MostDeathInOneGameRanking';
 import MostAssistInOneGameRanking from './MostAssistInOneGameRanking';
 import MostDamageDoneInOneGameRanking from './MostDamageDoneInOneGameRanking';
 import MostHealingDoneInOneGameRanking from './MostHealingDoneInOneGameRanking';
-import MostDamageTakenInOneGameRanking from './MostDamageDoneInOneGameRanking copy';
+import MostDamageTakenInOneGameRanking from './MostDamageDoneInOneGameRanking';
 import { Button } from '@chakra-ui/button';
 import { useHistory } from 'react-router';
 
@@ -17,7 +17,7 @@ const Ranking = () => {
         👑 Ranking
       </Text>
 
-      <VStack>
+      <VStack spacing="20px">
         <Button colorScheme="teal"
           onClick={() => {
             history.push({ pathname: '/ranking/most_kills_one_game' });
@@ -39,13 +39,30 @@ const Ranking = () => {
         >
           Most Deaths in a Single Game
         </Button>
+        <Divider />
+        <Button colorScheme="teal"
+          onClick={() => {
+            history.push({ pathname: '/ranking/most_damage_done_one_game' });
+          }}
+        >
+          Most Damage Done in a Single Game
+        </Button>
+        <Button colorScheme="teal"
+          onClick={() => {
+            history.push({ pathname: '/ranking/most_damage_taken_one_game' });
+          }}
+        >
+          Most Damage Taken in a Single Game
+        </Button>
+        <Button colorScheme="teal"
+          onClick={() => {
+            history.push({ pathname: '/ranking/most_healing_done_one_game' });
+          }}
+        >
+          Most Healing Done in a Single Game
+        </Button>
       </VStack>
-
-      { /* Ranking Panel */}
-      <MostDamageDoneInOneGameRanking />
-      <MostHealingDoneInOneGameRanking />
-      <MostDamageTakenInOneGameRanking />
-    </VStack>
+    </VStack >
   );
 }
 

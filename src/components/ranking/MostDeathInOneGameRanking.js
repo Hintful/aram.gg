@@ -79,7 +79,7 @@ const MostDeathInOneGameRanking = () => {
   return (
     <VStack mt="100px" mb="100px">
       <Text fontFamily="Roboto Condensed" fontSize="24px">💀 Most Deaths in One Game</Text>
-      <HStack spacing="40px">
+      <HStack spacing="40px" mb={10}>
         {rankingData &&
           <>
             <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={silverRecord.max_death} championName={silverChampionName} unit='Deaths'/>

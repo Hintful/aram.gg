@@ -6,13 +6,16 @@ import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
 import { formatNumber } from '../ChampionStats';
-
+import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
+import { Link } from 'react-router-dom';
 
 
 const MostHealingDoneInOneGameRanking = () => {
 
   const [rankingData, setRankingData] = useState(null);
   const [championData, setChampionData] = useState([]);
+
+  const [top50Data, setTop50Data] = useState(null);
 
   // parse user data
   const goldUserData = rankingData ? rankingData[0]["1"].user : null;
@@ -34,6 +37,14 @@ const MostHealingDoneInOneGameRanking = () => {
     axios.get('http://localhost:8000/aramgg/rest_api/ranking/most_healing_done_in_one_game/')
       .then(res => {
         setRankingData(res.data);
+      })
+      .catch(err => {
+        console.log(err);
+      })
+
+    axios.get('http://localhost:8000/aramgg/rest_api/ranking/top50_most_healing_done_in_one_game/')
+      .then(res => {
+        setTop50Data(res.data);
       })
       .catch(err => {
         console.log(err);
@@ -66,9 +77,9 @@ const MostHealingDoneInOneGameRanking = () => {
   }, [championData, goldRecord, silverRecord, bronzeRecord])
 
   return (
-    <VStack mt="50px" mb="100px">
+    <VStack mt="100px" mb="100px">
       <Text fontFamily="Roboto Condensed" fontSize="24px">👼 Most Healing Done in One Game</Text>
-      <HStack spacing="40px">
+      <HStack spacing="40px" mb={10}>
         {rankingData &&
           <>
             <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={formatNumber(silverRecord.healing_done)} championName={silverChampionName} unit='Healing' />
@@ -77,6 +88,32 @@ const MostHealingDoneInOneGameRanking = () => {
           </>
         }
       </HStack>
+      <Text fontFamily="Roboto Condensed" fontSize="22px">👑 Leaderboard</Text>
+      { top50Data &&
+        <Table w="500px" variant="striped" colorScheme="gray" mb="100px">
+          <TableCaption>Most Healing Done in One Game Ranking</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Rank</Th>
+              <Th>Summoner Name</Th>
+              <Th isNumeric>Healing Done in One Game</Th>
+            </Tr>
+          </Thead>
+          <Tbody fontFamily="Roboto" fontSize="14px">
+            { top50Data.map((entry, i) => {
+              return (
+                <Tr>
+                  <Td>{ i === 0 ? '1 🥇' : i === 1 ? '2 🥈' : i === 2 ? '3 🥉' : i + 1 }</Td>
+                  <Td><Link href={`/profile/${entry.username}`}>
+                    <span style={{ color: "#008080" }}>{ entry.username.toUpperCase() }</span>
+                  </Link></Td>
+                  <Td isNumeric>{ formatNumber(entry.most_healing_done) }</Td>
+                </Tr>
+              )
+            })}
+          </Tbody>
+        </Table>
+      }
     </VStack>
   );
 }
