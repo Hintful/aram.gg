@@ -54,8 +54,8 @@ const LeastAverageDeathRanking = () => {
         {rankingData &&
           <>
             <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={roundNumber(silverRecord.avg_death, 2)} unit='Deaths/game' />
-            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={roundNumber(goldRecord.avg_death, 2)} unit='Kills/game' />
-            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={roundNumber(bronzeRecord.avg_death, 2)} unit='Kills/game' />
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={roundNumber(goldRecord.avg_death, 2)} unit='Deaths/game' />
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={roundNumber(bronzeRecord.avg_death, 2)} unit='Deaths/game' />
           </>
         }
       </HStack>
