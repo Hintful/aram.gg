@@ -50,7 +50,7 @@ class BaseRankingAPIView(APIView):
                 attribute=self.attribute,
                 column_name=self.column_name,
                 is_based_on_avg=self.is_based_one_avg,
-                min_game_req=self.min_game_req
+                min_game_req=self.min_game_req if hasattr(self, "min_game_req") else 0
             )
 
         return Response(top_list)
