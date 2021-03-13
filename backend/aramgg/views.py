@@ -5,6 +5,9 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from django.db import models
+from django.db.models import Sum, ExpressionWrapper
+
 from .api import RiotApiRequests
 from .models import User, Champion
 from .serializers import UserSerializer, ChampionSerializer
@@ -238,6 +241,52 @@ class Top50MostHealingDoneInOneGame(BaseRankingAPIView):
     attribute = "healing_done"
     column_name = "most_healing_done"
     is_based_one_avg = False
+
+class RankingMostAvgEDView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        ranking = []
+        avg_ed_user_data = (User.objects.annotate(
+            avg_ed=ExpressionWrapper((Sum("champion__total_damage_done") * 1.0
+            / Sum("champion__total_game_length") * 60), output_field=models.FloatField())
+        ).filter(avg_ed__isnull=False)
+        .order_by("-avg_ed")[:3])
+
+        for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append(
+                {
+                    "user": user_serializer.data,
+                    "avg_ed": user.avg_ed
+                }
+            )
+
+        return Response(ranking)
+
+class Top50MostAvgEDView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        ranking = []
+        avg_ed_user_data = (User.objects.annotate(
+            avg_ed=ExpressionWrapper((Sum("champion__total_damage_done") * 1.0
+            / Sum("champion__total_game_length") * 60), output_field=models.FloatField())
+        ).filter(avg_ed__isnull=False)
+        .order_by("-avg_ed")[:50])
+
+        for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append(
+                {
+                    "user": user_serializer.data,
+                    "avg_ed": user.avg_ed
+                }
+            )
+
+        return Response(ranking)
 
 
 class UserDetailView(APIView):
