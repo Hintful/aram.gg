@@ -18,11 +18,8 @@ const GoldPodium = ({ username, profile_icon, level, value, showChampion = true,
 
         {showChampion &&
           <VStack mt={7} spacing="5px">
-            {championName !== '' ?
-              // <Image w="40px" key={championName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
+            {championName !== '' &&
               <Image w="40px" key={championName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[champId].image}`} />
-              :
-              <Spinner size="40px" color="teal.500" />
             }
             <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{championName}</span></Text>
           </VStack>

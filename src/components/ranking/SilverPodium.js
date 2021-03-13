@@ -18,10 +18,8 @@ const SilverPodium = ({ username, profile_icon, level, value, showChampion = tru
         <Text fontFamily="Source Sans Pro" fontSize="14px">🥈 <span style={{ fontWeight: 600 }}>{value}</span> {unit}</Text>
         {showChampion &&
           <VStack mt={7} spacing="5px">
-            {championName !== '' ?
+            {championName !== '' &&
               <Image w="40px" key={uuidv4()} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[champId].image}`} />
-              :
-              <Spinner size="40px" color="teal.500" />
             }
             <Text fontFamily="Source Sans Pro" fontSize="14px"><span style={{ fontWeight: 600 }}>{championName}</span></Text>
           </VStack>
