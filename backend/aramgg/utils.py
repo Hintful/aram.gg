@@ -1,6 +1,7 @@
 from typing import List, Dict
 
-from django.db.models import Sum, F
+from django.db import models
+from django.db.models import Sum, F, ExpressionWrapper
 
 from aramgg.models import Champion, User
 from aramgg.serializers import UserSerializer
@@ -71,8 +72,9 @@ def get_top_users(
 
 def get_annotate_attr_based_on_avg(attribute: str, column_name: str) -> Dict:
     return {
-        attribute: Sum(f"champion__{column_name}")
-        / (Sum("champion__win") + Sum("champion__loss"))
+        attribute: ExpressionWrapper((Sum(f"champion__{column_name}")) * 1.0
+        / (Sum("champion__win") + Sum("champion__loss")),
+        output_field=models.FloatField())
     }
 
 
