@@ -274,7 +274,7 @@ class Top50MostAvgEDView(APIView):
         ranking = []
         avg_ed_user_data = (User.objects.annotate(
             avg_ed=ExpressionWrapper(((Sum("champion__total_damage_done") * 1.0 + Sum("champion__total_healing_done"))
-            / (Sum("champion__total_game_length") / 60)), output_field=models.FloatField()),
+            / Sum("champion__total_game_length") * 60), output_field=models.FloatField()),
             num_games=Sum("champion__win") + Sum("champion__loss")
         ).filter(avg_ed__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
         .order_by("-avg_ed")[:50])
