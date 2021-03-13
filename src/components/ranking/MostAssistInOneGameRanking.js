@@ -6,6 +6,7 @@ import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import { ChampId } from '../data/ChampId';
+import { Image } from '@chakra-ui/image';
 
 
 
@@ -81,12 +82,13 @@ const MostAssistInOneGameRanking = () => {
       </HStack>
       <Text fontFamily="Roboto Condensed" fontSize="22px">👑 Leaderboard</Text>
       { top50Data &&
-        <Table w="500px" variant="striped" colorScheme="gray" mb="100px">
+        <Table w="600px" variant="striped" colorScheme="gray" mb="100px">
           <TableCaption>Most Assists in One Game Ranking</TableCaption>
           <Thead>
             <Tr>
               <Th>Rank</Th>
               <Th>Summoner Name</Th>
+              <Th>Champion Used</Th>
               <Th isNumeric>Number of Assists</Th>
             </Tr>
           </Thead>
@@ -98,6 +100,12 @@ const MostAssistInOneGameRanking = () => {
                   <Td><Link href={`/profile/${entry.user.username}`}>
                     <span style={{ color: "#008080" }}>{ entry.user.username.toUpperCase() }</span>
                   </Link></Td>
+                  <Td>
+                    <HStack>
+                      <Image w="30px" key={i} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[entry.champion_id].image}`} />
+                      <Text fontFamily="Roboto" fontSize="14px">{ ChampId[entry.champion_id].name }</Text>
+                    </HStack>
+                  </Td>
                   <Td isNumeric>{ entry.max_assist }</Td>
                 </Tr>
               )
