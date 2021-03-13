@@ -22,14 +22,29 @@ urlpatterns = [
         name="rest_api_ranking_most_avg_kill",
     ),
     path(
+        "rest_api/ranking/top50_avg_kill/",
+        views.Top50MostAverageKillView.as_view(),
+        name="rest_api_top50_most_avg_kill"
+    ),
+    path(
         "rest_api/ranking/most_avg_death/",
         views.RankingMostAverageDeathView.as_view(),
         name="rest_api_ranking_most_avg_death",
     ),
     path(
+        "rest_api/ranking/top50_avg_death/",
+        views.Top50MostAverageDeathView.as_view(),
+        name="rest_api_top50_most_avg_death"
+    ),
+    path(
         "rest_api/ranking/most_avg_assist/",
         views.RankingMostAverageAssistView.as_view(),
         name="rest_api_ranking_most_avg_assist",
+    ),
+    path(
+        "rest_api/ranking/top50_avg_assist/",
+        views.Top50MostAverageAssistView.as_view(),
+        name="rest_api_top50_most_avg_assist"  
     ),
     path(
         "rest_api/ranking/most_kill_in_one_game/",

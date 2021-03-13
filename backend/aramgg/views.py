@@ -149,9 +149,9 @@ class RankingMostAverageAssistView(BaseRankingAPIView):
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
 
-class RankingMostAverageAssistView(BaseRankingAPIView):
+class Top50MostAverageAssistView(BaseRankingAPIView):
     queryset = User.objects.all()
-    num_users = 3
+    num_users = 50
     attribute = "avg_assist"
     column_name = "assist"
     is_based_one_avg = True
