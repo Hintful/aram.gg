@@ -133,12 +133,12 @@ urlpatterns = [
         name="rest_api_top50_most_healing_done_in_one_game"
     ),
     path(
-        "rest_api/ranking/most_avg_ed",
+        "rest_api/ranking/most_avg_ed/",
         views.RankingMostAvgEDView.as_view(),
         name="rest_api_most_avg_ed"
     ),
     path(
-        "rest_api/ranking/top50_most_avg_ed",
+        "rest_api/ranking/top50_most_avg_ed/",
         views.Top50MostAvgEDView.as_view(),
         name="rest_api_top50_most_avg_ed"
     )

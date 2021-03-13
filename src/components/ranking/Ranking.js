@@ -12,7 +12,7 @@ import { useHistory } from 'react-router';
 const Ranking = () => {
   const history = useHistory();
   return (
-    <VStack mt="100px">
+    <VStack mt="100px" spacing="50px">
       <Text fontSize="36px" mb={10} style={{ letterSpacing: "-1px" }}>
         👑 Ranking
       </Text>
@@ -85,6 +85,17 @@ const Ranking = () => {
             }}
           >
             Most Average Assist per Game
+          </Button>
+        </VStack>
+      </HStack>
+      <HStack>
+        <VStack spacing="20px">
+          <Button colorScheme="red"
+            onClick={() => {
+              history.push({ pathname: '/ranking/most_avg_ed' });
+            }}
+          >
+            Average Effective Damage per minute
           </Button>
         </VStack>
       </HStack>
