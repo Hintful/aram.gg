@@ -357,7 +357,7 @@ const Profile = ({ location }) => {
             }
 
             { /* Sorting Menu */}
-            {userStats.numGames > 0 &&
+            {userStats.numWins + userStats.numLosses > 0 &&
               <Flex direction="row" justify="center" align="center" width="50vw" style={{ gap: "5px", marginTop: "70px" }}>
                 <Button colorScheme="teal"
                   onClick={() => {
