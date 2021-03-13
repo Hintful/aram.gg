@@ -10,6 +10,7 @@ from .models import User, Champion
 from .serializers import UserSerializer, ChampionSerializer
 from .utils import get_top_champs, get_top_users
 
+MIN_GAME_REQ = 20 # minimum number of games required to be in average based rankings
 
 class UserView(APIView):
     serializer_class = UserSerializer
@@ -49,6 +50,7 @@ class BaseRankingAPIView(APIView):
                 attribute=self.attribute,
                 column_name=self.column_name,
                 is_based_on_avg=self.is_based_one_avg,
+                min_game_req=self.min_game_req
             )
 
         return Response(top_list)
@@ -129,7 +131,15 @@ class RankingMostAverageKillView(BaseRankingAPIView):
     attribute = "avg_kill"
     column_name = "kill"
     is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
 
+class Top50MostAverageKillView(BaseRankingAPIView):
+    queryset = User.objects.all()
+    num_users = 50
+    attribute = "avg_kill"
+    column_name = "kill"
+    is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
 
 class RankingMostAverageAssistView(BaseRankingAPIView):
     queryset = User.objects.all()
@@ -137,7 +147,15 @@ class RankingMostAverageAssistView(BaseRankingAPIView):
     attribute = "avg_assist"
     column_name = "assist"
     is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
 
+class RankingMostAverageAssistView(BaseRankingAPIView):
+    queryset = User.objects.all()
+    num_users = 3
+    attribute = "avg_assist"
+    column_name = "assist"
+    is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
 
 class RankingMostAverageDeathView(BaseRankingAPIView):
     queryset = User.objects.all()
@@ -145,7 +163,15 @@ class RankingMostAverageDeathView(BaseRankingAPIView):
     attribute = "avg_death"
     column_name = "death"
     is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
 
+class Top50MostAverageDeathView(BaseRankingAPIView):
+    queryset = User.objects.all()
+    num_users = 50
+    attribute = "avg_death"
+    column_name = "death"
+    is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
 
 class Top50MostKillsInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()

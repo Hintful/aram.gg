@@ -31,7 +31,7 @@ def get_top_champs(num_champs: int, attribute: str, column_name: str) -> List:
 
 
 def get_top_users(
-    num_users: int, attribute: str, column_name: str, is_based_on_avg: bool
+    num_users: int, attribute: str, column_name: str, is_based_on_avg: bool, min_game_req: int = 0
 ) -> List:
     top_users = list()
     annotate_attr = (
@@ -44,8 +44,9 @@ def get_top_users(
     filter_attr = {f"{attribute}__isnull": False}
 
     user_data = (
-        User.objects.annotate(**annotate_attr)
+        User.objects.annotate(**annotate_attr, num_games=Sum("champion__win") + Sum("champion__loss"))
         .filter(**filter_attr)
+        .filter(num_games__gte=min_game_req)
         .order_by(f"-{attribute}")[:num_users]
     )
 
