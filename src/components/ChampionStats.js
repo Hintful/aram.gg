@@ -6,6 +6,7 @@ import champion_data_json from './json/champion.json';
 import { GiDiceSixFacesTwo, GiDiceSixFacesThree, GiDiceSixFacesFour, GiDiceSixFacesFive, GiDiceSixFacesSix } from 'react-icons/gi'
 import MultikillTag from './tags/MultikillTag';
 import StarTag from './tags/StarTag';
+import { ChampId } from './data/ChampId';
 
 
 /* stats = {
@@ -174,7 +175,7 @@ const ChampionStats = ({ stats }) => {
   }, []);
 
   useEffect(() => {
-    const championInfo = championData.filter(data => parseInt(data.key) === stats.champion_id)[0];
+    const championInfo = ChampId[stats.champion_id];
     if (championInfo !== undefined) {
       setChampionName(championInfo.name);
       setKDA(stats.death > 0 ? roundNumber((stats.kill + stats.assist) / stats.death) : roundNumber(stats.kill + stats.assist));
@@ -196,7 +197,7 @@ const ChampionStats = ({ stats }) => {
       <Flex direction="row" className="champion-stats" width="auto">
         <Flex direction="column" justify="center" align="center" className="champion-icon">
           {championName !== '' ?
-            <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
+            <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[stats.champion_id].image}`} />
             :
             <div style={{ background: 'black' }}>
             </div>

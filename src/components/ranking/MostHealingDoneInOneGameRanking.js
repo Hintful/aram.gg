@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { HStack, Text, VStack } from '@chakra-ui/layout';
-import champion_data_json from '../json/champion.json';
+import { HStack, Link, Text, VStack } from '@chakra-ui/layout';
 import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
 import { formatNumber } from '../ChampionStats';
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
-import { Link } from 'react-router-dom';
-
+import { ChampId } from '../data/ChampId';
 
 const MostHealingDoneInOneGameRanking = () => {
 
   const [rankingData, setRankingData] = useState(null);
-  const [championData, setChampionData] = useState([]);
 
   const [top50Data, setTop50Data] = useState(null);
 
@@ -56,25 +53,18 @@ const MostHealingDoneInOneGameRanking = () => {
   }, []);
 
   useEffect(() => {
-    // load champion.json
-    setChampionData(Object.values(JSON.parse(JSON.stringify(champion_data_json)).data));
-  }, [])
-
-  useEffect(() => {
     let goldChampionInfo = undefined;
     let silverChampionInfo = undefined;
     let bronzeChampionInfo = undefined;
 
-    if (championData.length > 0) {
-      goldChampionInfo = championData.filter(data => parseInt(data.key) === (goldRecord ? goldRecord.champion_id : ''))[0];
-      silverChampionInfo = championData.filter(data => parseInt(data.key) === (silverRecord ? silverRecord.champion_id : ''))[0];
-      bronzeChampionInfo = championData.filter(data => parseInt(data.key) === (bronzeRecord ? bronzeRecord.champion_id : ''))[0];
+    goldChampionInfo = goldRecord ? ChampId[goldRecord.champion_id] : null;
+    silverChampionInfo = silverRecord ? ChampId[silverRecord.champion_id] : null;
+    bronzeChampionInfo = bronzeRecord ? ChampId[bronzeRecord.champion_id] : null;
 
-      if (goldChampionInfo !== undefined) { setGoldChampionName(goldChampionInfo.name) }
-      if (silverChampionInfo !== undefined) { setSilverChampionName(silverChampionInfo.name) }
-      if (bronzeChampionInfo !== undefined) { setBronzeChampionName(bronzeChampionInfo.name) }
-    }
-  }, [championData, goldRecord, silverRecord, bronzeRecord])
+    if (goldChampionInfo !== null) { setGoldChampionName(goldChampionInfo.name) }
+    if (silverChampionInfo !== null) { setSilverChampionName(silverChampionInfo.name) }
+    if (bronzeChampionInfo !== null) { setBronzeChampionName(bronzeChampionInfo.name) }
+  }, [goldRecord, silverRecord, bronzeRecord])
 
   return (
     <VStack mt="100px" mb="100px">
@@ -82,9 +72,9 @@ const MostHealingDoneInOneGameRanking = () => {
       <HStack spacing="40px" mb={10}>
         {rankingData &&
           <>
-            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={formatNumber(silverRecord.healing_done)} championName={silverChampionName} unit='Healing' />
-            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={formatNumber(goldRecord.healing_done)} championName={goldChampionName} unit='Healing' />
-            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={formatNumber(bronzeRecord.healing_done)} championName={bronzeChampionName} unit='Healing' />
+            <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={formatNumber(silverRecord.healing_done)} champId={silverRecord.champion_id} championName={silverChampionName} unit='Healing' />
+            <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={formatNumber(goldRecord.healing_done)} champId={goldRecord.champion_id} championName={goldChampionName} unit='Healing' />
+            <BronzePodium username={bronzeUserData.username} profile_icon={bronzeUserData.profile_icon} level={bronzeUserData.level} value={formatNumber(bronzeRecord.healing_done)} champId={bronzeRecord.champion_id} championName={bronzeChampionName} unit='Healing' />
           </>
         }
       </HStack>

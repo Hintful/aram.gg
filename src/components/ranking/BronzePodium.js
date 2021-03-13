@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 import IconBox from '../IconBox';
 import { bgColorRGBA, bgColor } from './ColorData';
 import { getURLName } from '../ChampionStats';
+import { ChampId } from '../data/ChampId';
 
-const BronzePodium = ({ username, profile_icon, level, value, showChampion = true, championName = '', unit }) => {
+const BronzePodium = ({ username, profile_icon, level, value, showChampion = true, champId, championName = '', unit }) => {
   return (  
     <Link to={`/profile/${username}`}>
       <Flex className="rank-element" p="40px" mt="100px" direction="column" align="center" justify="center" style={{ background: bgColorRGBA.bronze, boxShadow: `0 10px 0px ${bgColor.bronze}` }}>
@@ -18,7 +19,8 @@ const BronzePodium = ({ username, profile_icon, level, value, showChampion = tru
         {showChampion &&
           <VStack mt={7} spacing="5px">
             {championName !== '' ?
-              <Image w="40px" key={championName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
+              // <Image w="40px" key={championName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${getURLName(championName)}.png`} />
+              <Image w="40px" key={championName} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[champId].image}`} />
               :
               <Spinner size="40px" color="teal.500" />
             }
