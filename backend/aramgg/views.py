@@ -50,7 +50,8 @@ class BaseRankingAPIView(APIView):
                 attribute=self.attribute,
                 column_name=self.column_name,
                 is_based_on_avg=self.is_based_one_avg,
-                min_game_req=self.min_game_req if hasattr(self, "min_game_req") else 0
+                min_game_req=self.min_game_req if hasattr(self, "min_game_req") else 0,
+                reverse=self.reverse if hasattr(self, "reverse") else False
             )
 
         return Response(top_list)
@@ -172,6 +173,24 @@ class Top50MostAverageDeathView(BaseRankingAPIView):
     column_name = "death"
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
+
+class RankingLeastAverageDeathView(BaseRankingAPIView):
+    queryset = User.objects.all()
+    num_users = 3
+    attribute = "avg_death"
+    column_name = "death"
+    is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
+    reverse = True
+
+class Top50LeastAverageDeathView(BaseRankingAPIView):
+    queryset = User.objects.all()
+    num_users = 50
+    attribute = "avg_death"
+    column_name = "death"
+    is_based_one_avg = True
+    min_game_req = MIN_GAME_REQ
+    reverse = True
 
 class Top50MostKillsInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()

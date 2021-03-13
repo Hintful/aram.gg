@@ -37,6 +37,16 @@ urlpatterns = [
         name="rest_api_top50_most_avg_death"
     ),
     path(
+        "rest_api/ranking/least_avg_death/",
+        views.RankingLeastAverageDeathView.as_view(),
+        name="rest_api_ranking_least_avg_death"
+    ),
+    path(
+        "rest_api/ranking/top50_least_avg_death/",
+        views.Top50LeastAverageDeathView.as_view(),
+        name="rest_api_top50_least_avg_death"
+    ),
+    path(
         "rest_api/ranking/most_avg_assist/",
         views.RankingMostAverageAssistView.as_view(),
         name="rest_api_ranking_most_avg_assist",
