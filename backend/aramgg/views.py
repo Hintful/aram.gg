@@ -253,7 +253,7 @@ class RankingMostAvgEDView(APIView):
             / Sum("champion__total_game_length") * 60), output_field=models.FloatField()),
             num_games=Sum("champion__win") + Sum("champion__loss")
         ).filter(avg_ed__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
-        .order_by("-avg_ed")[:3])
+        .order_by("-avg_ed", "-level")[:3])
 
         for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
             user_serializer = UserSerializer(user)
@@ -277,7 +277,7 @@ class Top50MostAvgEDView(APIView):
             / Sum("champion__total_game_length") * 60), output_field=models.FloatField()),
             num_games=Sum("champion__win") + Sum("champion__loss")
         ).filter(avg_ed__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
-        .order_by("-avg_ed")[:50])
+        .order_by("-avg_ed", "-level")[:50])
 
         for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
             user_serializer = UserSerializer(user)
@@ -285,6 +285,54 @@ class Top50MostAvgEDView(APIView):
                 {
                     "user": user_serializer.data,
                     "avg_ed": user.avg_ed
+                }
+            )
+
+        return Response(ranking)
+
+class RankingMostAvgKDAView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        ranking = []
+        avg_ed_user_data = (User.objects.annotate(
+            avg_kda=ExpressionWrapper(((Sum("champion__kill") * 1.0 + Sum("champion__assist") * 1.0)
+            / ((Sum("champion__death") * 1.0))), output_field=models.FloatField()),
+            num_games=Sum("champion__win") + Sum("champion__loss")
+        ).filter(avg_kda__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
+        .order_by("-avg_kda", "-level")[:3])
+
+        for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append(
+                {
+                    "user": user_serializer.data,
+                    "avg_kda": user.avg_kda
+                }
+            )
+
+        return Response(ranking)
+
+class Top50MostAvgKDAView(APIView):
+    queryset = User.objects.all()
+
+    @staticmethod
+    def get(request, *args, **kwargs):
+        ranking = []
+        avg_ed_user_data = (User.objects.annotate(
+            avg_kda=ExpressionWrapper(((Sum("champion__kill") * 1.0 + Sum("champion__assist") * 1.0)
+            / ((Sum("champion__death") * 1.0))), output_field=models.FloatField()),
+            num_games=Sum("champion__win") + Sum("champion__loss")
+        ).filter(avg_kda__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
+        .order_by("-avg_kda", "-level")[:50])
+
+        for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
+            user_serializer = UserSerializer(user)
+            ranking.append(
+                {
+                    "user": user_serializer.data,
+                    "avg_kda": user.avg_kda
                 }
             )
 

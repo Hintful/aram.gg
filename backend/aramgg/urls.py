@@ -141,6 +141,16 @@ urlpatterns = [
         "rest_api/ranking/top50_most_avg_ed/",
         views.Top50MostAvgEDView.as_view(),
         name="rest_api_top50_most_avg_ed"
+    ),
+    path(
+        "rest_api/ranking/most_avg_kda/",
+        views.RankingMostAvgKDAView.as_view(),
+        name="rest_api_most_avg_kda"
+    ),
+    path(
+        "rest_api/ranking/top50_most_avg_kda/",
+        views.Top50MostAvgKDAView.as_view(),
+        name="rest_api_top50_most_avg_kda"
     )
 ]
 
