@@ -10,6 +10,7 @@ import LeastAverageDeathRanking from './components/ranking/LeastAverageDeathRank
 import MostAssistInOneGameRanking from './components/ranking/MostAssistInOneGameRanking';
 import MostAverageAssistRanking from './components/ranking/MostAverageAssistRanking';
 import MostAverageEDRanking from './components/ranking/MostAverageEDRanking';
+import MostAverageKDARanking from './components/ranking/MostAverageKDARanking';
 import MostAverageKillRanking from './components/ranking/MostAverageKillRanking';
 import MostDamageDoneInOneGameRanking from './components/ranking/MostDamageDoneInOneGameRanking';
 import MostDamageTakenInOneGameRanking from './components/ranking/MostDamageTakenInOneGameRanking';
@@ -46,6 +47,7 @@ function App() {
         <Route exact path='/ranking/most_avg_assist' component={MostAverageAssistRanking} />
         <Route exact path='/ranking/least_avg_death' component={LeastAverageDeathRanking} />
         <Route exact path='/ranking/most_avg_ed' component={MostAverageEDRanking} />
+        <Route exact path='/ranking/most_avg_kda' component={MostAverageKDARanking} />
         
         { /* 404 */ }
         <Route path='*'>

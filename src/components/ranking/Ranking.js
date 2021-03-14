@@ -97,6 +97,13 @@ const Ranking = () => {
           >
             Average Effective Damage per minute
           </Button>
+          <Button colorScheme="red"
+            onClick={() => {
+              history.push({ pathname: '/ranking/most_avg_kda' });
+            }}
+          >
+            Average KDA
+          </Button>
         </VStack>
       </HStack>
     </VStack >
