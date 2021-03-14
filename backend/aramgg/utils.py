@@ -47,7 +47,7 @@ def get_top_users(
         User.objects.annotate(**annotate_attr, num_games=Sum("champion__win") + Sum("champion__loss"))
         .filter(**filter_attr)
         .filter(num_games__gte=min_game_req)
-        .order_by(f"-{attribute}" if not reverse else f"{attribute}")[:num_users]
+        .order_by(f"-{attribute}" if not reverse else f"{attribute}", "-level")[:num_users]
     )
 
     for i, user in zip(range(len(user_data)), user_data):
