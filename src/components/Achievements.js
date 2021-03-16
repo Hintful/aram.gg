@@ -5,7 +5,7 @@ import axios from 'axios';
 import { achievements } from './AchievementRequirement';
 import AchievementTag from './tags/AchievementTag';
 import IconBox from './IconBox';
-import { getKDAStarRating, getDamageStarRating, getCarryPotential } from './ChampionStats';
+import { getOverallKDAStarRating, getDamageStarRating, getCarryPotential } from './functions/CommonFunctions';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 import { achievementRarityDesc } from './functions/ComparisonFunctions';
@@ -127,7 +127,7 @@ const Achievements = () => {
 
     // calculate performance
     const totalPerformance = userChampionStats.reduce((total, championStat) => total + (
-      getCarryPotential(championStat.win, championStat.loss, getKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
+      getCarryPotential(championStat.win, championStat.loss, getOverallKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
         getDamageStarRating((championStat.total_damage_done + championStat.total_healing_done) / (championStat.total_game_length / 60)),
         getDamageStarRating(championStat.total_damage_taken / (championStat.total_game_length / 60)))), 0);
 
@@ -212,7 +212,6 @@ const Achievements = () => {
             {
               userStats &&
               achievements.sort(achievementRarityDesc).map(achievement => {
-                console.log("rendered");
                 let reqMet = 0;
                 Object.keys(achievement.requirements).forEach(requirement => {
                   if (userStats[requirement] >= achievement.requirements[requirement]) {
@@ -233,7 +232,6 @@ const Achievements = () => {
                 <HStack wrap="wrap" p={10}>
                   {userStats &&
                     achievements.filter(achievement => achievement.rarity === (5 - i)).map(achievement => {
-                      console.log("rendered");
                       let reqMet = 0;
                       Object.keys(achievement.requirements).forEach(requirement => {
 

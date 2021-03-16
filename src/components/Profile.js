@@ -1,69 +1,15 @@
-import { Button, Center, CircularProgress, CircularProgressLabel, Divider, Flex, HStack, Icon, Spinner, Stat, StatHelpText, StatLabel, StatNumber, Text, Tooltip, VStack } from '@chakra-ui/react';
+import { Button, Center, Divider, Flex, HStack, Icon, Spinner, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 import IconBox from './IconBox';
 import ChampionStats from './ChampionStats';
-import { roundNumber, getKDAStarRating, getDamageStarRating, getCarryPotential } from './ChampionStats';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import { winsAsc, winsDesc, gamesAsc, gamesDesc, kdaAsc, kdaDesc, effectiveDamageAsc, effectiveDamageDesc, damageTakenAsc, damageTakenDesc } from './functions/ComparisonFunctions';
 import MultikillTag from './tags/MultikillTag';
-
-export const getKDAStyle = (kda, shadow = false) => {
-  if (kda < 1.0) { return { color: '#ababab' }; }
-  else if (kda < 2.0) { return { color: '#676767' }; }
-  else if (kda < 3.0) { return { color: '#90ee90' }; }
-  else if (kda < 3.7) { return { color: '#87cefa' }; }
-  else if (kda < 4.3) { return { color: '#ffa500', textShadow: shadow ? '0px 0px 4px #ffa500' : '0' }; }
-  else { return { color: '#ff4500', textShadow: shadow ? '0px 0px 4px #ff4500' : '0' }; }
-}
-
-const getKDAElement = (kda) => {
-  if (kda) {
-    return (
-      <span style={getKDAStyle(kda)}>
-        {roundNumber(kda)}
-      </span>
-    )
-  } else {
-    return (
-      <HStack>
-        <Spinner color="teal.500" size="sm" />
-        <Text>Loading...</Text>
-      </HStack>
-    )
-  }
-}
-
-const getPotentialColor = (potential) => {
-  if (potential < 0.2) { return '#ababab'; }
-  else if (potential < 0.43) { return '#676767'; }
-  else if (potential < 0.55) { return '#90ee90'; }
-  else if (potential < 0.65) { return '#87cefa'; }
-  else if (potential < 0.8) { return '#ffa500'; }
-  else if (potential < 0.9) { return '#ff4500'; }
-  else { return '#d900e4'; }
-}
-
-const getPotentialRank = (potential) => {
-  const potentialThreshold = [0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 1, 100];
-  const potentialRank = ['F-', 'F', 'F+', 'D-', 'D', 'D+', 'C-', 'C', 'C+', 'B-', 'B', 'B+', 'A-', 'A', 'A+', 'S-', 'S', 'S+', 'SS', 'SSS'];
-
-  for (let i = 0; i < potentialThreshold.length; i++) {
-    if (potential < potentialThreshold[i]) {
-      return potentialRank[i];
-    }
-  }
-}
-
-const getWinrateColor = (winrate) => {
-  if (winrate < 0.4) { return '#ababab'; }
-  else if (winrate < 0.5) { return '#676767'; }
-  else if (winrate < 0.6) { return '#90ee90'; }
-  else if (winrate < 0.7) { return '#87cefa'; }
-  else if (winrate < 0.8) { return '#ffa500'; }
-  else { return '#ff4500'; }
-}
+import WinLossKDA from './WinLossKDA';
+import { getCarryPotential, getDamageStarRating, getIndividualKDAStarRating } from './functions/CommonFunctions';
+import WinratePerformance from './WinratePerformance';
 
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
@@ -219,7 +165,7 @@ const Profile = ({ location }) => {
 
     // calculate overall performance
     const totalPerformance = userChampionStats.reduce((total, championStat) => total + (
-      getCarryPotential(championStat.win, championStat.loss, getKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
+      getCarryPotential(championStat.win, championStat.loss, getIndividualKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
         getDamageStarRating((championStat.total_damage_done + championStat.total_healing_done) / (championStat.total_game_length / 60)),
         getDamageStarRating(championStat.total_damage_taken / (championStat.total_game_length / 60)))), 0);
 
@@ -271,62 +217,11 @@ const Profile = ({ location }) => {
 
 
             { /* Wins/Losses/KDA Stat */}
-            <HStack spacing="40px">
-              <Stat width="120px">
-                <StatLabel>Wins</StatLabel>
-                <StatNumber color="blue.300">
-                  {userStats.numWins}
-                </StatNumber>
-                <StatHelpText>Games Won</StatHelpText>
-              </Stat>
-              <Stat>
-                <StatLabel>Losses</StatLabel>
-                <StatNumber color="red.300">
-                  {userStats.numLosses}
-                </StatNumber>
-                <StatHelpText>Games Lost</StatHelpText>
-              </Stat>
-              <Stat width="160px">
-                <StatLabel>KDA</StatLabel>
-                <StatNumber>
-                  {getKDAElement((userStats.numKills + userStats.numAssists) / userStats.numDeaths)}
-                </StatNumber>
-                <StatHelpText>
-                  Over {userStats.numWins + userStats.numLosses} Games
-            </StatHelpText>
-              </Stat>
-            </HStack>
+            <WinLossKDA wins={userStats.numWins} losses={userStats.numLosses} KDA={(userStats.numKills + userStats.numAssists) / userStats.numDeaths} />
 
 
             { /* Winrate/Performance Stats */}
-            <HStack spacing="50px">
-              <VStack>
-                <Text fontWeight="600">Winrate</Text>
-                {userStats.numWins ?
-                  <CircularProgress size="100px" thickness="5px" value={userStats.numWins / (userStats.numWins + userStats.numLosses) * 100} color={getWinrateColor(userStats.numWins / (userStats.numWins + userStats.numLosses))}>
-                    <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px" }}>{roundNumber(userStats.numWins / (userStats.numWins + userStats.numLosses) * 100)}%</span></CircularProgressLabel>
-                  </CircularProgress>
-                  :
-                  <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
-
-                  </CircularProgress>
-                }
-              </VStack>
-              <Tooltip hasArrow label={`${roundNumber(performance * 100)}%`}>
-                <VStack>
-                  <Text fontWeight="600">Performance</Text>
-                  {performance ?
-                    <CircularProgress size="100px" thickness="5px" value={performance * 100} color={getPotentialColor(performance)}>
-                      <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px", color: getPotentialColor(performance) }}>{getPotentialRank(performance)}</span></CircularProgressLabel>
-                    </CircularProgress>
-                    :
-                    <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
-
-                    </CircularProgress>
-                  }
-                </VStack>
-              </Tooltip>
-            </HStack>
+            <WinratePerformance wins={userStats.numWins} losses={userStats.numLosses} performance={performance} />
 
 
             {/* Number of games analyzed / Refresh button */}

@@ -4,7 +4,7 @@ import { HStack, Link, Text, VStack } from '@chakra-ui/layout';
 import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
-import { formatNumber } from '../ChampionStats';
+import { formatNumber } from '../functions/CommonFunctions';
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import { ChampId } from '../data/ChampId';
 import { Image } from '@chakra-ui/image';

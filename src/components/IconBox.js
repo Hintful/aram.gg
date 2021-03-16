@@ -1,9 +1,9 @@
 import { Image } from '@chakra-ui/image';
-import { Box, Center, Flex, Text, VStack, HStack } from '@chakra-ui/layout';
+import { Box, Flex, VStack } from '@chakra-ui/layout';
 import { Spinner } from '@chakra-ui/spinner';
 import { Tooltip } from '@chakra-ui/tooltip';
-import React, { useEffect } from 'react';
-import { getKDAStarRating, roundNumber } from './ChampionStats';
+import React from 'react';
+import { getOverallKDAStarRating, roundNumber } from './functions/CommonFunctions';
 import StarTag from './tags/StarTag';
 
 const getStarRatingStyle = (star) => {
@@ -43,7 +43,7 @@ const IconBox = ({ profile_icon_id, level, totalKDA = null, performance = null, 
   return (
     <VStack mb={5}>
       { profile_icon_id ?
-        <Box className="icon-box" boxSize="100px" mb={-2} style={getBorderStyle(((performance * 5) + getKDAStarRating(totalKDA)) / 2)}>
+        <Box className="icon-box" boxSize="100px" mb={-2} style={getBorderStyle(((performance * 5) + getOverallKDAStarRating(totalKDA)) / 2)}>
           <Image className="icon-box-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/profileicon/${profile_icon_id}.png`} />
           <Box className="icon-box-level-badge">
             {level}
@@ -55,9 +55,9 @@ const IconBox = ({ profile_icon_id, level, totalKDA = null, performance = null, 
         </Flex>
       }
       { showStarRating &&
-        <Tooltip hasArrow label={`${roundNumber(((performance * 5) + getKDAStarRating(totalKDA)) / 2)} / 5`}>
+        <Tooltip hasArrow label={`${roundNumber(((performance * 5) + getOverallKDAStarRating(totalKDA)) / 2)} / 5`}>
           <Flex flexDirection="row">
-            <StarTag style={getStarRatingStyle(((performance * 5) + getKDAStarRating(totalKDA)) / 2)} value={((performance * 5) + getKDAStarRating(totalKDA)) / 2} />
+            <StarTag style={getStarRatingStyle(((performance * 5) + getOverallKDAStarRating(totalKDA)) / 2)} value={((performance * 5) + getOverallKDAStarRating(totalKDA)) / 2} />
           </Flex>
         </Tooltip>
       }

@@ -5,7 +5,7 @@ import SilverPodium from './SilverPodium';
 import GoldPodium from './GoldPodium';
 import BronzePodium from './BronzePodium';
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
-import { roundNumber } from '../ChampionStats';
+import { roundNumber } from '../functions/CommonFunctions';
 
 
 const MostAverageEDRanking = () => {

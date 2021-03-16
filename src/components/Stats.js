@@ -1,12 +1,12 @@
-import { Divider, HStack, Text, VStack } from '@chakra-ui/layout';
+import { HStack, Text, VStack } from '@chakra-ui/layout';
 import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import axios from 'axios';
 import IconBox from './IconBox';
-import { getKDAStarRating, getDamageStarRating, getCarryPotential, roundNumber, formatNumber } from './ChampionStats';
+import { getIndividualKDAStarRating, getDamageStarRating, getCarryPotential, roundNumber, formatNumber } from './functions/CommonFunctions';
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
-import { Table, TableCaption, Tbody, Td, Tfoot, Th, Thead, Tr } from '@chakra-ui/table';
+import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 
 const formatUsername = (username) => {
   return username.split(" ").join("").toLowerCase();
@@ -23,9 +23,6 @@ const secondsToTime = (t) => {
   return `${hours > 0 ? hours + ' hour' : ''}${hours > 1 ? 's' : ''} ${minutes > 0 ? minutes + ' minute' : ''}${minutes > 1 ? 's' : ''} ${seconds} second${seconds > 1 ? 's' : ''}`;
 }
 
-const rarityColor = ["#676767", "#5bd75b", "#87cefa", "#ffa500", "#ff4500", "#c700fd"];
-const rarityDesc = ["Common", "Uncommon", "Rare", "Very Rare", "Extremely Rare", "Legendary"];
-
 const Stats = () => {
   const [userDetail, setUserDetail] = useState([]); // init
   const [userChampionStats, setUserChampionStats] = useState([]); // init
@@ -38,9 +35,6 @@ const Stats = () => {
 
   // for link
   const history = useHistory();
-
-  // categorize achievements
-  const [categorizeAchievements, setCategorizeAchievements] = useState(true);
 
   async function getUserData() {
     // user data
@@ -136,7 +130,7 @@ const Stats = () => {
 
     // calculate performance
     const totalPerformance = userChampionStats.reduce((total, championStat) => total + (
-      getCarryPotential(championStat.win, championStat.loss, getKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
+      getCarryPotential(championStat.win, championStat.loss, getIndividualKDAStarRating((championStat.kill + championStat.assist) / championStat.death / (championStat.win + championStat.loss)),
         getDamageStarRating((championStat.total_damage_done + championStat.total_healing_done) / (championStat.total_game_length / 60)),
         getDamageStarRating(championStat.total_damage_taken / (championStat.total_game_length / 60)))), 0);
 
