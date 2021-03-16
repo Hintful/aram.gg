@@ -13,7 +13,8 @@ from .models import User, Champion
 from .serializers import UserSerializer, ChampionSerializer
 from .utils import get_top_champs, get_top_users
 
-MIN_GAME_REQ = 20 # minimum number of games required to be in average based rankings
+MIN_GAME_REQ = 20  # minimum number of games required to be in average based rankings
+
 
 class UserView(APIView):
     serializer_class = UserSerializer
@@ -54,7 +55,7 @@ class BaseRankingAPIView(APIView):
                 column_name=self.column_name,
                 is_based_on_avg=self.is_based_one_avg,
                 min_game_req=self.min_game_req if hasattr(self, "min_game_req") else 0,
-                reverse=self.reverse if hasattr(self, "reverse") else False
+                reverse=self.reverse if hasattr(self, "reverse") else False,
             )
 
         return Response(top_list)
@@ -137,6 +138,7 @@ class RankingMostAverageKillView(BaseRankingAPIView):
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
 
+
 class Top50MostAverageKillView(BaseRankingAPIView):
     queryset = User.objects.all()
     num_users = 50
@@ -144,6 +146,7 @@ class Top50MostAverageKillView(BaseRankingAPIView):
     column_name = "kill"
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
+
 
 class RankingMostAverageAssistView(BaseRankingAPIView):
     queryset = User.objects.all()
@@ -153,6 +156,7 @@ class RankingMostAverageAssistView(BaseRankingAPIView):
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
 
+
 class Top50MostAverageAssistView(BaseRankingAPIView):
     queryset = User.objects.all()
     num_users = 50
@@ -160,6 +164,7 @@ class Top50MostAverageAssistView(BaseRankingAPIView):
     column_name = "assist"
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
+
 
 class RankingMostAverageDeathView(BaseRankingAPIView):
     queryset = User.objects.all()
@@ -169,6 +174,7 @@ class RankingMostAverageDeathView(BaseRankingAPIView):
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
 
+
 class Top50MostAverageDeathView(BaseRankingAPIView):
     queryset = User.objects.all()
     num_users = 50
@@ -176,6 +182,7 @@ class Top50MostAverageDeathView(BaseRankingAPIView):
     column_name = "death"
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
+
 
 class RankingLeastAverageDeathView(BaseRankingAPIView):
     queryset = User.objects.all()
@@ -186,6 +193,7 @@ class RankingLeastAverageDeathView(BaseRankingAPIView):
     min_game_req = MIN_GAME_REQ
     reverse = True
 
+
 class Top50LeastAverageDeathView(BaseRankingAPIView):
     queryset = User.objects.all()
     num_users = 50
@@ -194,6 +202,7 @@ class Top50LeastAverageDeathView(BaseRankingAPIView):
     is_based_one_avg = True
     min_game_req = MIN_GAME_REQ
     reverse = True
+
 
 class Top50MostKillsInOneGame(BaseRankingAPIView):
     queryset = User.objects.all()
@@ -242,29 +251,39 @@ class Top50MostHealingDoneInOneGame(BaseRankingAPIView):
     column_name = "most_healing_done"
     is_based_one_avg = False
 
+
 class RankingMostAvgEDView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
     def get(request, *args, **kwargs):
         ranking = []
-        avg_ed_user_data = (User.objects.annotate(
-            avg_ed=ExpressionWrapper(((Sum("champion__total_damage_done") * 1.0 + Sum("champion__total_healing_done"))
-            / Sum("champion__total_game_length") * 60), output_field=models.FloatField()),
-            num_games=Sum("champion__win") + Sum("champion__loss")
-        ).filter(avg_ed__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
-        .order_by("-avg_ed", "-level")[:3])
+        avg_ed_user_data = (
+            User.objects.annotate(
+                avg_ed=ExpressionWrapper(
+                    (
+                        (
+                            Sum("champion__total_damage_done") * 1.0
+                            + Sum("champion__total_healing_done")
+                        )
+                        / Sum("champion__total_game_length")
+                        * 60
+                    ),
+                    output_field=models.FloatField(),
+                ),
+                num_games=Sum("champion__win") + Sum("champion__loss"),
+            )
+            .filter(avg_ed__isnull=False)
+            .filter(num_games__gte=MIN_GAME_REQ)
+            .order_by("-avg_ed", "-level")[:3]
+        )
 
         for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
             user_serializer = UserSerializer(user)
-            ranking.append(
-                {
-                    "user": user_serializer.data,
-                    "avg_ed": user.avg_ed
-                }
-            )
+            ranking.append({"user": user_serializer.data, "avg_ed": user.avg_ed})
 
         return Response(ranking)
+
 
 class Top50MostAvgEDView(APIView):
     queryset = User.objects.all()
@@ -272,23 +291,32 @@ class Top50MostAvgEDView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         ranking = []
-        avg_ed_user_data = (User.objects.annotate(
-            avg_ed=ExpressionWrapper(((Sum("champion__total_damage_done") * 1.0 + Sum("champion__total_healing_done"))
-            / Sum("champion__total_game_length") * 60), output_field=models.FloatField()),
-            num_games=Sum("champion__win") + Sum("champion__loss")
-        ).filter(avg_ed__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
-        .order_by("-avg_ed", "-level")[:50])
+        avg_ed_user_data = (
+            User.objects.annotate(
+                avg_ed=ExpressionWrapper(
+                    (
+                        (
+                            Sum("champion__total_damage_done") * 1.0
+                            + Sum("champion__total_healing_done")
+                        )
+                        / Sum("champion__total_game_length")
+                        * 60
+                    ),
+                    output_field=models.FloatField(),
+                ),
+                num_games=Sum("champion__win") + Sum("champion__loss"),
+            )
+            .filter(avg_ed__isnull=False)
+            .filter(num_games__gte=MIN_GAME_REQ)
+            .order_by("-avg_ed", "-level")[:50]
+        )
 
         for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
             user_serializer = UserSerializer(user)
-            ranking.append(
-                {
-                    "user": user_serializer.data,
-                    "avg_ed": user.avg_ed
-                }
-            )
+            ranking.append({"user": user_serializer.data, "avg_ed": user.avg_ed})
 
         return Response(ranking)
+
 
 class RankingMostAvgKDAView(APIView):
     queryset = User.objects.all()
@@ -296,23 +324,28 @@ class RankingMostAvgKDAView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         ranking = []
-        avg_ed_user_data = (User.objects.annotate(
-            avg_kda=ExpressionWrapper(((Sum("champion__kill") * 1.0 + Sum("champion__assist") * 1.0)
-            / ((Sum("champion__death") * 1.0))), output_field=models.FloatField()),
-            num_games=Sum("champion__win") + Sum("champion__loss")
-        ).filter(avg_kda__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
-        .order_by("-avg_kda", "-level")[:3])
+        avg_ed_user_data = (
+            User.objects.annotate(
+                avg_kda=ExpressionWrapper(
+                    (
+                        (Sum("champion__kill") * 1.0 + Sum("champion__assist") * 1.0)
+                        / ((Sum("champion__death") * 1.0))
+                    ),
+                    output_field=models.FloatField(),
+                ),
+                num_games=Sum("champion__win") + Sum("champion__loss"),
+            )
+            .filter(avg_kda__isnull=False)
+            .filter(num_games__gte=MIN_GAME_REQ)
+            .order_by("-avg_kda", "-level")[:3]
+        )
 
         for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
             user_serializer = UserSerializer(user)
-            ranking.append(
-                {
-                    "user": user_serializer.data,
-                    "avg_kda": user.avg_kda
-                }
-            )
+            ranking.append({"user": user_serializer.data, "avg_kda": user.avg_kda})
 
         return Response(ranking)
+
 
 class Top50MostAvgKDAView(APIView):
     queryset = User.objects.all()
@@ -320,21 +353,25 @@ class Top50MostAvgKDAView(APIView):
     @staticmethod
     def get(request, *args, **kwargs):
         ranking = []
-        avg_ed_user_data = (User.objects.annotate(
-            avg_kda=ExpressionWrapper(((Sum("champion__kill") * 1.0 + Sum("champion__assist") * 1.0)
-            / ((Sum("champion__death") * 1.0))), output_field=models.FloatField()),
-            num_games=Sum("champion__win") + Sum("champion__loss")
-        ).filter(avg_kda__isnull=False).filter(num_games__gte=MIN_GAME_REQ)
-        .order_by("-avg_kda", "-level")[:50])
+        avg_ed_user_data = (
+            User.objects.annotate(
+                avg_kda=ExpressionWrapper(
+                    (
+                        (Sum("champion__kill") * 1.0 + Sum("champion__assist") * 1.0)
+                        / ((Sum("champion__death") * 1.0))
+                    ),
+                    output_field=models.FloatField(),
+                ),
+                num_games=Sum("champion__win") + Sum("champion__loss"),
+            )
+            .filter(avg_kda__isnull=False)
+            .filter(num_games__gte=MIN_GAME_REQ)
+            .order_by("-avg_kda", "-level")[:50]
+        )
 
         for i, user in zip(range(len(avg_ed_user_data)), avg_ed_user_data):
             user_serializer = UserSerializer(user)
-            ranking.append(
-                {
-                    "user": user_serializer.data,
-                    "avg_kda": user.avg_kda
-                }
-            )
+            ranking.append({"user": user_serializer.data, "avg_kda": user.avg_kda})
 
         return Response(ranking)
 

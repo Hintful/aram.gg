@@ -31,7 +31,12 @@ def get_top_champs(num_champs: int, attribute: str, column_name: str) -> List:
 
 
 def get_top_users(
-    num_users: int, attribute: str, column_name: str, is_based_on_avg: bool, min_game_req: int = 0, reverse: bool = False
+    num_users: int,
+    attribute: str,
+    column_name: str,
+    is_based_on_avg: bool,
+    min_game_req: int = 0,
+    reverse: bool = False,
 ) -> List:
     top_users = list()
     annotate_attr = (
@@ -44,10 +49,17 @@ def get_top_users(
     filter_attr = {f"{attribute}__isnull": False}
 
     user_data = (
-        User.objects.annotate(**annotate_attr, num_games=Sum("champion__win") + Sum("champion__loss"))
+        User.objects.annotate(
+            **annotate_attr, num_games=Sum("champion__win") + Sum("champion__loss")
+        )
         .filter(**filter_attr)
         .filter(num_games__gte=min_game_req)
-        .order_by(f"-{attribute}" if not reverse else f"{attribute}", "-level")[:num_users]
+        .order_by(
+            f"-{attribute}",
+            "username" if not reverse else f"{attribute}",
+            "username",
+            "-level",
+        )[:num_users]
     )
 
     for i, user in zip(range(len(user_data)), user_data):
@@ -73,9 +85,12 @@ def get_top_users(
 
 def get_annotate_attr_based_on_avg(attribute: str, column_name: str) -> Dict:
     return {
-        attribute: ExpressionWrapper((Sum(f"champion__{column_name}")) * 1.0
-        / (Sum("champion__win") + Sum("champion__loss")),
-        output_field=models.FloatField())
+        attribute: ExpressionWrapper(
+            (Sum(f"champion__{column_name}"))
+            * 1.0
+            / (Sum("champion__win") + Sum("champion__loss")),
+            output_field=models.FloatField(),
+        )
     }
 
 
