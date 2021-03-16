@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Dict, List, Any
 
@@ -7,6 +8,7 @@ from rest_framework import status
 
 from aramgg.config import RIOT_API_KEY
 from aramgg.exceptions import SummonerNotFoundException, RateLimitExceededException
+from log.trace_log import trace_log
 
 os.environ["DJANGO_SETTINGS_MODULE"] = "backend.local_settings"
 django.setup()
@@ -17,22 +19,27 @@ from aramgg.models import Champion, User
 BASE_URL = "https://na1.api.riotgames.com"
 PARAMS = {"api_key": RIOT_API_KEY}
 
+logger = logging.getLogger(__name__)
+
 
 class RiotApiRequests:
     def __init__(self, summoner_name: str, request_limit: int = 10):
         self.summoner_name = summoner_name
         self.request_limit = request_limit
 
+    @trace_log(logger)
     def check_rate_limit(self, request: Response) -> None:
         if request.status_code == status.HTTP_429_TOO_MANY_REQUESTS:
             raise RateLimitExceededException(
                 f"Rate limit exceeded with summoner name: {self.summoner_name}"
             )
 
+    @trace_log(logger)
     def check_if_summoner_exists(self, request: Response) -> None:
         if request.status_code == status.HTTP_404_NOT_FOUND:
             raise SummonerNotFoundException(f"Summoner not found: {self.summoner_name}")
 
+    @trace_log(logger)
     def get_account_info(self) -> User:
         """ Get account information based on the summoner name """
 
@@ -42,18 +49,18 @@ class RiotApiRequests:
         self.check_if_summoner_exists(request)
 
         data = request.json()
-        if data.get("name", None):
-            User.objects.update_or_create(
-                username=data["name"].replace(" ", "").lower(),
-                defaults={
-                    "profile_icon": data["profileIconId"],
-                    "account_id": data["accountId"],
-                    "level": data["summonerLevel"],
-                },
-            )
+        User.objects.update_or_create(
+            username=data["name"].replace(" ", "").lower(),
+            defaults={
+                "profile_icon": data["profileIconId"],
+                "account_id": data["accountId"],
+                "level": data["summonerLevel"],
+            },
+        )
 
         return User.objects.get(username=self.summoner_name)
 
+    @trace_log(logger)
     def get_match_list(self, user: User) -> List[Dict[str, int]]:
         """ Get list of game IDs and timestamps based on the summoner's account ID """
 
@@ -62,25 +69,25 @@ class RiotApiRequests:
         self.check_rate_limit(request)
         match_list = request.json()
         final_list = list()
-        if match_list.get("matches", None):
-            final_list = [
-                {"gameId": match["gameId"], "timestamp": match["timestamp"]}
-                for match in match_list["matches"]
-            ]
-            final_list = sorted(final_list, key=lambda k: k["timestamp"])
+        final_list = [
+            {"gameId": match["gameId"], "timestamp": match["timestamp"]}
+            for match in match_list["matches"]
+        ]
+        final_list = sorted(final_list, key=lambda k: k["timestamp"])
 
-            # If user already has a record of timestamp,
-            # only get game records that happened after given timestamp
-            if user.last_updated is not None:
-                final_list = list(
-                    filter(
-                        lambda element: element["timestamp"] > user.last_updated,
-                        final_list,
-                    )
+        # If user already has a record of timestamp,
+        # only get game records that happened after given timestamp
+        if user.last_updated is not None:
+            final_list = list(
+                filter(
+                    lambda element: element["timestamp"] > user.last_updated,
+                    final_list,
                 )
+            )
 
         return final_list
 
+    @trace_log(logger)
     def update_user_champion_info(self, user: User, data: Dict) -> None:
         participant_identity_list = data["participantIdentities"]
         participant_id = None
@@ -199,6 +206,7 @@ class RiotApiRequests:
         champion.save()
 
     @staticmethod
+    @trace_log(logger)
     def update_max_record(champion: Champion, attribute: str, new_val: Any) -> None:
         """Replace original value to new value if new value is greater than the original val"""
 
@@ -207,6 +215,7 @@ class RiotApiRequests:
         setattr(champion, attribute, update_val)
         champion.save()
 
+    @trace_log(logger)
     def get_match_data(self, match_id: int) -> Dict:
         """ Get information about specific match based on the match ID """
 
@@ -217,6 +226,7 @@ class RiotApiRequests:
 
         return data
 
+    @trace_log(logger)
     def get_total_match_info(self) -> List:
         """ Return combined dictionary with relevant match information """
 

@@ -1,10 +1,13 @@
-from django.core.exceptions import ViewDoesNotExist, ObjectDoesNotExist
+import logging
+
+from django.core.exceptions import ViewDoesNotExist
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, get_list_or_404
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from log.trace_log import trace_log
 from django.db import models
 from django.db.models import Sum, ExpressionWrapper
 
@@ -14,6 +17,8 @@ from .serializers import UserSerializer, ChampionSerializer
 from .utils import get_top_champs, get_top_users
 
 MIN_GAME_REQ = 20  # minimum number of games required to be in average based rankings
+
+logger = logging.getLogger(__name__)
 
 
 class UserView(APIView):
@@ -41,6 +46,7 @@ class BaseRankingAPIView(APIView):
         else:
             self.is_champ_ranking = False
 
+    @trace_log(logger)
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         if self.is_champ_ranking:
             top_list = get_top_champs(
@@ -289,6 +295,7 @@ class Top50MostAvgEDView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
+    @trace_log(logger)
     def get(request, *args, **kwargs):
         ranking = []
         avg_ed_user_data = (
@@ -322,6 +329,7 @@ class RankingMostAvgKDAView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
+    @trace_log(logger)
     def get(request, *args, **kwargs):
         ranking = []
         avg_ed_user_data = (
@@ -351,6 +359,7 @@ class Top50MostAvgKDAView(APIView):
     queryset = User.objects.all()
 
     @staticmethod
+    @trace_log(logger)
     def get(request, *args, **kwargs):
         ranking = []
         avg_ed_user_data = (
@@ -380,6 +389,7 @@ class UserDetailView(APIView):
     serializer_class = UserSerializer
     queryset = User.objects.all()
 
+    @trace_log(logger)
     def get_queryset(self):
         try:
             return get_object_or_404(User, username__exact=self.kwargs["username"])
@@ -389,25 +399,34 @@ class UserDetailView(APIView):
                 f"Selected user record for the user {self.kwargs['username']} does not exist. "
             )
 
-    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
-        username = self.kwargs["username"]
+    @trace_log(logger)
+    def get(
+        self,
+        request: HttpRequest,
+        username: str = None,
+        update: str = None,
+        *args,
+        **kwargs,
+    ) -> HttpResponse:
+        if update:
+            try:
+                riot_api = RiotApiRequests(summoner_name=username, request_limit=10)
+                riot_api.get_account_info()
+                riot_api.get_total_match_info()
+            except KeyError as e:
+                logger.error(f"Key error for user detail view: {e}")
+                pass
 
-        try:
-            riot_api = RiotApiRequests(summoner_name=username, request_limit=10)
-            riot_api.get_account_info()
-            riot_api.get_total_match_info()
-            user = User.objects.get(username__exact=username)
-            serializer = UserSerializer(user, many=False)
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        except ObjectDoesNotExist:
-            return Response(data=username, status=status.HTTP_404_NOT_FOUND)
+        user = get_object_or_404(User, username__exact=username)
+        serializer = UserSerializer(user, many=False)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class ChampionDetailView(APIView):
     serializer_class = ChampionSerializer
     queryset = User.objects.none()
 
+    @trace_log(logger)
     def get_queryset(self):
         username = str(self.kwargs["username"])
         try:
@@ -417,6 +436,7 @@ class ChampionDetailView(APIView):
                 f"Selected champion record for the user {username} does not exist. "
             )
 
+    @trace_log(logger)
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         username = self.kwargs["username"]
         champions = get_list_or_404(Champion, user__username__exact=username)

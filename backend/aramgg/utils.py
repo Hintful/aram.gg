@@ -1,3 +1,4 @@
+import logging
 from typing import List, Dict
 
 from django.db import models
@@ -5,8 +6,12 @@ from django.db.models import Sum, F, ExpressionWrapper
 
 from aramgg.models import Champion, User
 from aramgg.serializers import UserSerializer
+from log.trace_log import trace_log
+
+logger = logging.getLogger(__name__)
 
 
+@trace_log(logger)
 def get_top_champs(num_champs: int, attribute: str, column_name: str) -> List:
     top_champs = list()
     annotate_attr = {attribute: Sum(column_name) / (Sum("win") + Sum("loss"))}
@@ -30,6 +35,7 @@ def get_top_champs(num_champs: int, attribute: str, column_name: str) -> List:
     return top_champs
 
 
+@trace_log(logger)
 def get_top_users(
     num_users: int,
     attribute: str,
@@ -83,6 +89,7 @@ def get_top_users(
     return top_users
 
 
+@trace_log(logger)
 def get_annotate_attr_based_on_avg(attribute: str, column_name: str) -> Dict:
     return {
         attribute: ExpressionWrapper(
@@ -94,6 +101,7 @@ def get_annotate_attr_based_on_avg(attribute: str, column_name: str) -> Dict:
     }
 
 
+@trace_log(logger)
 def get_annotate_attr_based_on_max(attribute: str, column_name: str) -> Dict:
     return {
         attribute: F(f"champion__{column_name}"),
