@@ -42,14 +42,15 @@ class RiotApiRequests:
         self.check_if_summoner_exists(request)
 
         data = request.json()
-        User.objects.update_or_create(
-            username=data["name"].replace(" ", "").lower(),
-            defaults={
-                "profile_icon": data["profileIconId"],
-                "account_id": data["accountId"],
-                "level": data["summonerLevel"],
-            },
-        )
+        if data.get("name", None):
+            User.objects.update_or_create(
+                username=data["name"].replace(" ", "").lower(),
+                defaults={
+                    "profile_icon": data["profileIconId"],
+                    "account_id": data["accountId"],
+                    "level": data["summonerLevel"],
+                },
+            )
 
         return User.objects.get(username=self.summoner_name)
 
@@ -60,20 +61,23 @@ class RiotApiRequests:
         request = requests.get(url=url, params=PARAMS)
         self.check_rate_limit(request)
         match_list = request.json()
-        final_list = [
-            {"gameId": match["gameId"], "timestamp": match["timestamp"]}
-            for match in match_list["matches"]
-        ]
-        final_list = sorted(final_list, key=lambda k: k["timestamp"])
+        final_list = list()
+        if match_list.get("matches", None):
+            final_list = [
+                {"gameId": match["gameId"], "timestamp": match["timestamp"]}
+                for match in match_list["matches"]
+            ]
+            final_list = sorted(final_list, key=lambda k: k["timestamp"])
 
-        # If user already has a record of timestamp,
-        # only get game records that happened after given timestamp
-        if user.last_updated is not None:
-            final_list = list(
-                filter(
-                    lambda element: element["timestamp"] > user.last_updated, final_list
+            # If user already has a record of timestamp,
+            # only get game records that happened after given timestamp
+            if user.last_updated is not None:
+                final_list = list(
+                    filter(
+                        lambda element: element["timestamp"] > user.last_updated,
+                        final_list,
+                    )
                 )
-            )
 
         return final_list
 
