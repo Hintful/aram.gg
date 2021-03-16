@@ -1,15 +1,15 @@
-import { Button, Center, Flex, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import { Box, Button, Center, Flex, HStack, Spinner, Text, VStack } from '@chakra-ui/react';
+import React, { useEffect, useState, Suspense } from 'react';
 import axios from 'axios';
 import { useHistory, useParams } from 'react-router-dom';
 import IconBox from './IconBox';
-
-
 import MultikillTag from './tags/MultikillTag';
 import WinLossKDA from './WinLossKDA';
 import { getCarryPotential, getDamageStarRating, getIndividualKDAStarRating } from './functions/CommonFunctions';
 import WinratePerformance from './WinratePerformance';
-import ChampionStatsContainer from './ChampionStatsContainer';
+// import ChampionStatsContainer from './ChampionStatsContainer';
+import Achievements from './Achievements';
+import Stats from './Stats';
 
 const Profile = ({ location }) => {
   const [userDetail, setUserDetail] = useState([]); // init
@@ -20,8 +20,19 @@ const Profile = ({ location }) => {
   const [userStats, setUserStats] = useState(null);
   const [performance, setPerformance] = useState(null);
 
-  // for link
-  const history = useHistory();
+
+  // main/sub menu states
+  const [mainMenuItems, setMainMenuItems] = useState(['Champion Stats', 'Achievements', 'Stats']);
+  const [mainActiveMenu, setMainActiveMenu] = useState(0);
+
+  const [subMenuItems, setSubMenuItems] = useState(['Basic Info']);
+  const [subActiveMenu, setSubActiveMenu] = useState(0);
+
+  const [sub2MenuItems, setSub2MenuItems] = useState(['Winrate / Performance']);
+  const [sub2ActiveMenu, setSub2ActiveMenu] = useState(0);
+
+  // lazy-load ChampionStatsContainer for better menu responsiveness
+  const ChampionStatsContainer = React.lazy(() => import('./ChampionStatsContainer'));
 
   const formatUsername = (username) => {
     return username.split(" ").join("").toLowerCase();
@@ -168,7 +179,7 @@ const Profile = ({ location }) => {
   return (
     <>
       { userStats ?
-        <Center h="auto" mt="50px" mb="50px" className="profile-container">
+        <Center h="auto" mt="100px" className="profile-container">
           <VStack spacing={5}>
             <VStack>
               <Text fontSize={32} className="sName" mt={10}>{username}</Text>
@@ -177,74 +188,120 @@ const Profile = ({ location }) => {
                 :
                 <div>
                   <Spinner color="teal.500" /> Loading..
-            </div>
+                </div>
+              }
+
+              {/* Refresh button */}
+              {userChampionStats.length > 0 ?
+                <Button colorScheme="purple" variant="outline" onClick={() => {
+                  window.location.reload();
+                }}
+                  leftIcon={<i className="fas fa-sync-alt"></i>}
+                >
+                  <Text mb="2px">Refresh</Text>
+                </Button>
+                :
+                <>
+                </>
               }
             </VStack>
 
+            <Flex direction="row" className="profile-content-container" mb="50px">
+              <VStack className="profile-content-container-side">
+                <VStack className="profile-side-content" style={{ paddingBottom: "20px" }}>
+                  <Flex direction="row" className="profile-content-container-menu">
+                    {subMenuItems.map((menu, i) => {
+                      return (
+                        <HStack className="profile-menu-item"
+                          style={{ background: subActiveMenu === i ? '#9370db' : 'white', color: subActiveMenu === i ? 'white' : '#9370db' }}
+                          onClick={() => setSubActiveMenu(i)}
+                        >
+                          <Text>{menu}</Text>
+                        </HStack>
+                      )
+                    })}
+                  </Flex>
+                  {subActiveMenu === 0 ?
+                    <>
+                      <WinLossKDA wins={userStats.numWins} losses={userStats.numLosses} KDA={(userStats.numKills + userStats.numAssists) / userStats.numDeaths} />
+                      {userStats ?
+                        <Text fontFamily="Roboto" fontSize={14}>
+                          Total number of games analyzed:&nbsp;
+                          <span style={{ fontWeight: 600, color: "#9370db" }}>
+                            {userStats.numWins + userStats.numLosses}
+                          </span>
+                        </Text>
+                        :
+                        <Text fontFamily="Toboto" fontSize={14}>
+                          Total number of games analyzed:&nbsp;&nbsp;<Spinner color="teal.500" size="xs" /> <span style={{ fontWeight: 600 }}>Loading...</span>
+                        </Text>
+                      }
+                    </>
+                    :
+                    <></>
+                  }
+
+                </VStack>
+
+                <VStack className="profile-side-content">
+                  <Flex direction="row" className="profile-content-container-menu">
+                    {sub2MenuItems.map((menu, i) => {
+                      return (
+                        <HStack className="profile-menu-item"
+                          style={{ background: sub2ActiveMenu === i ? '#9370db' : 'white', color: sub2ActiveMenu === i ? 'white' : '#9370db' }}
+                          onClick={() => setSubActiveMenu(i)}
+                        >
+                          <Text>{menu}</Text>
+                        </HStack>
+                      )
+                    })}
+                  </Flex>
+                  {sub2ActiveMenu === 0 ?
+                    <WinratePerformance wins={userStats.numWins} losses={userStats.numLosses} performance={performance} />
+                    :
+                    <></>
+                  }
+
+                </VStack>
+
+              </VStack>
+
+              <VStack className="profile-content-container-main">
+                <Flex direction="row" className="profile-content-container-menu">
+                  {mainMenuItems.map((menu, i) => {
+                    return (
+                      <HStack className="profile-menu-item"
+                        style={{ background: mainActiveMenu === i ? '#9370db' : 'white', color: mainActiveMenu === i ? 'white' : '#9370db' }}
+                        onClick={() => setMainActiveMenu(i)}
+                      >
+                        <Text>{menu}</Text>
+                      </HStack>
+                    )
+                  })}
+                </Flex>
+                {mainActiveMenu === 0 ?
+                  <Suspense fallback={<></>}>
+                    <ChampionStatsContainer wins={userStats.numWins} losses={userStats.numLosses} _userChampionStats={userChampionStats} />
+                  </Suspense>
+                  : mainActiveMenu === 1 ?
+                    <Achievements />
+                    :
+                    <Stats />
+                }
+              </VStack>
+            </Flex>
+
 
             { /* Multi-kill stats */}
-            <Flex direction="row" align="center" justify="center" style={{ fontSize: "14px", gap: "3px" }}>
+            {/* <Flex direction="row" align="center" justify="center" style={{ fontSize: "14px", gap: "3px" }}>
               <MultikillTag multikill={2} count={userStats.numDoubleKill} />
               <MultikillTag multikill={3} count={userStats.numTripleKill} />
               <MultikillTag multikill={4} count={userStats.numQuadraKill} />
               <MultikillTag multikill={5} count={userStats.numPentaKill} />
               <MultikillTag multikill={6} count={userStats.numLegendaryKill} />
-            </Flex>
+            </Flex> */}
 
 
-            { /* Achievement/Stats Button */}
-            <HStack>
-              <Button onClick={() => {
-                history.push({
-                  pathname: `/profile/${username}/achievements`
-                })
-              }}>Achievements</Button>
-              <Button onClick={() => {
-                history.push({
-                  pathname: `/profile/${username}/stats`
-                })
-              }}>Stats/Records</Button>
-            </HStack>
-
-
-
-            { /* Wins/Losses/KDA Stat */}
-            <WinLossKDA wins={userStats.numWins} losses={userStats.numLosses} KDA={(userStats.numKills + userStats.numAssists) / userStats.numDeaths} />
-
-
-            { /* Winrate/Performance Stats */}
-            <WinratePerformance wins={userStats.numWins} losses={userStats.numLosses} performance={performance} />
-
-
-            {/* Number of games analyzed / Refresh button */}
-            {userStats ?
-              <Text fontFamily="Roboto" fontSize={14}>
-                Total number of games analyzed:&nbsp;
-            <span style={{ fontWeight: 600 }}>
-                  {userStats.numWins + userStats.numLosses}
-                </span>
-              </Text>
-              :
-              <Text fontFamily="Toboto" fontSize={14}>
-                Total number of games analyzed:&nbsp;&nbsp;<Spinner color="teal.500" size="xs" /> <span style={{ fontWeight: 600 }}>Loading...</span>
-              </Text>
-            }
-
-            {userChampionStats.length > 0 ?
-              <Button colorScheme="teal" variant="outline" onClick={() => {
-                window.location.reload();
-              }}
-                leftIcon={<i className="fas fa-sync-alt"></i>}
-              >
-                <Text mb="2px">Refresh</Text>
-              </Button>
-              :
-              <>
-              </>
-            }
-
-            { /* Champion Stats */ }
-            <ChampionStatsContainer wins={userStats.numWins} losses={userStats.numLosses} _userChampionStats={userChampionStats}/>
           </VStack>
 
         </Center>

@@ -37,7 +37,7 @@ const Navbar = () => {
                   onChange={(e) => { setSummonerName(e.target.value) }}
                 />
               </InputGroup>
-              <Button type="submit" variant="solid" size="sm" colorScheme="teal">
+              <Button type="submit" variant="solid" size="sm" colorScheme="purple">
                 <i className="fas fa-search"></i>
               </Button>
             </HStack>

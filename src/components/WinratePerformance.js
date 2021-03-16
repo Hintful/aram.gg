@@ -5,7 +5,7 @@ import { getWinrateColor, roundNumber, getOverallPotentialColor, getOverallPoten
 
 const WinratePerformance = ({ wins, losses, performance}) => {
   return (
-    <HStack spacing="50px">
+    <HStack p="20px" spacing="50px">
       <VStack>
         <Text fontWeight="600">Winrate</Text>
         {wins ?
@@ -13,7 +13,7 @@ const WinratePerformance = ({ wins, losses, performance}) => {
             <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px" }}>{roundNumber(wins / (wins + losses) * 100)}%</span></CircularProgressLabel>
           </CircularProgress>
           :
-          <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
+          <CircularProgress isIndeterminate size="100px" thickness="5px" color="purple.200">
 
           </CircularProgress>
         }
@@ -26,7 +26,7 @@ const WinratePerformance = ({ wins, losses, performance}) => {
               <CircularProgressLabel ml="1px" mt="-3px" ><span style={{ fontFamily: "Roboto", fontSize: "18px", color: getOverallPotentialColor(performance) }}>{getOverallPotentialRank(performance)}</span></CircularProgressLabel>
             </CircularProgress>
             :
-            <CircularProgress isIndeterminate size="100px" thickness="5px" color="teal.500">
+            <CircularProgress isIndeterminate size="100px" thickness="5px" color="purple.200">
 
             </CircularProgress>
           }

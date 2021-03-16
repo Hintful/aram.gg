@@ -1,13 +1,17 @@
 import { Button } from '@chakra-ui/button';
 import Icon from '@chakra-ui/icon';
-import { Divider, Flex, Text, VStack } from '@chakra-ui/layout';
-import React, { useEffect, useState } from 'react';
+import { Divider, Flex, HStack, Text, VStack } from '@chakra-ui/layout';
+import React, { useEffect, useRef, useState } from 'react';
 import ChampionStats from './ChampionStats';
 import { AiOutlineArrowDown, AiOutlineArrowUp } from 'react-icons/ai';
 import { winsAsc, winsDesc, gamesAsc, gamesDesc, kdaAsc, kdaDesc, effectiveDamageAsc, effectiveDamageDesc, damageTakenAsc, damageTakenDesc } from './functions/ComparisonFunctions';
+import { Spinner } from '@chakra-ui/spinner';
+import { BiChevronDown } from 'react-icons/bi';
 
-const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
-  const [userChampionStats, setUserChampionStats] = useState([]); // init
+const INITIAL_CHAMP_LOAD = 6;
+
+const ChampionStatsContainer = ({ wins, losses, _userChampionStats }) => {
+  const [userChampionStats, setUserChampionStats] = useState(null); // init
 
   // sort button orientations
   // 0 unselected, 1 descending, 2 ascending
@@ -17,15 +21,20 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
   const [effectiveDamageSort, setEffectiveDamageSort] = useState(0);
   const [damageTakenSort, setDamageTakenSort] = useState(0);
 
+  const [loadChampion, setLoadChampion] = useState(INITIAL_CHAMP_LOAD);
+
+  const pageBottom = useRef();
+
   useEffect(() => {
     setUserChampionStats(_userChampionStats);
   }, [_userChampionStats])
 
   return (
+    <>
     <VStack>
-      {wins + losses > 0 &&
-        <Flex direction="row" justify="center" align="center" width="50vw" style={{ gap: "5px", marginTop: "70px" }}>
-          <Button colorScheme="teal"
+      { userChampionStats ?
+        <Flex direction="row" justify="center" align="center" width="50vw" style={{ gap: "5px", margin: "20px 0" }}>
+          <Button colorScheme="purple"
             onClick={() => {
               if (gamesSort === 1) { setGamesSort(2); }
               else { setGamesSort(1); }
@@ -44,7 +53,7 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
             {gamesSort === 1 ? <Icon as={AiOutlineArrowDown} /> : gamesSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
           </Button>
 
-          <Button colorScheme="teal"
+          <Button colorScheme="purple"
             onClick={() => {
               if (winsSort === 1) { setWinsSort(2); }
               else { setWinsSort(1); }
@@ -63,7 +72,7 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
             {winsSort === 1 ? <Icon as={AiOutlineArrowDown} /> : winsSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
           </Button>
 
-          <Button colorScheme="teal"
+          <Button colorScheme="purple"
             onClick={() => {
               if (kdaSort === 1) { setKdaSort(2); }
               else { setKdaSort(1); }
@@ -82,7 +91,7 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
             {kdaSort === 1 ? <Icon as={AiOutlineArrowDown} /> : kdaSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
           </Button>
 
-          <Button colorScheme="teal"
+          <Button colorScheme="purple"
             onClick={() => {
               if (effectiveDamageSort === 1) { setEffectiveDamageSort(2); }
               else { setEffectiveDamageSort(1); }
@@ -101,7 +110,7 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
             {effectiveDamageSort === 1 ? <Icon as={AiOutlineArrowDown} /> : effectiveDamageSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
           </Button>
 
-          <Button colorScheme="teal"
+          <Button colorScheme="purple"
             onClick={() => {
               if (damageTakenSort === 1) { setDamageTakenSort(2); }
               else { setDamageTakenSort(1); }
@@ -120,24 +129,37 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
             {damageTakenSort === 1 ? <Icon as={AiOutlineArrowDown} /> : damageTakenSort === 2 ? <Icon as={AiOutlineArrowUp} /> : <></>}
           </Button>
         </Flex>
+        :
+        <Spinner color="purple.300" mt="50px" />
       }
 
-      <Divider />
+      { userChampionStats && <Divider />}
       <VStack width="50vw">
 
-        {userChampionStats.length > 0 ?
-          userChampionStats.map((stat, i) => (
-            <div key={i}>
-              <ChampionStats stats={stat} key={`ChampionStats-${i}`} />
-              <Divider orientation="horizontal" />
-            </div>
-          ))
+        {userChampionStats ?
+          <VStack>
+            {userChampionStats.slice(0, loadChampion).map((stat, i) => (
+              <div key={i}>
+                <ChampionStats stats={stat} key={`ChampionStats-${i}`} />
+                { i < loadChampion - 1 && <Divider orientation="horizontal" />}
+              </div>
+            ))}
+            <HStack className="champion-stats-load-button" onClick={() => {
+              setLoadChampion(loadChampion + 5);
+              setTimeout(() => pageBottom.current.scrollIntoView({ behavior: "smooth" }), 1000);
+            }}>
+              <div ref={pageBottom} />
+              <Text>Load More</Text>
+              <BiChevronDown />
+            </HStack>
+            
+          </VStack>
           :
           <VStack>
             <Text mt={10} mb={5} fontWeight="600">
               Please refresh the page in a bit - we're fetching your ARAM game data!
               </Text>
-            <Button colorScheme="teal" variant="outline"
+            <Button colorScheme="purple" variant="outline"
               onClick={() => {
                 window.location.reload();
               }}
@@ -148,7 +170,9 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats}) => {
           </VStack>
         }
       </VStack>
+      
     </VStack>
+    </>
   );
 }
 

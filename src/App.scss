@@ -112,3 +112,70 @@ hr {
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
 }
+
+
+.profile-content-container {
+  width: 85vw;
+  padding-top: 50px;
+  gap: 10px;
+  justify-content: center;
+
+  .profile-content-container-side {
+    width: 450px;
+
+    .profile-side-content {
+      width: inherit;
+      border: 1px solid #9370db;
+      justify-content: center;
+    }
+  }
+
+  .profile-content-container-main {
+    width: 1050px;
+    height: auto;
+    border: 1px solid #9370db;
+  }
+}
+
+.profile-content-container-menu {
+  height: 50px;
+  width: inherit;
+  border-bottom: 1px solid #9370db;
+  justify-content: flex-start;
+
+  .profile-menu-item {
+    font-family: Roboto;
+    font-size: 14px;
+    margin: -1px -1px -1px 0;
+    padding: 20px;
+    border: 1px solid #9370db;
+  }
+
+  .profile-menu-item:hover {
+    cursor: pointer;
+    background: #b299e5;
+    box-shadow: inset 0 -2px 0 #9370db;
+  }
+}
+
+.champion-stats-load-button {
+  width: 1050px;
+  padding: 20px;
+  margin-bottom: -1px;
+  justify-content: center;
+  background: #b299e5;
+  color: white;
+  font-size: 14px;
+  font-family: Roboto;
+
+  /* transition */
+  transition: background 0.2s ease-in-out;
+}
+
+.champion-stats-load-button:hover {
+  background: #9370db;
+  cursor: pointer;
+
+  /* transition */
+  transition: background 0.2s ease-in-out;
+}

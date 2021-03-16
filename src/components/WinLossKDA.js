@@ -5,7 +5,7 @@ import { getOverallKDAElement } from './functions/CommonFunctions';
 
 const WinLossKDA = ({ wins, losses, KDA }) => {
   return (
-    <HStack spacing="40px">
+    <HStack p="20px" spacing="40px">
       <Stat width="120px">
         <StatLabel>Wins</StatLabel>
         <StatNumber color="blue.300">
@@ -20,7 +20,7 @@ const WinLossKDA = ({ wins, losses, KDA }) => {
         </StatNumber>
         <StatHelpText>Games Lost</StatHelpText>
       </Stat>
-      <Stat width="160px">
+      <Stat width="100px">
         <StatLabel>KDA</StatLabel>
         <StatNumber>
           {getOverallKDAElement(KDA)}

@@ -118,7 +118,7 @@ export const getOverallKDAElement = (kda) => {
   } else {
     return (
       <HStack>
-        <Spinner color="teal.500" size="sm" />
+        <Spinner color="purple.300" size="sm" />
         <Text>Loading...</Text>
       </HStack>
     )

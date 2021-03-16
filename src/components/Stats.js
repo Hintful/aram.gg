@@ -7,6 +7,7 @@ import { getIndividualKDAStarRating, getDamageStarRating, getCarryPotential, rou
 import { Spinner } from '@chakra-ui/spinner';
 import { Button } from '@chakra-ui/button';
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
+import { IoStatsChartSharp } from 'react-icons/io5';
 
 const formatUsername = (username) => {
   return username.split(" ").join("").toLowerCase();
@@ -172,36 +173,14 @@ const Stats = () => {
   }, [userChampionStats]);
 
   return (
-    <VStack mt="50px" className="achievement-container">
-      <VStack mb={5}>
-        <Text fontSize={32} className="sName" mt={10} mb={1}>{username}</Text>
-        {userDetail && userStats ?
-          <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={(userStats.numKills + userStats.numAssists) / userStats.numDeaths} performance={performance} />
-          :
-          <div>
-            <Spinner color="teal.500" /> Loading..
-          </div>
-        }
-      </VStack>
-
-      { /* Back to Profile/Achievements button */}
-      <HStack>
-        <Button mb={10} onClick={() => {
-          history.push({
-            pathname: `/profile/${username}`
-          })
-        }}>Back to Profile</Button>
-        <Button mb={10} onClick={() => {
-          history.push({
-            pathname: `/profile/${username}/achievements`
-          })
-        }}>Achievements</Button>
-      </HStack>
-
+    <VStack pt="30px" className="achievement-container">
       <VStack>
-        <Text fontSize={26} fontFamily="Roboto Condensed">📊 Statistics and Records</Text>
+        <HStack>
+          <IoStatsChartSharp />
+          <Text fontSize={26} fontFamily="Roboto Condensed"> Statistics and Records</Text>
+        </HStack>
         {userStats ?
-          <Table w="600px" variant="striped" colorScheme="gray" mb="100px">
+          <Table w="600px" variant="striped" colorScheme="purple" mb="100px">
             <TableCaption>Various Stats/Records</TableCaption>
             <Thead>
               <Tr>

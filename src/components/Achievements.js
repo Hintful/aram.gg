@@ -169,37 +169,12 @@ const Achievements = () => {
   }, [userChampionStats]);
 
   return (
-    <VStack mt="50px" className="achievement-container">
-      <VStack mb={5}>
-        <Text fontSize={32} className="sName" mt={10} mb={1}>{username}</Text>
-        {userDetail && userStats ?
-          <IconBox profile_icon_id={userDetail.profile_icon} level={userDetail.level} totalKDA={(userStats.numKills + userStats.numAssists) / userStats.numDeaths} performance={performance} />
-          :
-          <div>
-            <Spinner color="teal.500" /> Loading..
-          </div>
-        }
-      </VStack>
-
-      { /* Back to Profile/Stats button */}
-      <HStack>
-        <Button mb={10} onClick={() => {
-          history.push({
-            pathname: `/profile/${username}`
-          })
-        }}>Back to Profile</Button>
-        <Button mb={10} onClick={() => {
-          history.push({
-            pathname: `/profile/${username}/stats`
-          })
-        }}>Stats/Records</Button>
-      </HStack>
-
-      <Button mb="100px" colorScheme="teal" onClick={() => {
+    <VStack pt="30px" className="achievement-container">
+      {/* <Button mb="100px" colorScheme="teal" onClick={() => {
         setCategorizeAchievements(!categorizeAchievements)
       }}>
         {categorizeAchievements ? "Categorized by Rarity" : "Non-categorized"}
-      </Button>
+      </Button> */}
 
       <VStack mb="100px">
         <Text fontSize={26} fontFamily="Roboto Condensed">🏆 Achievements Earned</Text>

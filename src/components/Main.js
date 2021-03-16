@@ -31,7 +31,7 @@ const Main = () => {
                 />
               </InputGroup>
             </FormControl>
-              <Button type="submit" variant="solid" size="sm" colorScheme="teal" width="40%"
+              <Button type="submit" variant="solid" size="sm" colorScheme="purple" width="40%"
                 leftIcon={<i className="fas fa-search"></i>}
               >
               Search
