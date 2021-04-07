@@ -8,13 +8,8 @@ urlpatterns = [
     path("rest_api/champions", views.ChampionView.as_view(), name="rest_api_champion"),
     path(
         "rest_api/user_detail/<slug:username>/",
-        view=views.UserDetailView.as_view(),
+        views.UserDetailView.as_view(),
         name="rest_api_user_detail",
-    ),
-    path(
-        "rest_api/user_detail/<slug:username>/<str:update>/",
-        view=views.UserDetailView.as_view(),
-        name="rest_api_user_detail_update",
     ),
     path(
         "rest_api/user_champion/<slug:username>/",
@@ -29,7 +24,7 @@ urlpatterns = [
     path(
         "rest_api/ranking/top50_most_avg_kill/",
         views.Top50MostAverageKillView.as_view(),
-        name="rest_api_top50_most_avg_kill",
+        name="rest_api_top50_most_avg_kill"
     ),
     path(
         "rest_api/ranking/most_avg_death/",
@@ -39,17 +34,17 @@ urlpatterns = [
     path(
         "rest_api/ranking/top50_most_avg_death/",
         views.Top50MostAverageDeathView.as_view(),
-        name="rest_api_top50_most_avg_death",
+        name="rest_api_top50_most_avg_death"
     ),
     path(
         "rest_api/ranking/least_avg_death/",
         views.RankingLeastAverageDeathView.as_view(),
-        name="rest_api_ranking_least_avg_death",
+        name="rest_api_ranking_least_avg_death"
     ),
     path(
         "rest_api/ranking/top50_least_avg_death/",
         views.Top50LeastAverageDeathView.as_view(),
-        name="rest_api_top50_least_avg_death",
+        name="rest_api_top50_least_avg_death"
     ),
     path(
         "rest_api/ranking/most_avg_assist/",
@@ -59,7 +54,7 @@ urlpatterns = [
     path(
         "rest_api/ranking/top50_most_avg_assist/",
         views.Top50MostAverageAssistView.as_view(),
-        name="rest_api_top50_most_avg_assist",
+        name="rest_api_top50_most_avg_assist"  
     ),
     path(
         "rest_api/ranking/most_kill_in_one_game/",
@@ -106,56 +101,57 @@ urlpatterns = [
         views.RankingChampWithMostDeath.as_view(),
         name="rest_api_ranking_champ_with_most_death",
     ),
+
     path(
         "rest_api/ranking/top50_most_kills_in_one_game/",
         views.Top50MostKillsInOneGame.as_view(),
-        name="rest_api_top50_most_kills_in_one_game",
+        name="rest_api_top50_most_kills_in_one_game"
     ),
     path(
         "rest_api/ranking/top50_most_deaths_in_one_game/",
         views.Top50MostDeathsInOneGame.as_view(),
-        name="rest_api_top50_most_deaths_in_one_game",
+        name="rest_api_top50_most_deaths_in_one_game"
     ),
     path(
         "rest_api/ranking/top50_most_assists_in_one_game/",
         views.Top50MostAssistsInOneGame.as_view(),
-        name="rest_api_top50_most_assists_in_one_game",
+        name="rest_api_top50_most_assists_in_one_game"
     ),
     path(
         "rest_api/ranking/top50_most_damage_done_in_one_game/",
         views.Top50MostDamageDoneInOneGame.as_view(),
-        name="rest_api_top50_most_damage_done_in_one_game",
+        name="rest_api_top50_most_damage_done_in_one_game"
     ),
     path(
         "rest_api/ranking/top50_most_damage_taken_in_one_game/",
         views.Top50MostDamageTakenInOneGame.as_view(),
-        name="rest_api_top50_most_damage_taken_in_one_game",
+        name="rest_api_top50_most_damage_taken_in_one_game"
     ),
     path(
         "rest_api/ranking/top50_most_healing_done_in_one_game/",
         views.Top50MostHealingDoneInOneGame.as_view(),
-        name="rest_api_top50_most_healing_done_in_one_game",
+        name="rest_api_top50_most_healing_done_in_one_game"
     ),
     path(
         "rest_api/ranking/most_avg_ed/",
         views.RankingMostAvgEDView.as_view(),
-        name="rest_api_most_avg_ed",
+        name="rest_api_most_avg_ed"
     ),
     path(
         "rest_api/ranking/top50_most_avg_ed/",
         views.Top50MostAvgEDView.as_view(),
-        name="rest_api_top50_most_avg_ed",
+        name="rest_api_top50_most_avg_ed"
     ),
     path(
         "rest_api/ranking/most_avg_kda/",
         views.RankingMostAvgKDAView.as_view(),
-        name="rest_api_most_avg_kda",
+        name="rest_api_most_avg_kda"
     ),
     path(
         "rest_api/ranking/top50_most_avg_kda/",
         views.Top50MostAvgKDAView.as_view(),
-        name="rest_api_top50_most_avg_kda",
-    ),
+        name="rest_api_top50_most_avg_kda"
+    )
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
