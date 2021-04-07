@@ -133,7 +133,7 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats }) => {
         <Spinner color="purple.300" mt="50px" />
       }
 
-      { userChampionStats && <Divider />}
+      {/* { userChampionStats && <Divider />} */}
       <VStack width="50vw">
 
         {userChampionStats ?
