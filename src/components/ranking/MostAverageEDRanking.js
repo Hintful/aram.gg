@@ -15,14 +15,14 @@ const MostAverageEDRanking = () => {
   const [top50Data, setTop50Data] = useState(null);
 
   // parse user data
-  const goldUserData = rankingData ? rankingData[0].user : null;
-  const silverUserData = rankingData ? rankingData[1].user : null;
-  const bronzeUserData = rankingData ? rankingData[2].user : null;
+  const goldUserData = rankingData ? rankingData[0] ? rankingData[0].user : null : null
+  const silverUserData = rankingData ? rankingData[1] ? rankingData[1].user : null : null 
+  const bronzeUserData = rankingData ? rankingData[2] ? rankingData[2].user : null : null
 
   // parse record
-  const goldRecord = rankingData ? rankingData[0] : null
-  const silverRecord = rankingData ? rankingData[1] : null
-  const bronzeRecord = rankingData ? rankingData[2] : null
+  const goldRecord = rankingData ? rankingData[0] ? rankingData[0] : null : null
+  const silverRecord = rankingData ? rankingData[1] ? rankingData[1] : null : null
+  const bronzeRecord = rankingData ? rankingData[2] ? rankingData[2] : null : null
 
   async function getRankingData() {
     // ranking data
@@ -51,7 +51,7 @@ const MostAverageEDRanking = () => {
     <VStack mt="100px" mb="100px">
       <Text fontFamily="Roboto Condensed" fontSize="24px">⚔️ Most Average Effective Damage Per Minute (min. 20 games)</Text>
       <HStack spacing="40px" mb={10}>
-        {rankingData &&
+        {(rankingData && rankingData[2]) &&
           <>
             <SilverPodium username={silverUserData.username} profile_icon={silverUserData.profile_icon} level={silverUserData.level} value={roundNumber(silverRecord.avg_ed, 2)} unit='ED/min' />
             <GoldPodium username={goldUserData.username} profile_icon={goldUserData.profile_icon} level={goldUserData.level} value={roundNumber(goldRecord.avg_ed, 2)} unit='ED/min' />

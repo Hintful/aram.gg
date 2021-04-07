@@ -112,7 +112,6 @@ const MostKillInOneGameRanking = () => {
           </Tbody>
         </Table>
       }
-
     </VStack>
   );
 }
