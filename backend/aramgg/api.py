@@ -251,5 +251,5 @@ class RiotApiRequests:
 
 
 if __name__ == "__main__":
-    riot_api = RiotApiRequests(summoner_name="", request_limit=10)
+    riot_api = RiotApiRequests(summoner_name="juis", request_limit=10)
     total_match_info = riot_api.get_total_match_info()
