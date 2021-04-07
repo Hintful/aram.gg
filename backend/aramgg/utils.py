@@ -55,8 +55,7 @@ def get_top_users(
         .filter(**filter_attr)
         .filter(num_games__gte=min_game_req)
         .order_by(
-            f"-{attribute}",
-            "username" if not reverse else f"{attribute}",
+            f"-{attribute}" if not reverse else f"{attribute}",
             "username",
             "-level",
         )[:num_users]
