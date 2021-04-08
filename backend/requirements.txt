@@ -7,3 +7,8 @@ djangorestframework
 django
 django-extra-views
 django-cors-headers
+django-heroku
+dj-database-url
+gunicorn
+whitenoise
+psycopg2
