@@ -8,6 +8,7 @@ import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table'
 import { roundNumber } from '../functions/CommonFunctions';
 
 
+
 const MostAverageKillRanking = () => {
 
   const [rankingData, setRankingData] = useState(null);

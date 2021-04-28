@@ -7,6 +7,7 @@ import BronzePodium from './BronzePodium';
 import { Table, TableCaption, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/table';
 import { ChampId } from '../data/ChampId';
 import { Image } from '@chakra-ui/image';
+import { version } from '../data/DataDragon';
 
 
 const MostKillInOneGameRanking = () => {
@@ -101,7 +102,7 @@ const MostKillInOneGameRanking = () => {
                   </Link></Td>
                   <Td>
                     <HStack>
-                      <Image w="30px" key={i} src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[entry.champion_id].image}`} />
+                      <Image w="30px" key={i} src={`http://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ChampId[entry.champion_id].image}`} />
                       <Text fontFamily="Roboto" fontSize="14px">{ ChampId[entry.champion_id].name }</Text>
                     </HStack>
                   </Td>
