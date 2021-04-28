@@ -1,6 +1,3 @@
-import { m, SharedLayoutContext } from "framer-motion";
-import { GiKusarigama } from "react-icons/gi";
-
 export const ChampId = {
   266:  { name: "Aatrox", image: "Aatrox.png" },
   103:  { name: "Ahri", image: "Ahri.png" },
@@ -39,6 +36,7 @@ export const ChampId = {
   150:  { name: "Gnar", image: "Gnar.png" },
   79:   { name: "Gragas", image: "Gragas.png" },
   104:  { name: "Graves", image: "Graves.png" },
+  887:  { name: "Gwen", image: "Gwen.png" },
   120:  { name: "Hecarim", image: "Hecarim.png" },
   74:   { name: "Heimerdinger", image: "Heimerdinger.png" },
   420:  { name: "Illaoi", image: "Illaoi.png" },
