@@ -26,8 +26,8 @@ const WinLossKDA = ({ wins, losses, KDA }) => {
           {getOverallKDAElement(KDA)}
         </StatNumber>
         <StatHelpText>
-          Over {wins + losses} Games
-            </StatHelpText>
+          Ratio
+        </StatHelpText>
       </Stat>
     </HStack>
   );
