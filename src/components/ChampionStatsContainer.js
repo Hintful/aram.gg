@@ -146,7 +146,7 @@ const ChampionStatsContainer = ({ wins, losses, _userChampionStats }) => {
             ))}
             <HStack className="champion-stats-load-button" onClick={() => {
               setLoadChampion(loadChampion + 5);
-              setTimeout(() => pageBottom.current.scrollIntoView({ behavior: "smooth" }), 1000);
+              // setTimeout(() => pageBottom.current.scrollIntoView({ behavior: "smooth" }), 1000);
             }}>
               <div ref={pageBottom} />
               <Text>Load More</Text>
