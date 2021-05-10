@@ -7,6 +7,7 @@ import MultikillTag from './tags/MultikillTag';
 import StarTag from './tags/StarTag';
 import { ChampId } from './data/ChampId';
 import { roundNumber, getIndividualKDAStarRating, getDamageStarRating, getDamageElement, getDamageStyle, formatNumber, getIndividualKDAStyle, getIndividualKDAElement, getIndividualPotentialRank, getIndividualPotentialColor, getCarryPotential } from './functions/CommonFunctions';
+import { version } from './data/DataDragon';
 
 const ChampionStats = ({ stats }) => {
   const [championData, setChampionData] = useState([]);
@@ -49,7 +50,7 @@ const ChampionStats = ({ stats }) => {
       <Flex direction="row" className="champion-stats" width="auto">
         <Flex direction="column" justify="center" align="center" className="champion-icon">
           {championName !== '' ?
-            <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/11.5.1/img/champion/${ChampId[stats.champion_id].image}`} />
+            <Image mb={1} className="champion-icon-image" src={`http://ddragon.leagueoflegends.com/cdn/${version}/img/champion/${ChampId[stats.champion_id].image}`} />
             :
             <div style={{ background: 'black' }}>
             </div>
