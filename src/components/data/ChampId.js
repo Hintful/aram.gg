@@ -69,7 +69,7 @@ export const ChampId = {
   236:  { name: "Lucian", image: "Lucian.png" },
   117:  { name: "Lulu", image: "Lulu.png" },
   99:   { name: "Lux", image: "Lux.png" },
-  54:   { name: "Malphie", image: "Malphite.png" },
+  54:   { name: "Malphite", image: "Malphite.png" },
   90:   { name: "Malzahar", image: "Malzahar.png" },
   57:   { name: "Maokai", image: "Maokai.png" },
   11:   { name: "Master Yi", image: "MasterYi.png" },
